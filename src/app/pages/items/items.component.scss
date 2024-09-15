@@ -1,0 +1,17 @@
+mat-grid-list {
+  width: calc(100% );
+  height: calc(60% );
+}
+
+mat-grid-tile {
+  width: calc(100% );
+  height: calc(100% );
+}
+
+mat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(100% );
+  height: calc(100% );
+}
