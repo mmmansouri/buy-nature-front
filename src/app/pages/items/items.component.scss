@@ -1,17 +1,15 @@
-mat-grid-list {
-  width: calc(100% );
-  height: calc(60% );
+.container {
+  padding: 24px;
 }
 
-mat-grid-tile {
-  width: calc(100% );
-  height: calc(100% );
+img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
-mat-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: calc(100% );
-  height: calc(100% );
+.responsive-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }

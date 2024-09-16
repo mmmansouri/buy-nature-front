@@ -3,8 +3,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { CommonModule } from "@angular/common";
 import { SidenavComponent } from "./components/sidenav/sidenav.component";
 import { ToolbarComponent } from "./components/toolbar/toolbar.component";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {BrowserModule} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
