@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import { RouterLink, RouterOutlet } from "@angular/router";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,11 +10,15 @@ import { CommonModule } from "@angular/common";
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [ RouterLink , MatIconModule, MatSidenavModule, MatListModule, RouterOutlet, CommonModule],
+  imports: [ RouterLinkActive, RouterLink , MatIconModule, MatSidenavModule, MatListModule, RouterOutlet, CommonModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
 })
 export class SidenavComponent implements OnInit  {
+
+  @Input()
+  routerLinkActiveOptions: { exact: boolean } = { exact: true };
+
   isSidenavOpen = false;
   isMobile= true;
   @ViewChild(MatSidenav)

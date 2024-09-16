@@ -7,3 +7,15 @@ mat-toolbar{
   top:0;
   z-index: 2;
 }
+
+/* Remove default link styling */
+.unstyled-link {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color from parent (or set to specific color) */
+}
+
+/* Optionally, remove hover effects */
+.unstyled-link:hover {
+  text-decoration: none; /* Keep the text-decoration as none even on hover */
+  color: inherit; /* Keep the color the same on hover */
+}

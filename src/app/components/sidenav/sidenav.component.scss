@@ -30,3 +30,8 @@ mat-sidenav-content{
 .expanded {
   width: 250px;
 }
+
+/* Style for active link */
+.active {
+  background-color: rgb(109, 222, 127); /* Adjust this for your active background */
+}
