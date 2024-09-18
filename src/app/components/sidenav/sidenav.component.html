@@ -5,7 +5,14 @@
          routerLinkActive="active" [routerLinkActiveOptions]="routerLinkActiveOptions">
         <span class="entry">
           <mat-icon>house</mat-icon>
-          <span *ngIf="!isSidenavOpen">Items</span>
+          <span *ngIf="!isSidenavOpen || isMobile">Items</span>
+        </span>
+      </a>
+      <a mat-list-item  routerLink="/"
+         routerLinkActive="active" [routerLinkActiveOptions]="routerLinkActiveOptions">
+        <span class="entry">
+          <mat-icon>house</mat-icon>
+          <span *ngIf="!isSidenavOpen || isMobile">Items</span>
         </span>
       </a>
     </mat-nav-list>

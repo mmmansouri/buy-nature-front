@@ -2,14 +2,8 @@ mat-sidenav-container {
   height:100%;
 }
 
-// Move the content down so that it won't be hidden by the toolbar
 mat-sidenav {
-  padding-top: 3.5rem;
-  transition: width 0.3s ease;
-  @media screen and (min-width: 600px) {
-    padding-top: 4rem;
-  }
-
+  padding-top: 3rem;
   .entry{
     display: flex;
     align-items: center;
@@ -18,6 +12,19 @@ mat-sidenav {
   }
 
 }
+
+//removes the rounded border of the list item
+.mat-mdc-nav-list .mat-mdc-list-item {
+  border-radius:0;
+
+}
+// Move the content down so that it won't be hidden by the toolbar
+@media screen and (min-width: 600px) {
+  mat-sidenav {
+    padding-top: 3.5rem;
+  }
+}
+
 
 // Move the content down so that it won't be hidden by the toolbar
 mat-sidenav-content{
@@ -28,10 +35,11 @@ mat-sidenav-content{
 }
 
 .expanded {
-  width: 250px;
+  width: 100%;
 }
 
 /* Style for active link */
 .active {
-  background-color: rgb(109, 222, 127); /* Adjust this for your active background */
+  background-color: coral;
+
 }
