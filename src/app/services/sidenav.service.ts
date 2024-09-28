@@ -10,7 +10,6 @@ export class SidenavService {
 
   toggleSidenav() {
     this.sidenavState.next(!this.sidenavState.value);
-    console.log("TOGGLE")// Toggle between open and closed state
   }
 
   closeSidenav() {

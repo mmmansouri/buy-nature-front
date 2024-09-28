@@ -1,6 +1,9 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
+<mat-toolbar color="primary" class="flexSpaceBetween">
+  <button mat-icon-button (click)="toggleMenu()">
     <mat-icon>menu</mat-icon>
   </button>
   <a routerLink="/" class="unstyled-link"><span>Buy Nature</span></a>
+  <button mat-icon-button (click)="displayCart()">
+    <mat-icon matBadge="3"  aria-hidden="false">shopping_cart</mat-icon>
+  </button>
 </mat-toolbar>

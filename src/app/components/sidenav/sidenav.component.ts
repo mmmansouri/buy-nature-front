@@ -4,8 +4,8 @@ import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { SidenavService } from "../../services/sidenav.service";
-import { BreakpointObserver } from "@angular/cdk/layout";
 import { CommonModule } from "@angular/common";
+import {ScreenService} from "../../services/screen.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -24,17 +24,13 @@ export class SidenavComponent implements OnInit  {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
-  constructor(private sidenavService: SidenavService, private observer: BreakpointObserver) {}
+
+
+  constructor(private sidenavService: SidenavService, protected screenService: ScreenService) {}
 
   ngOnInit() {
-    this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
-      if (screenSize.matches) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    });
 
+    this.isMobile = this.screenService.isMobile();
 
     this.sidenavService.sidenavState$.subscribe((isOpen: boolean) => {
 
@@ -45,6 +41,7 @@ export class SidenavComponent implements OnInit  {
         if (this.sidenav) this.sidenav.open();
         this.isSidenavOpen = !this.isSidenavOpen;
       }
+
     });
 
 
