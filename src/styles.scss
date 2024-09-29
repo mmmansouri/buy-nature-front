@@ -23,10 +23,3 @@ html {
   @include mat.all-component-themes($my-theme);
 }*/
 
-html, body { height: 100%; }
-body {
-  margin: 0;
-
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-}
-

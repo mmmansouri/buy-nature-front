@@ -1,5 +1,5 @@
 <mat-sidenav-container autosize="true">
-  <mat-sidenav [mode]="this.screenService.isMobile() ? 'over' : 'side'" [opened]="this.screenService.isMobile() ? 'false' : 'true'">
+  <mat-sidenav [style]="!isSidenavOpen ? 'expanded' : ''" [mode]="this.screenService.isMobile() ? 'over' : 'side'" [opened]="this.isSidenavOpen  ? 'false' : 'true'">
     <mat-nav-list>
       <a mat-list-item  routerLink="/"
          routerLinkActive="active" [routerLinkActiveOptions]="routerLinkActiveOptions">

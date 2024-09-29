@@ -3,6 +3,7 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
+  width: fit-content;
   padding-top: 3rem;
   .entry{
     display: flex;
