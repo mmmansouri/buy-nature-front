@@ -3,7 +3,7 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { SidenavService } from "../../services/sidenav.service";
+import { SidenavService } from "./sidenav.service";
 import { CommonModule } from "@angular/common";
 import {ScreenService} from "../../services/screen.service";
 

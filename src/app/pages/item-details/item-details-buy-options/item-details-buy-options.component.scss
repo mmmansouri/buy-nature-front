@@ -1,10 +1,50 @@
 .container {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.example-button-container {
+.add-to-cart-form {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.mat-form-field-container {
+  width: 100%;
+}
+
+/* Flexbox for larger screens (tablet/desktop) */
+@media screen and (min-width: 768px) {
+  .add-to-cart-form {
+    flex-direction: column;
+  }
+
+  .divider {
+    width: 100%;
+    margin: 20px 0;
+  }
+}
+
+/* Flexbox for mobile screens (small screen) */
+@media screen and (max-width: 767px) {
+  .add-to-cart-form {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .add-to-cart-button-container {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  .divider {
+    width: auto;
+    height: 100%;
+    margin: 0 10px;
+    align-self: center;
+  }
 }

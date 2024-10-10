@@ -4,6 +4,6 @@
   </button>
   <a routerLink="/" class="unstyled-link"><span>Buy Nature</span></a>
   <button mat-icon-button (click)="displayCart()">
-    <mat-icon matBadge="3"  aria-hidden="false">shopping_cart</mat-icon>
+    <mat-icon [matBadge]="quantity"  aria-hidden="false">shopping_cart</mat-icon>
   </button>
 </mat-toolbar>

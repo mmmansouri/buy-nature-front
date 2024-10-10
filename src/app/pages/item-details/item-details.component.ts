@@ -13,6 +13,7 @@ import {CommonModule} from "@angular/common";
 import {ItemPhotosCarrousselComponent} from "./item-photos-carroussel/item-photos-carroussel.component";
 import {ItemDescriptionComponent} from "./item-description/item-description.component";
 import {ItemDetailsBuyOptionsComponent} from "./item-details-buy-options/item-details-buy-options.component";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 export interface Tile {
   position:string;
@@ -25,7 +26,7 @@ export interface Tile {
 @Component({
   selector: 'app-item-details',
   standalone: true,
-  imports: [MatGridListModule, CommonModule],
+  imports: [MatGridListModule, CommonModule, ItemDetailsBuyOptionsComponent, ItemPhotosCarrousselComponent, ItemDescriptionComponent, MatCard, MatCardContent],
   templateUrl: './item-details.component.html',
   styleUrl: './item-details.component.scss'
 })

@@ -5,11 +5,16 @@
         'main-content'
         'right-sidebar'
         'footer';
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  height: 100vh; /* Ensures the grid fills the entire viewport height */
+  box-sizing: border-box;
 }
 
 /* general column padding */
 .holy-grail-grid > * {
   padding:1rem;
+  box-sizing: border-box;
 }
 
 
@@ -30,11 +35,23 @@
 
 
 /* desktop breakpoint */
-@media (min-width:1300px) {
+@media (min-width: 768px) {
   .holy-grail-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 2fr 1fr; /* Ensures main-content takes up more space than sidebar */
     grid-template-areas:
-            'main-content right-sidebar'
-            'footer right-sidebar';
+      'main-content right-sidebar'
+      'footer right-sidebar';
+  }
+}
+
+/* mobile breakpoint */
+@media (max-width: 767px) {
+  .holy-grail-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      'main-content'
+      'right-sidebar'
+      'footer';
   }
 }
