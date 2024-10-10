@@ -30,7 +30,7 @@ export interface Tile {
   templateUrl: './item-details.component.html',
   styleUrl: './item-details.component.scss'
 })
-export class ItemDetailsComponent implements OnInit {
+export class ItemDetailsComponent  {
   @ViewChild('middleContainer', { read: ViewContainerRef }) middleContainer!: ViewContainerRef;
   @ViewChild('leftContainer', { read: ViewContainerRef }) leftContainer!: ViewContainerRef;
   @ViewChild('bottomContainer', { read: ViewContainerRef }) bottomContainer!: ViewContainerRef;
@@ -46,35 +46,14 @@ export class ItemDetailsComponent implements OnInit {
 
   constructor( protected screenService: ScreenService) {}
 
-  ngOnInit() {
-    this.resizeGrid();
-  }
+
 
   ngAfterViewInit() {
     this.loadComponents();
   }
 
-  // Listen to window resize events
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.resizeGrid();
-  }
 
-  private resizeGrid() {
-    if (this.screenService.isMobile()) {
-      this.tiles[0].cols =1;
-      this.tiles[1].cols =1;
-      this.tiles[2].cols =1;
-      this.gridCols = 1;  // Mobile screen, one column
-      this.gridRowHeight = '2:1'; // Adjust the tile height for mobile
-    } else {
-      this.tiles[0].cols =3;
-      this.tiles[1].cols =1;
-      this.tiles[2].cols =3;
-      this.gridCols = 4;  // Larger screens, four columns
-      this.gridRowHeight = '1:1';
-    }
-  }
+
 
   // Method to dynamically load components into the grid
   loadComponents() {
