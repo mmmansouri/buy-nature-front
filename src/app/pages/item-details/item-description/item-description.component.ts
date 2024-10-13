@@ -4,11 +4,12 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {CommonModule} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {MatTabsModule} from "@angular/material/tabs";
 
 @Component({
   selector: 'app-item-description',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatGridListModule, CommonModule, RouterLink],
+  imports: [MatTabsModule, MatCardModule, MatButtonModule, MatGridListModule, CommonModule, RouterLink],
   templateUrl: './item-description.component.html',
   styleUrl: './item-description.component.scss'
 })
