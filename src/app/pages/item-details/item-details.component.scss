@@ -1,8 +1,8 @@
 .items-details-container {
   height: 100%;
   display: grid;
-  grid-template-rows: 35% 65%;
-  grid-template-columns: 65% 35%;
+  grid-template-rows: 1fr 2fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-areas:
       'main aside'
       'footer aside'
@@ -14,7 +14,6 @@
 }
 
 .description {
-
   grid-area: footer;
   background:#c5ed77;
 
@@ -29,7 +28,8 @@
 @media (max-width: 767px) {
   .items-details-container {
     display: grid;
-    grid-template-rows: 35% 15% 50%;
+    grid-template-rows: 2fr 1fr 3fr;
+    grid-template-columns: 1fr;
     grid-template-areas:
       'main '
       'aside'

@@ -1,51 +1,26 @@
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+.item-buy-options-container {
+
+  display: grid;
+  justify-items: center;
   align-items: center;
-  justify-content: center;
+  grid-template-rows: 2fr repeat(4, 1fr);
+  grid-template-columns: 1fr;
+  grid-template-areas:
+      'header'
+      'main '
+      'aside'
+      'footer'
 }
 
-.add-to-cart-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
+.add-to-cart-button-container{
+  grid-area: footer;
 }
 
-.mat-form-field-container {
-  width: 100%;
+.size-selector-container {
+  grid-area: main;
 }
 
-/* Flexbox for larger screens (tablet/desktop) */
-@media screen and (min-width: 768px) {
-  .add-to-cart-form {
-    flex-direction: column;
-  }
-
-  .divider {
-    width: 100%;
-    margin: 20px 0;
-  }
+.quantity-selector-container {
+  grid-area: aside;
 }
 
-/* Flexbox for mobile screens (small screen) */
-@media screen and (max-width: 767px) {
-  .add-to-cart-form {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .add-to-cart-button-container {
-    flex: 1;
-    margin-right: 10px;
-  }
-
-  .divider {
-    width: auto;
-    height: 100%;
-    margin: 0 10px;
-    align-self: center;
-  }
-}

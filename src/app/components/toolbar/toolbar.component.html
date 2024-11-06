@@ -3,7 +3,8 @@
     <mat-icon>menu</mat-icon>
   </button>
   <a routerLink="/" class="unstyled-link"><span>Buy Nature</span></a>
-  <button mat-icon-button (click)="displayCart()">
+  <button mat-icon-button (click)="toggleCartShow($event)">
     <mat-icon [matBadge]="quantity"  aria-hidden="false">shopping_cart</mat-icon>
   </button>
 </mat-toolbar>
+<div *ngIf="cartOpen" appClickOutside (clickOutside)="closeCart()" class="mini-cart-container" > MINI CART WORKS</div>

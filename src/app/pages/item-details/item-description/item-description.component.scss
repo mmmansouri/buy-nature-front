@@ -1,0 +1,13 @@
+.description-container {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+      'main '
+}
+
+.description-container {
+  grid-area: main;
+}

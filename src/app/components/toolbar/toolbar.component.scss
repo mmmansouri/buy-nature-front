@@ -23,3 +23,15 @@ mat-toolbar{
 .flexSpaceBetween {
   justify-content: space-between;
 }
+
+.mini-cart-container {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  width: 250px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+}

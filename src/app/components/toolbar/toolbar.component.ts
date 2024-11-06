@@ -6,16 +6,19 @@ import { MatButtonModule } from "@angular/material/button";
 import { RouterLink } from "@angular/router";
 import { MatBadgeModule } from '@angular/material/badge';
 import {CartService} from "../../pages/cart/cart.service";
+import {CommonModule} from "@angular/common";
+import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [MatBadgeModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
+  imports: [ClickOutsideDirective, MatBadgeModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink, CommonModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
 export class ToolbarComponent implements OnInit {
   quantity: number = 0;
+  cartOpen: boolean = false;
 
   constructor(private sidenavService: SidenavService,private cartService: CartService) {}
 
@@ -34,8 +37,13 @@ export class ToolbarComponent implements OnInit {
 
   }
 
-  displayCart() {
+  toggleCartShow(event: MouseEvent) {
+    event.stopPropagation();
+    this.cartOpen = !this.cartOpen;
+  }
 
+  closeCart() {
+    this.cartOpen = false;
   }
 
 }
