@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1",
+    "name": "Wireless Mouse",
+    "price": 29.99,
+    "description": "A sleek and ergonomic wireless mouse with adjustable DPI.",
+    "imageUrl": "assets/mock-pictures/mouse.webp"
+  },
+  {
+    "id": "2",
+    "name": "Mechanical Keyboard",
+    "price": 79.99,
+    "description": "A durable mechanical keyboard with customizable RGB lighting.",
+    "imageUrl": "assets/mock-pictures/keybord.webp"
+  },
+  {
+    "id": "3",
+    "name": "USB-C Hub",
+    "price": 49.99,
+    "description": "A versatile USB-C hub with multiple ports for various devices.",
+    "imageUrl": "assets/mock-pictures/usb-hub.webp"
+  },
+  {
+    "id": "4",
+    "name": "Bluetooth Speaker",
+    "price": 99.99,
+    "description": "A portable Bluetooth speaker with deep bass and 12-hour battery life.",
+    "imageUrl": "assets/mock-pictures/speaker.webp"
+  },
+  {
+    "id": "5",
+    "name": "Smartphone Stand",
+    "price": 15.99,
+    "description": "An adjustable smartphone stand for hands-free viewing.",
+    "imageUrl": "assets/mock-pictures/smartphone-stand.webp"
+  },
+  {
+    "id": "6",
+    "name": "External Hard Drive",
+    "price": 89.99,
+    "description": "A 1TB external hard drive for storing all your important files.",
+    "imageUrl": "assets/mock-pictures/external-hardrive.webp"
+  },
+  {
+    "id": "7",
+    "name": "Gaming Headset",
+    "price": 59.99,
+    "description": "A comfortable gaming headset with surround sound.",
+    "imageUrl": "assets/mock-pictures/gaming-headset.webp"
+  },
+  {
+    "id": "8",
+    "name": "Portable Charger",
+    "price": 39.99,
+    "description": "A high-capacity portable charger for your mobile devices.",
+    "imageUrl": "assets/mock-pictures/power-bank.webp"
+  },
+  {
+    "id": "9",
+    "name": "Smart LED Bulb",
+    "price": 24.99,
+    "description": "A color-changing LED bulb controlled via app or voice.",
+    "imageUrl": "assets/mock-pictures/smart-led-buld.webp"
+  },
+  {
+    "id": "10",
+    "name": "Fitness Tracker",
+    "price": 49.99,
+    "description": "A fitness tracker with heart rate and activity monitoring.",
+    "imageUrl": "assets/mock-pictures/fitness-tracker.webp"
+  }
+]

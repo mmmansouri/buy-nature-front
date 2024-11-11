@@ -13,3 +13,10 @@ img {
   gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

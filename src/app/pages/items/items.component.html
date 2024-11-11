@@ -1,15 +1,16 @@
 <div class="container responsive-grid">
-  <mat-card  *ngFor="let i of [1,2,3,4,5,6,7,8,10,11,12,13,15]" appearance="outlined">
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+  <mat-card  *ngFor="let item of items" appearance="outlined">
     <mat-card-header>
-      <mat-card-title>Shiba Inu</mat-card-title>
-      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      <mat-card-title>{{item.name}}</mat-card-title>
+      <mat-card-subtitle>{{item.price}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img mat-card-image [src]="item.imageUrl" [alt]="item.name">
     <mat-card-content>
       <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
+        {{item.description}}
       </p>
     </mat-card-content>
     <mat-card-actions>
