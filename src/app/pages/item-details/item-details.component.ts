@@ -66,7 +66,9 @@ export class ItemDetailsComponent implements OnInit, AfterViewInit {
     this.bottomContainer.clear();
 
     this.middleContainer.createComponent(ItemPhotosCarrousselComponent);
-    this.leftContainer.createComponent(ItemDetailsBuyOptionsComponent);
+
+    const itemBuyOptionsComponentRef = this.leftContainer.createComponent(ItemDetailsBuyOptionsComponent);
+    itemBuyOptionsComponentRef.instance.item = this.item;
 
     const descriptionComponentRef = this.bottomContainer.createComponent(ItemDescriptionComponent);
     descriptionComponentRef.instance.item = this.item;

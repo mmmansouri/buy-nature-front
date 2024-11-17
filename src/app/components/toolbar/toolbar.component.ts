@@ -8,6 +8,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import {CartService} from "../../pages/cart/cart.service";
 import {CommonModule} from "@angular/common";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
+import {ItemInCart} from "../../models/item.in.cart.model";
 
 @Component({
   selector: 'app-toolbar',
@@ -17,14 +18,18 @@ import {ClickOutsideDirective} from "../../directives/click-outside.directive";
   styleUrl: './toolbar.component.scss'
 })
 export class ToolbarComponent implements OnInit {
-  quantity: number = 0;
+  cartItems: ItemInCart[] = [];
+  numberOfItemsInCart = 0;
+
   cartOpen: boolean = false;
 
   constructor(private sidenavService: SidenavService,private cartService: CartService) {}
 
   ngOnInit() {
-    this.cartService.cartState$.subscribe((quantity : number) => {
-      this.quantity = quantity;
+    this.cartService.cartState$.subscribe(cart => {
+      this.cartItems = cart;
+      this.numberOfItemsInCart = this.cartItems.length;
+      console.log('Cart updated:', cart);
     })
   }
 
@@ -32,9 +37,7 @@ export class ToolbarComponent implements OnInit {
 
 
   toggleMenu() {
-
       this.sidenavService.toggleSidenav();
-
   }
 
   toggleCartShow(event: MouseEvent) {

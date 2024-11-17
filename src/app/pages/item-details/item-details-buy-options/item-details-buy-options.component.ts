@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatGridListModule} from "@angular/material/grid-list";
@@ -8,6 +8,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {CartService} from "../../cart/cart.service";
+import {Item} from "../../../models/item.model";
 
 @Component({
   selector: 'app-item-details-buy-options',
@@ -16,7 +17,9 @@ import {CartService} from "../../cart/cart.service";
   templateUrl: './item-details-buy-options.component.html',
   styleUrl: './item-details-buy-options.component.scss'
 })
-export class ItemDetailsBuyOptionsComponent   {
+export class ItemDetailsBuyOptionsComponent  {
+  @Input() item!: Item | undefined;
+
   size = 'N';
   quantity = "0";
 
@@ -24,8 +27,11 @@ export class ItemDetailsBuyOptionsComponent   {
   }
 
   addToCart() {
-      this.cartService.addToCart(parseInt(this.quantity));
-      this.resetSelection();
+    if (this.item) {
+      this.cartService.addToCart(this.item, parseInt(this.quantity));
+    }
+
+    this.resetSelection();
   }
 
   resetSelection(): void {
