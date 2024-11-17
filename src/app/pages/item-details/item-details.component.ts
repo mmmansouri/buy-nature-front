@@ -1,27 +1,21 @@
 import {
+  AfterViewInit,
   Component,
-  ComponentFactoryResolver,
-  HostListener,
   OnInit,
-  Type,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
 import {MatGridListModule} from "@angular/material/grid-list";
-import {ScreenService} from "../../services/screen.service";
 import {CommonModule} from "@angular/common";
 import {ItemPhotosCarrousselComponent} from "./item-photos-carroussel/item-photos-carroussel.component";
 import {ItemDescriptionComponent} from "./item-description/item-description.component";
 import {ItemDetailsBuyOptionsComponent} from "./item-details-buy-options/item-details-buy-options.component";
 import {MatCard, MatCardContent} from "@angular/material/card";
+import {ActivatedRoute} from "@angular/router";
+import {ItemsService} from "../items/items.service";
+import {Item} from "../../models/item.model";
 
-export interface Tile {
-  position:string;
-  cols: number;
-  rows: number;
-  color: string;
-  component: Type<any>;
-}
+
 
 @Component({
   selector: 'app-item-details',
@@ -30,40 +24,51 @@ export interface Tile {
   templateUrl: './item-details.component.html',
   styleUrl: './item-details.component.scss'
 })
-export class ItemDetailsComponent  {
+export class ItemDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('middleContainer', { read: ViewContainerRef }) middleContainer!: ViewContainerRef;
   @ViewChild('leftContainer', { read: ViewContainerRef }) leftContainer!: ViewContainerRef;
   @ViewChild('bottomContainer', { read: ViewContainerRef }) bottomContainer!: ViewContainerRef;
 
-  gridCols: number = 4;
-  gridRowHeight: string = '1:1';
+  item!: Item | undefined;
+  isItemLoaded = false; // Tracks when the item data is loaded
+  isViewInitialized = false; // Tracks when the ViewChild references are initialized
 
-  tiles: Tile[] = [
-    {position:'middle', cols: 2,rows: 1, color: 'lightblue', component: ItemPhotosCarrousselComponent},
-    {position:'left', cols: 1,rows: 2, color: 'lightgreen',component: ItemDetailsBuyOptionsComponent},
-    {position:'bottom', cols: 2,rows: 1, color: '#DDBDF1',component:ItemDescriptionComponent},
-  ];
+  constructor(private route: ActivatedRoute, private itemService: ItemsService) {}
 
-  constructor( protected screenService: ScreenService) {}
-
-
-
-  ngAfterViewInit() {
-    this.loadComponents();
+  ngOnInit() {
+    const itemId = this.route.snapshot.paramMap.get('id')!;
+    this.itemService.getItemById(itemId).subscribe({
+      next: (item) => {
+        this.item = item;
+        this.isItemLoaded = true; // Mark item as loaded
+        this.tryLoadComponents(); // Attempt to load components
+      },
+      error: (err) => console.error('Error fetching item:', err)
+    });
   }
 
-
-
+  ngAfterViewInit() {
+    this.isViewInitialized = true; // Mark view as initialized
+    this.tryLoadComponents(); // Attempt to load components
+  }
 
   // Method to dynamically load components into the grid
-  loadComponents() {
+  private tryLoadComponents() {
+    if (this.isItemLoaded && this.isViewInitialized) {
+      // Only proceed if both the item and view references are ready
+      this.loadComponents();
+    }
+  }
+
+  private loadComponents() {
     this.middleContainer.clear();
     this.leftContainer.clear();
     this.bottomContainer.clear();
 
-    this.middleContainer.createComponent(this.tiles[0].component);
-    this.leftContainer.createComponent(this.tiles[1].component);
-    this.bottomContainer.createComponent(this.tiles[2].component);
+    this.middleContainer.createComponent(ItemPhotosCarrousselComponent);
+    this.leftContainer.createComponent(ItemDetailsBuyOptionsComponent);
 
+    const descriptionComponentRef = this.bottomContainer.createComponent(ItemDescriptionComponent);
+    descriptionComponentRef.instance.item = this.item;
   }
 }

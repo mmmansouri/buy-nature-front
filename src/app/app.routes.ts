@@ -6,6 +6,6 @@ import {ItemDetailsComponent} from "./pages/item-details/item-details.component"
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'items', component: ItemsComponent },
-  { path: 'item-details', component: ItemDetailsComponent }
+  { path: 'item-details/:id', component: ItemDetailsComponent }
 
 ];

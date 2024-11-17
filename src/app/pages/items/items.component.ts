@@ -5,8 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list'
 import {RouterLink} from "@angular/router";
 import {Item} from "../../models/item.model";
-import { HttpClient } from "@angular/common/http";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {ItemsService} from "./items.service";
 
 
 @Component({
@@ -21,16 +21,23 @@ export class ItemsComponent implements OnInit {
   items: Item[] = [];
   isLoading: boolean = true;
 
-  constructor(private http: HttpClient) {}
+  constructor(private itemsService: ItemsService) {}
 
   ngOnInit() {
     this.loadItems();
   }
 
   loadItems() {
-    this.http.get<Item[]>('assets/mock-data/items.json').subscribe((data) => {
-      this.items = data;
-      this.isLoading = false;
+    this.isLoading = true; // Start loading
+    this.itemsService.getAllItems().subscribe({
+      next: (data) => {
+        this.items = data;
+        this.isLoading = false; // Stop loading after data is fetched
+      },
+      error: () => {
+        this.isLoading = false; // Stop loading on error
+        // Optionally handle the error, like showing a message
+      }
     });
   }
 
