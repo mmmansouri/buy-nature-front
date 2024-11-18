@@ -7,4 +7,4 @@
     <mat-icon [matBadge]="numberOfItemsInCart"  aria-hidden="false">shopping_cart</mat-icon>
   </button>
 </mat-toolbar>
-<div *ngIf="cartOpen" appClickOutside (clickOutside)="closeCart()" class="mini-cart-container" > MINI CART WORKS</div>
+<ng-container #miniCartContainer></ng-container>
