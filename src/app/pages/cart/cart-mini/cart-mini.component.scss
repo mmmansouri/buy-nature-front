@@ -1,11 +1,97 @@
 .mini-cart-container {
+  background: greenyellow;
   position: absolute;
   right: 0;
   top: 50px;
-  width: 250px;
-  background-color: #fff;
+  width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 5px;
   z-index: 1000;
 }
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #2eb044;
+}
+
+.item-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.quantity-button {
+  width: 35px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quantity-button:hover {
+  background-color: #f0f0f0;
+}
+
+.quantity-input {
+  width: 40px;              /* Fixed width for uniform size */
+  height: 30px;             /* Fixed height to match the buttons */
+  text-align: center;       /* Centers text horizontally */
+  border: 1px solid #ccc;   /* Border to match the buttons */
+  border-radius: 3px;       /* Rounded corners */
+  padding: 0;               /* Remove extra padding */
+  font-size: 14px;          /* Adjust font size */
+  box-sizing: border-box;   /* Ensure padding and border are included in width/height */
+  line-height: 30px;        /* Vertically centers the text */
+}
+
+.item-price {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+  width: 80px;
+}
+
+.delete-button {
+  color: crimson;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.checkout-total-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.total-price {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.checkout-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
