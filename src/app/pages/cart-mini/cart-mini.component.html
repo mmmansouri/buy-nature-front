@@ -27,7 +27,7 @@
   <!-- Total price and checkout button on the same line -->
   <div class="checkout-total-container">
     <span class="total-price">Total: {{ getTotalPrice() | currency }}</span>
-    <button mat-raised-button color="primary" class="checkout-button" (click)="checkout()">
+    <button mat-raised-button color="primary" class="checkout-button" [routerLink]="['/cart']" (click)=" closeCart()">
       Checkout
     </button>
   </div>

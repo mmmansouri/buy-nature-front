@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,8 @@ import {RouterLink} from "@angular/router";
 import {Item} from "../../models/item.model";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {ItemsService} from "./items.service";
+import {ItemInCart} from "../../models/item.in.cart.model";
+import {CartService} from "../cart/cart.service";
 
 
 @Component({
@@ -18,12 +20,18 @@ import {ItemsService} from "./items.service";
 })
 export class ItemsComponent implements OnInit {
 
+  @Input()
+  cartItems: ItemInCart[] = [];
+
   items: Item[] = [];
   isLoading: boolean = true;
 
-  constructor(private itemsService: ItemsService) {}
+  constructor(private itemsService: ItemsService, private cartService: CartService) {}
 
   ngOnInit() {
+    this.cartService.cartState$.subscribe(cart => {
+      this.cartItems = cart;
+    })
     this.loadItems();
   }
 
@@ -38,6 +46,17 @@ export class ItemsComponent implements OnInit {
         this.isLoading = false; // Stop loading on error
         // Optionally handle the error, like showing a message
       }
+    });
+  }
+
+  addItem(itemId: string): void {
+    this.itemsService.getItemById(itemId).subscribe({
+      next: (item) => {
+        if (item) {
+          this.cartService.addToCart(item, 1)
+        }
+      },
+      error: (err) => console.error('Error fetching item:', err)
     });
   }
 

@@ -9,7 +9,7 @@ import {CartService} from "../../pages/cart/cart.service";
 import {CommonModule} from "@angular/common";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {ItemInCart} from "../../models/item.in.cart.model";
-import {CartMiniComponent} from "../../pages/cart/cart-mini/cart-mini.component";
+import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
 
 @Component({
   selector: 'app-toolbar',

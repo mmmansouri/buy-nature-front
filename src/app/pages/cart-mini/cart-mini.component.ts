@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CartService} from "../cart.service";
-import {ItemInCart} from "../../../models/item.in.cart.model";
-import {ClickOutsideDirective} from "../../../directives/click-outside.directive";
+import {CartService} from "../cart/cart.service";
+import {ItemInCart} from "../../models/item.in.cart.model";
+import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {CurrencyPipe, NgIf, NgFor} from "@angular/common";
 import {MatFormField} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-cart-mini',
@@ -17,7 +18,8 @@ import {FormsModule} from "@angular/forms";
     CurrencyPipe,
     MatFormField,
     MatIcon,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './cart-mini.component.html',
   styleUrl: './cart-mini.component.scss'
@@ -41,7 +43,6 @@ export class CartMiniComponent implements OnInit {
   }
 
   closeCart() {
-    console.log("clickOutside");
     this.cartOpen = false;
     this.cartOpenChange.emit(this.cartOpen);
   }
@@ -58,11 +59,6 @@ export class CartMiniComponent implements OnInit {
 
   removeItem(index: number): void {
     this.cartService.removeFromCart(this.cartItems[index].item.id)
-  }
-
-  checkout(): void {
-    // Implement your checkout logic here
-    console.log('Checkout clicked');
   }
 
   getTotalPrice(): number {

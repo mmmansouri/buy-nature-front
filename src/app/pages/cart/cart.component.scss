@@ -1,0 +1,99 @@
+.cart-container {
+  width: 100%;
+  padding: 10px;
+  background: yellow;
+  height: 100%;
+}
+
+.empty-cart-message {
+  width: 100%;
+  height: 100vh; /* Full height of the viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Ensures vertical stacking when items are shown */
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #555; /* Subtle text color */
+  text-align: center;
+}
+
+.cart-item {
+  background: lightgreen;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  border-bottom: 1px solid #ccc; /* Separator between items */
+}
+
+.item-image img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.item-details {
+  flex: 2;
+  padding-left: 10px;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.delete-button {
+  color: red;
+  margin-right: 10px;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-button,
+.quantity-button-increase {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.quantity-input {
+  width: 40px;
+  text-align: center;
+}
+
+.item-price {
+  font-size: 16px;
+  font-weight: bold;
+  flex: 1;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.delivery-total-container {
+  display: flex;
+  justify-content: space-between; /* Keeps "Total" on the left and the button to the right */
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px;
+}
+
+.delivery-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 20px; /* Adjust spacing from the right edge */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for visibility */
+}
+
+
+.total-price {
+  font-size: 18px;
+  font-weight: bold;
+}
+

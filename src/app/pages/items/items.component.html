@@ -2,7 +2,7 @@
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
-  <mat-card  *ngFor="let item of items" appearance="outlined">
+  <mat-card  *ngFor="let item of items" appearance="outlined" style="background:greenyellow;height: 65%">
     <mat-card-header>
       <mat-card-title>{{item.name}}</mat-card-title>
       <mat-card-subtitle>{{item.price}}</mat-card-subtitle>
@@ -14,7 +14,7 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button>Buy</button>
+      <button mat-button (click)="addItem(item.id)">Buy</button>
       <button mat-button [routerLink]="['/item-details', item.id]">
         Details
       </button>
