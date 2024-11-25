@@ -10,6 +10,7 @@ import {CommonModule} from "@angular/common";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {ItemInCart} from "../../models/item.in.cart.model";
 import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-toolbar',
@@ -21,36 +22,28 @@ import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
 export class ToolbarComponent implements OnInit, AfterViewInit {
   @ViewChild('miniCartContainer', { read: ViewContainerRef }) miniCartContainer!: ViewContainerRef;
 
-  cartItems: ItemInCart[] = [];
-  numberOfItemsInCart = 0;
+  cartItems$: Observable<ItemInCart[]>;
+  totalItems$: Observable<number>; // Bind to total items count
 
   cartOpen: boolean = false;
 
-  isItemLoaded = false; // Tracks when the item data is loaded
   isViewInitialized = false; // Tracks when the ViewChild references are initialized
 
   private cartMiniComponentInstance: CartMiniComponent | null = null; // Hold the instance of CartMiniComponent
 
-  constructor(private sidenavService: SidenavService,private cartService: CartService) {}
+  constructor(private sidenavService: SidenavService,private cartService: CartService) {
+    this.cartItems$ = this.cartService.getCartItems();
+    this.totalItems$ = this.cartService.getTotalItems();
+  }
 
   ngOnInit() {
-    this.cartService.cartState$.subscribe({
-      next: (cart) => {
+        this.tryLoadComponents(); // Attempt to load component
 
-        this.cartItems = cart;
-        this.numberOfItemsInCart = this.cartItems.length;
-        this.isItemLoaded = true; // Mark item as loaded
-        this.tryLoadComponents(); // Attempt to load components
-
-        console.log('Cart updated:', cart);
-      },
-      error: (err) => console.error('Error fetching cart:', err)
-    })
   }
 
   // Method to dynamically load components into the grid
   private tryLoadComponents() {
-    if (this.isItemLoaded && this.isViewInitialized) {
+    if (this.isViewInitialized) {
       // Only proceed if both the item and view references are ready
       this.loadComponents();
     }
@@ -66,7 +59,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
     const cartMiniComponentRef = this.miniCartContainer.createComponent(CartMiniComponent);
     this.cartMiniComponentInstance = cartMiniComponentRef.instance;
-    this.cartMiniComponentInstance.cartItems = this.cartItems;
     this.cartMiniComponentInstance.cartOpen = this.cartOpen;
 
     // Subscribe to cartOpenChange event

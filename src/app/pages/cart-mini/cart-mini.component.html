@@ -1,34 +1,41 @@
-<div *ngIf="cartOpen && cartItems.length>0" appClickOutside (clickOutside)="closeCart()" class="mini-cart-container">
-  <div *ngFor="let cartItem of cartItems; let i = index" class="cart-item">
-    <div class="item-image">
-      <img [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
-    </div>
-    <div class="item-details">
-      <span class="item-name">{{ cartItem.item.name }}</span>
-    </div>
-    <button mat-icon-button (click)="removeItem(i)" aria-label="Remove item" class="delete-button">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <div class="item-actions">
-      <button mat-icon-button (click)="decreaseQuantity(i)" aria-label="Decrease quantity" class="quantity-button">
-        <mat-icon>remove</mat-icon>
+<div *ngIf="cartOpen" class="mini-cart-container">
+  <!-- Show this when the cart is empty -->
+  <div *ngIf="(cartItems$ | async)?.length === 0" class="empty-cart-message">
+    Your cart is empty
+  </div>
+
+  <div *ngIf="(cartItems$ | async)?.length!>0" appClickOutside (clickOutside)="closeCart()">
+    <div *ngFor="let cartItem of (cartItems$ | async); let i = index" class="cart-item">
+      <div class="item-image">
+        <img [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
+      </div>
+      <div class="item-details">
+        <span class="item-name">{{ cartItem.item.name }}</span>
+      </div>
+      <button mat-icon-button (click)="removeItem(cartItem.item.id)" aria-label="Remove item" class="delete-button">
+        <mat-icon>delete</mat-icon>
       </button>
-      <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>
-      <button mat-icon-button (click)="increaseQuantity(i)" aria-label="Increase quantity" class="quantity-button-increase">
-        <mat-icon>add</mat-icon>
-      </button>
+      <div class="item-actions">
+        <button mat-icon-button (click)="decreaseQuantity(cartItem.item)" aria-label="Decrease quantity" class="quantity-button">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>
+        <button mat-icon-button (click)="increaseQuantity(cartItem.item)" aria-label="Increase quantity" class="quantity-button-increase">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="item-price">
+        {{ cartItem.item.price * cartItem.quantity | currency }}
+      </div>
     </div>
-    <div class="item-price">
-      {{ cartItem.item.price * cartItem.quantity | currency }}
+
+    <!-- Total price and checkout button on the same line -->
+    <div class="checkout-total-container">
+      <span class="total-price">Total: {{ totalPrice$ | async| currency }}</span>
+      <button mat-raised-button color="primary" class="checkout-button" [routerLink]="['/checkout']" (click)=" closeCart()">
+        Checkout
+      </button>
     </div>
   </div>
 
-
-  <!-- Total price and checkout button on the same line -->
-  <div class="checkout-total-container">
-    <span class="total-price">Total: {{ getTotalPrice() | currency }}</span>
-    <button mat-raised-button color="primary" class="checkout-button" [routerLink]="['/cart']" (click)=" closeCart()">
-      Checkout
-    </button>
-  </div>
 </div>

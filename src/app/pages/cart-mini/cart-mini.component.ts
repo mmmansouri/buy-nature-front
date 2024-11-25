@@ -2,11 +2,14 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CartService} from "../cart/cart.service";
 import {ItemInCart} from "../../models/item.in.cart.model";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
-import {CurrencyPipe, NgIf, NgFor} from "@angular/common";
+import {CurrencyPipe, NgIf, NgFor, AsyncPipe} from "@angular/common";
 import {MatFormField} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {async, Observable} from "rxjs";
+import {Item} from "../../models/item.model";
+import {MatButton, MatIconButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-cart-mini',
@@ -19,27 +22,30 @@ import {RouterLink} from "@angular/router";
     MatFormField,
     MatIcon,
     FormsModule,
-    RouterLink
+    RouterLink,
+    AsyncPipe,
+    MatIconButton,
+    MatButton
   ],
   templateUrl: './cart-mini.component.html',
   styleUrl: './cart-mini.component.scss'
 })
 export class CartMiniComponent implements OnInit {
 
-  @Input()
-  cartItems: ItemInCart[] = [];
+  cartItems$: Observable<ItemInCart[]>;
+  totalPrice$: Observable<number>;
 
   @Input()
   cartOpen: boolean = false;
 
   @Output() cartOpenChange = new EventEmitter<boolean>();
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService) {
+    this.cartItems$ = this.cartService.getCartItems();
+    this.totalPrice$ = this.cartService.getTotalPrice();
+  }
 
   ngOnInit() {
-    this.cartService.cartState$.subscribe(cart => {
-      this.cartItems = cart;
-    })
   }
 
   closeCart() {
@@ -47,22 +53,17 @@ export class CartMiniComponent implements OnInit {
     this.cartOpenChange.emit(this.cartOpen);
   }
 
-  increaseQuantity(index: number): void {
-    this.cartService.addToCart(this.cartItems[index].item, 1)
+  // Delegate actions to the CartService
+  removeItem(itemId: string): void {
+    this.cartService.removeFromCart(itemId);
   }
 
-  decreaseQuantity(index: number): void {
-    if (this.cartItems[index].quantity > 1) {
-      this.cartService.addToCart(this.cartItems[index].item, -1)
-    }
+  increaseQuantity(item: Item): void {
+    this.cartService.addToCart({ item, quantity:1});
   }
 
-  removeItem(index: number): void {
-    this.cartService.removeFromCart(this.cartItems[index].item.id)
-  }
-
-  getTotalPrice(): number {
-    return this.cartItems.reduce((total, cartItem) => total + cartItem.item.price * cartItem.quantity, 0);
+  decreaseQuantity(item: Item): void {
+    this.cartService.addToCart({ item, quantity:-1});
   }
 
 }

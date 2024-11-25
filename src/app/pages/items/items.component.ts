@@ -20,18 +20,12 @@ import {CartService} from "../cart/cart.service";
 })
 export class ItemsComponent implements OnInit {
 
-  @Input()
-  cartItems: ItemInCart[] = [];
-
   items: Item[] = [];
   isLoading: boolean = true;
 
   constructor(private itemsService: ItemsService, private cartService: CartService) {}
 
   ngOnInit() {
-    this.cartService.cartState$.subscribe(cart => {
-      this.cartItems = cart;
-    })
     this.loadItems();
   }
 
@@ -49,11 +43,11 @@ export class ItemsComponent implements OnInit {
     });
   }
 
-  addItem(itemId: string): void {
-    this.itemsService.getItemById(itemId).subscribe({
+  addItem(item: Item): void {
+    this.itemsService.getItemById(item.id).subscribe({
       next: (item) => {
         if (item) {
-          this.cartService.addToCart(item, 1)
+          this.cartService.addToCart({item, quantity: 1})
         }
       },
       error: (err) => console.error('Error fetching item:', err)

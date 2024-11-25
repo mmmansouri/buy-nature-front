@@ -1,0 +1,32 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <!-- Step 1: Cart -->
+  <mat-step [stepControl]="cartForm">
+    <form [formGroup]="cartForm">
+      <ng-template matStepLabel>Cart</ng-template>
+      <app-cart></app-cart>
+      <div>
+        <button mat-button matStepperNext [disabled]="!cartForm.valid">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Step 2: Delivery Details -->
+  <mat-step [stepControl]="deliveryForm">
+    <form [formGroup]="deliveryForm">
+      <ng-template matStepLabel>Delivery Details</ng-template>
+      <app-delivery></app-delivery>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="!deliveryForm.valid">Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Step 3: Confirmation -->
+  <mat-step>
+    <ng-template matStepLabel>Confirmation</ng-template>
+    <p>Your order has been placed successfully!</p>
+    <button mat-button matStepperPrevious>Back</button>
+    <button mat-button (click)="resetStepper(stepper)">Finish</button>
+  </mat-step>
+</mat-horizontal-stepper>

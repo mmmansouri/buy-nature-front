@@ -2,10 +2,13 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ItemInCart} from "../../models/item.in.cart.model";
 import {CartService} from "./cart.service";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
-import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
+import {FormBuilder, FormGroup, FormsModule} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
+import {Observable} from "rxjs";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {Item} from "../../models/item.model";
 
 @Component({
   selector: 'app-cart',
@@ -17,40 +20,43 @@ import {RouterLink} from "@angular/router";
     MatIcon,
     NgForOf,
     NgIf,
-    RouterLink
+    RouterLink,
+    MatIconButton,
+    MatButton,
+    AsyncPipe
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })
 export class CartComponent implements OnInit {
 
-  @Input()
-  cartItems: ItemInCart[] = [];
+  cartItems$: Observable<ItemInCart[]>;
+  totalPrice$: Observable<number>;
 
-  constructor(private cartService: CartService) {}
+  @Input() formGroup!: FormGroup;
+
+  constructor(private cartService: CartService, private fb: FormBuilder) {
+
+    this.cartItems$ = this.cartService.getCartItems();
+    this.totalPrice$ = this.cartService.getTotalPrice();
+  }
 
   ngOnInit() {
-    this.cartService.cartState$.subscribe(cart => {
-      this.cartItems = cart;
-    })
+    // Initialize dummy control to satisfy parent form validation
+    this.formGroup?.addControl('items', this.fb.control(null, { validators: [] }));
   }
 
-  increaseQuantity(index: number): void {
-    this.cartService.addToCart(this.cartItems[index].item, 1)
+  // Delegate actions to the CartService
+  removeItem(itemId: string): void {
+    this.cartService.removeFromCart(itemId);
   }
 
-  decreaseQuantity(index: number): void {
-    if (this.cartItems[index].quantity > 1) {
-      this.cartService.addToCart(this.cartItems[index].item, -1)
-    }
+  increaseQuantity(item: Item): void {
+    this.cartService.addToCart({ item, quantity:1});
   }
 
-  removeItem(index: number): void {
-    this.cartService.removeFromCart(this.cartItems[index].item.id)
-  }
-
-  getTotalPrice(): number {
-    return this.cartItems.reduce((total, cartItem) => total + cartItem.item.price * cartItem.quantity, 0);
+  decreaseQuantity(item: Item): void {
+    this.cartService.addToCart({ item, quantity:-1});
   }
 
 }

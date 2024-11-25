@@ -1,0 +1,94 @@
+<div class="delivery-form-container">
+  <form [formGroup]="deliveryForm" (ngSubmit)="onSubmit()">
+    <!-- Firstname -->
+    <mat-form-field appearance="outline">
+      <mat-label>Firstname</mat-label>
+      <input matInput formControlName="firstname" placeholder="Enter your firstname" />
+      <mat-error *ngIf="deliveryForm.get('firstname')?.hasError('required')">
+        Firstname is required
+      </mat-error>
+      <mat-error *ngIf="deliveryForm.get('firstname')?.hasError('minlength')">
+        Firstname must be at least 2 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Lastname -->
+    <mat-form-field appearance="outline">
+      <mat-label>Lastname</mat-label>
+      <input matInput formControlName="lastname" placeholder="Enter your lastname" />
+      <mat-error *ngIf="deliveryForm.get('lastname')?.hasError('required')">
+        Lastname is required
+      </mat-error>
+      <mat-error *ngIf="deliveryForm.get('lastname')?.hasError('minlength')">
+        Lastname must be at least 2 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Phone number -->
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" placeholder="Enter your phone" />
+      <mat-error *ngIf="deliveryForm.get('phone')?.hasError('required')">
+        Lastname is required
+      </mat-error>
+      <mat-error *ngIf="deliveryForm.get('phone')?.hasError('minlength')">
+        Lastname must be at least 2 characters
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Enter your email" />
+      <mat-error *ngIf="deliveryForm.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="deliveryForm.get('email')?.hasError('email')">
+        Please enter a valid email
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Address -->
+    <div formGroupName="address">
+      <mat-form-field appearance="outline">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street" placeholder="Enter your street" />
+        <mat-error *ngIf="deliveryForm.get('address.street')?.hasError('required')">
+          Street is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Number</mat-label>
+        <input matInput formControlName="number" placeholder="Enter the number" />
+        <mat-error *ngIf="deliveryForm.get('address.number')?.hasError('required')">
+          Number is required
+        </mat-error>
+        <mat-error *ngIf="deliveryForm.get('address.number')?.hasError('pattern')">
+          Number must be a valid numeric value
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Region</mat-label>
+        <input matInput formControlName="region" placeholder="Enter your region" />
+        <mat-error *ngIf="deliveryForm.get('address.region')?.hasError('required')">
+          Region is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" placeholder="Enter your country" />
+        <mat-error *ngIf="deliveryForm.get('address.country')?.hasError('required')">
+          Country is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Submit Button -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="!deliveryForm.valid">
+      Submit
+    </button>
+  </form>
+</div>

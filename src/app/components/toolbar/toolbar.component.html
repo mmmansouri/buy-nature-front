@@ -4,7 +4,7 @@
   </button>
   <a routerLink="/" class="unstyled-link"><span>Buy Nature</span></a>
   <button mat-icon-button (click)="toggleCartShow($event)">
-    <mat-icon [matBadge]="numberOfItemsInCart"  aria-hidden="false">shopping_cart</mat-icon>
+    <mat-icon [matBadge]="(totalItems$ | async)" aria-hidden="false">shopping_cart</mat-icon>
   </button>
 </mat-toolbar>
 <ng-container #miniCartContainer></ng-container>

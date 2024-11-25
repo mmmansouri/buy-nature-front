@@ -28,7 +28,9 @@ export class ItemDetailsBuyOptionsComponent  {
 
   addToCart() {
     if (this.item) {
-      this.cartService.addToCart(this.item, parseInt(this.quantity));
+      this.cartService.addToCart(
+        {item: this.item, quantity: parseInt(this.quantity)}
+      );
     }
 
     this.resetSelection();
