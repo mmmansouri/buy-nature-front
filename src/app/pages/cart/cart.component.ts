@@ -3,7 +3,7 @@ import {ItemInCart} from "../../models/item.in.cart.model";
 import {CartService} from "./cart.service";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
-import {FormBuilder, FormGroup, FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
@@ -42,8 +42,24 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize dummy control to satisfy parent form validation
-    this.formGroup?.addControl('items', this.fb.control(null, { validators: [] }));
+    // Initialize the 'items' control if it doesn't already exist
+    if (!this.formGroup.contains('items')) {
+      this.formGroup.addControl(
+        'items',
+        this.fb.control(null, [Validators.required]) // Add a required validator
+      );
+    }
+
+    // Subscribe to cartItems$ and update the 'items' control's value
+    this.cartItems$.subscribe(cartItems => {
+      if (cartItems.length > 0) {
+        this.formGroup.get('items')?.setValue(cartItems); // Set the value to the cart items
+        this.formGroup.get('items')?.setErrors(null); // Clear any validation errors
+      } else {
+        this.formGroup.get('items')?.setValue(null); // Clear the value if the cart is empty
+        this.formGroup.get('items')?.setErrors({ required: true }); // Set a required error
+      }
+    });
   }
 
   // Delegate actions to the CartService

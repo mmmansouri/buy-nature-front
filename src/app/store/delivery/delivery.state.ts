@@ -1,16 +1,12 @@
 import {Address} from "../../models/address.model";
+import {Delivery} from "../../models/delivery.model";
 
 export interface DeliveryState {
-  details: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    address: Address
-  };
+  delivery: Delivery
 }
 
 export const initialDeliveryState: DeliveryState = {
-  details: {
+  delivery: {
     firstname: '',
     lastname: '',
     email: '',

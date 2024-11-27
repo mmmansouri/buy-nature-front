@@ -4,8 +4,8 @@ import { DeliveryState, initialDeliveryState } from './delivery.state';
 
 export const deliveryReducer = createReducer(
   initialDeliveryState,
-  on(updateDeliveryDetails, (state, { details }) => ({
+  on(updateDeliveryDetails, (state, { delivery }) => ({
     ...state,
-    details,
+    delivery,
   }))
 );

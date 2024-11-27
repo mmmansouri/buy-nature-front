@@ -1,8 +1,12 @@
-import { createSelector } from '@ngrx/store';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 import { DeliveryState } from './delivery.state';
+import {Delivery} from "../../models/delivery.model";
 
-export const selectDelivery = (state: { delivery: DeliveryState }) => state.delivery;
-export const selectDeliveryDetails = createSelector(
-  selectDelivery,
-  (state: DeliveryState) => state.details
+
+export const selectDeliveryState = createFeatureSelector<DeliveryState>('delivery');
+
+export const selectDelivery = createSelector(
+  selectDeliveryState,
+  (state) => state.delivery
 );
+
