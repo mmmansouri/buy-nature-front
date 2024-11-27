@@ -33,9 +33,6 @@
     <!-- Delivery and checkout button on the same line -->
     <div class="delivery-total-container">
       <span class="total-price">Total: {{  totalPrice$ | async | currency }}</span>
-      <button mat-raised-button color="primary" class="delivery-button" [routerLink]="['/delivery']">
-        Delivery
-      </button>
     </div>
   </div>
 </div>

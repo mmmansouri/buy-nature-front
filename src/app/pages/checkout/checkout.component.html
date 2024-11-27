@@ -6,7 +6,7 @@
       <!-- Pass the formGroup from the parent to the child -->
       <app-cart [formGroup]="cartForm"></app-cart>
       <div>
-        <button mat-button matStepperNext [disabled]="!cartForm.valid">Next</button>
+        <button mat-button matStepperNext [disabled]="!cartForm.valid">Delivery</button>
       </div>
     </form>
   </mat-step>
@@ -17,8 +17,8 @@
       <ng-template matStepLabel>Delivery Details</ng-template>
       <app-delivery [formGroup]="deliveryForm"></app-delivery>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext [disabled]="!deliveryForm.valid">Next</button>
+        <button mat-button matStepperPrevious>Cart</button>
+        <button mat-button matStepperNext [disabled]="!deliveryForm.valid">Payment</button>
       </div>
     </form>
   </mat-step>
@@ -28,6 +28,6 @@
     <ng-template matStepLabel>Confirmation</ng-template>
     <p>Your order has been placed successfully!</p>
     <button mat-button matStepperPrevious>Back</button>
-    <button mat-button (click)="resetStepper(stepper)">Finish</button>
+    <button mat-button (click)="resetStepper(stepper)">Order</button>
   </mat-step>
 </mat-horizontal-stepper>
