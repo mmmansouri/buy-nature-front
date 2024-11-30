@@ -8,11 +8,21 @@ import { provideStore } from '@ngrx/store';
 import { cartReducer } from "./store/cart/cart.reducer";
 import { deliveryReducer } from "./store/delivery/delivery.reducer";
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideEffects } from '@ngrx/effects';
+import { itemsReducer } from './store/items/items.reducer';
+import { ItemsEffects } from './store/items/items.effects';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideAnimationsAsync(), provideHttpClient(withInterceptorsFromDi()),
+  providers: [
+    provideRouter(routes),
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideStore({
         cart: cartReducer,
         delivery: deliveryReducer,
-    }), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
+        items: itemsReducer,
+    }),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideEffects([ItemsEffects]),
+  ],
 };
