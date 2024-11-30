@@ -16,7 +16,7 @@
         <mat-icon>delete</mat-icon>
       </button>
       <div class="item-actions">
-        <button mat-icon-button (click)="decreaseQuantity(cartItem.item)" aria-label="Decrease quantity" class="quantity-button">
+        <button mat-icon-button (click)="decreaseQuantity(cartItem.item)" aria-label="Decrease quantity" class="quantity-button-increase">
           <mat-icon>remove</mat-icon>
         </button>
         <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>

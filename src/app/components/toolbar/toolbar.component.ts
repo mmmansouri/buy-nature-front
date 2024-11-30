@@ -8,7 +8,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import {CartService} from "../../pages/cart/cart.service";
 import {CommonModule} from "@angular/common";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
 import {Observable} from "rxjs";
 
@@ -22,7 +22,7 @@ import {Observable} from "rxjs";
 export class ToolbarComponent implements OnInit, AfterViewInit {
   @ViewChild('miniCartContainer', { read: ViewContainerRef }) miniCartContainer!: ViewContainerRef;
 
-  cartItems$: Observable<ItemInCart[]>;
+  cartItems$: Observable<OrderItem[]>;
   totalItems$: Observable<number>; // Bind to total items count
 
   cartOpen: boolean = false;

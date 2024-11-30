@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 import {CartService} from "./cart.service";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
@@ -30,7 +30,7 @@ import {Item} from "../../models/item.model";
 })
 export class CartComponent implements OnInit {
 
-  cartItems$: Observable<ItemInCart[]>;
+  cartItems$: Observable<OrderItem[]>;
   totalPrice$: Observable<number>;
 
   @Input() formGroup!: FormGroup;

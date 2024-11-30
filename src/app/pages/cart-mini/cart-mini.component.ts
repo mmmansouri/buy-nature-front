@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CartService} from "../cart/cart.service";
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {CurrencyPipe, NgIf, NgFor, AsyncPipe} from "@angular/common";
 import {MatFormField} from "@angular/material/form-field";
@@ -19,7 +19,6 @@ import {MatButton, MatIconButton} from "@angular/material/button";
     NgIf,
     NgFor,
     CurrencyPipe,
-    MatFormField,
     MatIcon,
     FormsModule,
     RouterLink,
@@ -32,7 +31,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 })
 export class CartMiniComponent implements OnInit {
 
-  cartItems$: Observable<ItemInCart[]>;
+  cartItems$: Observable<OrderItem[]>;
   totalPrice$: Observable<number>;
 
   @Input()

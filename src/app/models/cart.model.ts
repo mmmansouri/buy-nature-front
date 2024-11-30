@@ -1,4 +1,4 @@
-import { ItemInCart } from "./item.in.cart.model";
+import { ItemInCart } from "./order.item.model";
 
 export interface Cart {
   id: string;

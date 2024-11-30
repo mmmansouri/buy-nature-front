@@ -1,7 +1,7 @@
-import { ItemInCart } from "../../models/item.in.cart.model";
+import { OrderItem } from "../../models/order.item.model";
 
 export interface CartState {
-  itemsInCart: ItemInCart[]; // Define your item model
+  itemsInCart: OrderItem[]; // Define your item model
 }
 
 export const initialCartState: CartState = {

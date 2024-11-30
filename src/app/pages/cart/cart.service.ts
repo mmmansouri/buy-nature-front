@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { addItem, removeItem, clearCart } from '../../store/cart/cart.actions';
 
 import { selectCartItems, selectCartTotalItems, selectCartTotalPrice } from '../../store/cart/cart.selectors';
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class CartService {
   constructor(private store: Store) {}
 
   // Selectors to get cart data
-  getCartItems(): Observable<ItemInCart[]> {
+  getCartItems(): Observable<OrderItem[]> {
     return this.store.select(selectCartItems);
   }
 
@@ -26,7 +26,7 @@ export class CartService {
   }
 
   // Dispatch actions to modify cart state
-  addToCart(itemInCart: ItemInCart): void {
+  addToCart(itemInCart: OrderItem): void {
     this.store.dispatch(addItem({ itemInCart }));
   }
 

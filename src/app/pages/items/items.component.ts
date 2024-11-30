@@ -7,7 +7,7 @@ import {RouterLink} from "@angular/router";
 import {Item} from "../../models/item.model";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {ItemsService} from "./items.service";
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 import {CartService} from "../cart/cart.service";
 
 

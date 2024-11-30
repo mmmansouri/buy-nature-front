@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { addItem, removeItem, clearCart, loadCart } from './cart.actions';
-import {ItemInCart} from "../../models/item.in.cart.model";
+import {OrderItem} from "../../models/order.item.model";
 import {initialCartState} from "./cart.state";
 
 
