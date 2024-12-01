@@ -1,9 +1,9 @@
 import { OrderItem } from "../../models/order.item.model";
 
 export interface CartState {
-  itemsInCart: OrderItem[]; // Define your item model
+  orderItems: OrderItem[]; // Define your item model
 }
 
 export const initialCartState: CartState = {
-  itemsInCart: []
+  orderItems: []
 };

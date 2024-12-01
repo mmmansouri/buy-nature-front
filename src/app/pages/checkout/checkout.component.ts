@@ -6,6 +6,8 @@ import {DeliveryComponent} from "../delivery/delivery.component";
 import {MatButton} from "@angular/material/button";
 import { CartService } from '../../services/cart.service';
 import { DeliveryService } from '../../services/delivery.service';
+import { PaymentComponent } from "../payment/payment.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -19,8 +21,9 @@ import { DeliveryService } from '../../services/delivery.service';
     MatStepLabel,
     MatButton,
     MatStepperNext,
-    MatStepperPrevious
-  ],
+    MatStepperPrevious,
+    PaymentComponent
+],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -28,9 +31,13 @@ export class CheckoutComponent {
 
   cartForm: FormGroup;
   deliveryForm!: FormGroup;
+  paymentForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, @Inject(CartService) private cartService: CartService, @Inject(DeliveryService) private deliveryService: DeliveryService) {
+  constructor(private fb: FormBuilder, @Inject(CartService) private cartService: CartService, @Inject(DeliveryService) private deliveryService: DeliveryService, private router: Router) {
     // Cart Form (Validate that the cart is not empty)
+    this.paymentForm = this.fb.group({
+      paymentMethod: ['fff', Validators.required]
+    });
     this.cartForm = this.fb.group({
       items: [this.cartService.getCartItems(), Validators.required] // Initialize with cart items
     });
@@ -56,8 +63,14 @@ export class CheckoutComponent {
     this.deliveryService.updateDeliveryDetails(this.deliveryForm.value);
   }
 
+  clearOrder() { 
+    this.cartService.clearCart(); // Clear the cart
+    this.deliveryService.clearDeliveryDetails(); // Clear delivery details
+  }
+
   resetStepper(stepper: any): void {
-    //stepper.reset();
+    stepper.reset();
+    this.router.navigate(['/items']);
   }
 
 }

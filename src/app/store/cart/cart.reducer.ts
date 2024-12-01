@@ -6,14 +6,14 @@ import {initialCartState} from "./cart.state";
 
 export const cartReducer = createReducer(
   initialCartState,
-  on(loadCart, (state, { cart }) => ({ ...state, itemsInCart: [...cart] })),
+  on(loadCart, (state, { cart }) => ({ ...state, orderItems: [...cart] })),
   on(addItem, (state, { itemInCart }) => {
-    const existingItem = state.itemsInCart.find((cartItem) => cartItem.item.id === itemInCart.item.id);
+    const existingItem = state.orderItems.find((cartItem) => cartItem.item.id === itemInCart.item.id);
     if (existingItem) {
       // Update quantity of existing item
       return {
         ...state,
-        itemsInCart: state.itemsInCart.map((cartItem) =>
+        orderItems: state.orderItems.map((cartItem) =>
           cartItem.item.id === itemInCart.item.id
             ? { ...cartItem, quantity: cartItem.quantity + itemInCart.quantity }
             : cartItem
@@ -22,11 +22,11 @@ export const cartReducer = createReducer(
     }
 
     // Add new item to the cart
-    return { ...state, itemsInCart: [...state.itemsInCart,  itemInCart ] };
+    return { ...state, orderItems: [...state.orderItems,  itemInCart ] };
   }),
   on(removeItem, (state, { itemId }) => ({
     ...state,
-    itemsInCart: state.itemsInCart.filter((cartItem) => cartItem.item.id !== itemId),
+    orderItems: state.orderItems.filter((cartItem) => cartItem.item.id !== itemId),
   })),
-  on(clearCart, (state) => ({ ...state, items: [] }))
+  on(clearCart, (state) => ({ ...state, orderItems: [] }))
 );
