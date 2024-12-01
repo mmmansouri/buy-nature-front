@@ -18,7 +18,7 @@
       <app-delivery [formGroup]="deliveryForm"></app-delivery>
       <div>
         <button mat-button matStepperPrevious>Cart</button>
-        <button mat-button matStepperNext [disabled]="!deliveryForm.valid">Payment</button>
+        <button mat-button matStepperNext [disabled]="!deliveryForm.valid" (click)="confirmDelivery()">Payment</button>
       </div>
     </form>
   </mat-step>

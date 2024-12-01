@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {CartService} from "../cart/cart.service";
+import {CartService} from "../../services/cart.service";
 import {OrderItem} from "../../models/order.item.model";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {CurrencyPipe, NgIf, NgFor, AsyncPipe} from "@angular/common";

@@ -12,8 +12,8 @@ import {ItemDescriptionComponent} from "./item-description/item-description.comp
 import {ItemDetailsBuyOptionsComponent} from "./item-details-buy-options/item-details-buy-options.component";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {ActivatedRoute} from "@angular/router";
-import {ItemsService} from "../items/items.service";
 import {Item} from "../../models/item.model";
+import { ItemsService } from '../../services/items.service';
 
 
 

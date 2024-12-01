@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {OrderItem} from "../../models/order.item.model";
-import {CartService} from "./cart.service";
+import {CartService} from "../../services/cart.service";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";

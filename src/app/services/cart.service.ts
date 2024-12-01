@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { addItem, removeItem, clearCart } from '../../store/cart/cart.actions';
+import { OrderItem } from '../models/order.item.model';
+import { selectCartItems, selectCartTotalItems, selectCartTotalPrice } from '../store/cart/cart.selectors';
+import { addItem, clearCart, removeItem } from '../store/cart/cart.actions';
 
-import { selectCartItems, selectCartTotalItems, selectCartTotalPrice } from '../../store/cart/cart.selectors';
-import {OrderItem} from "../../models/order.item.model";
 
 @Injectable({
   providedIn: 'root',

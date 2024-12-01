@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
-import {Item} from "../../models/item.model";
+import {Item} from "../models/item.model";
 import { Observable } from "rxjs";
 import { Store } from '@ngrx/store';
-import { selectAllItems, selectItemById } from '../../store/items/items.selectors';
-import { loadItems } from '../../store/items/items.actions';
+import { loadItems } from "../store/items/items.actions";
+import { selectAllItems, selectItemById } from "../store/items/items.selectors";
+
 
 @Injectable({
   providedIn: 'root'

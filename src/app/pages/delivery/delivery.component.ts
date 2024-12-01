@@ -6,7 +6,8 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Observable} from "rxjs";
 import {Delivery} from "../../models/delivery.model";
-import {DeliveryService} from "./delivery.service";
+import { DeliveryService } from '../../services/delivery.service';
+
 
 @Component({
   selector: 'app-delivery',

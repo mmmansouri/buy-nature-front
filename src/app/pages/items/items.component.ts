@@ -6,9 +6,10 @@ import { MatGridListModule } from '@angular/material/grid-list'
 import {RouterLink} from "@angular/router";
 import {Item} from "../../models/item.model";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {ItemsService} from "./items.service";
-import {OrderItem} from "../../models/order.item.model";
-import {CartService} from "../cart/cart.service";
+import { ItemsService } from '../../services/items.service';
+import { CartService } from '../../services/cart.service';
+
+
 
 
 @Component({

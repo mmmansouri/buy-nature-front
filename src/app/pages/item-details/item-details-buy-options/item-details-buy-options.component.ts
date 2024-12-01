@@ -7,8 +7,8 @@ import {RouterLink} from "@angular/router";
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {CartService} from "../../cart/cart.service";
 import {Item} from "../../../models/item.model";
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-item-details-buy-options',
