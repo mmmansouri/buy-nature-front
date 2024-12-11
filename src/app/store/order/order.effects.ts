@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -13,15 +12,5 @@ export class OrderEffects {
     private orderService: OrderService
   ) {}
 
-  loadOrders$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrderActions.getOrders),
-      mergeMap(() =>
-        this.orderService.getOrders().pipe(
-          map(orders => OrderActions.getOrdersSuccess({ orders })),
-          catchError(error => of(OrderActions.getOrdersFailure({ error })))
-        )
-      )
-    )
-  );
+
 }

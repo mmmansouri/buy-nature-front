@@ -1,34 +1,83 @@
 
 import { createReducer, on } from '@ngrx/store';
-import { Order } from '../../models/order.model';
 import * as OrderActions from './order.actions';
-
-export interface OrderState {
-  orders: Order[];
-  error: any;
-}
-
-export const initialState: OrderState = {
-  orders: [],
-  error: null
-};
+import { initialState } from './oder.state';
+import { createOrUpdateOrder, createOrUpdateOrderFailure, getOrderByIdFailure, getOrderByIdSuccess, getOrdersFailure, getOrdersSuccess, updateOrderItem, updateOrderItems } from './order.actions';
 
 export const orderReducer = createReducer(
   initialState,
-  on(OrderActions.createOrder, (state, { order }) => ({
-    ...state,
-    orders: [...state.orders, order]
-  })),
-  on(OrderActions.updateOrder, (state, { order }) => ({
-    ...state,
-    orders: state.orders.map(o => o.id === order.id ? order : o)
-  })),
-  on(OrderActions.getOrdersSuccess, (state, { orders }) => ({
+  on(getOrdersSuccess, (state, { orders }) => ({
     ...state,
     orders
   })),
-  on(OrderActions.getOrdersFailure, (state, { error }) => ({
+  on(getOrdersFailure, (state, { error }) => ({
     ...state,
     error
-  }))
+  })),
+  on(getOrderByIdSuccess, (state, { order }) => ({
+    ...state,
+    order
+  })),
+  on(getOrderByIdFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+  on(createOrUpdateOrder, (state, { order }) => ({
+    ...state,
+    order
+  })),
+  on(createOrUpdateOrderFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+  on(updateOrderItems, (state, { orderItems }) => ({
+    ...state,
+    order: {
+      ...state.order,
+      orderItems
+    }
+  })),
+  on(updateOrderItem, (state, { orderItem }) => {
+
+    if (!state.order) {
+      return state;
+    }
+    
+    const existingItem = state.order.orderItems.find((item) => item.item.id === orderItem.item.id);
+
+    if(existingItem && (orderItem.quantity + existingItem!.quantity) <= 0 ) {  
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          orderItems: state.order.orderItems.filter((cartItem) => cartItem.item.id !== orderItem.item.id)
+        }
+      }
+    }
+  
+    
+    if (existingItem) {
+      // Update quantity of existing item
+      return {
+        ...state,
+        order: { 
+          ...state.order,
+          orderItems: state.order.orderItems.map((item) =>
+            orderItem.item.id === item.item.id ? 
+                { ...item, quantity: item.quantity + orderItem.quantity }
+                  : item)
+        }
+      };
+    }
+
+    // Add new item to the order
+    return { 
+      ...state, 
+      order : {
+          ...state.order,
+          orderItems: [...state.order.orderItems,  orderItem ]
+         }
+    };
+    
+  })
 );

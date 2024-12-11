@@ -1,15 +1,26 @@
-
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { OrderState } from '../order.reducer';
+import { OrderState } from './oder.state';
 
-export const selectOrderState = createFeatureSelector<OrderState>('orders');
+export const selectOrderState = createFeatureSelector<OrderState>('order');
 
 export const selectAllOrders = createSelector(
   selectOrderState,
-  (state: OrderState) => state.orders
+  (state) => state.order
 );
 
 export const selectOrderError = createSelector(
   selectOrderState,
-  (state: OrderState) => state.error
+  (state) => state.error
+);
+
+export const selectOrderById = (orderId: string) => createSelector(
+  selectOrderState,
+  (state) => state.order
+);
+
+export const selectCurrentOrder =  createSelector(
+  selectOrderState,
+  (state) =>{
+    return state.order;
+  }
 );

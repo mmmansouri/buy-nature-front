@@ -84,11 +84,10 @@
           Country is required
         </mat-error>
       </mat-form-field>
-    </div>
 
-    <!-- Submit Button -->
-    <button mat-raised-button color="primary" type="submit" [disabled]="!formGroup.valid">
-      Submit
-    </button>
+      <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+        Comfirm Delivery
+      </button>
+    </div>
   </form>
 </div>

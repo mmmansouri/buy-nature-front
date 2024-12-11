@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
+<mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="onStepChange($event)">
   <!-- Step 1: Cart -->
   <mat-step [stepControl]="cartForm">
     <form [formGroup]="cartForm">
@@ -11,31 +11,47 @@
     </form>
   </mat-step>
 
-  <!-- Step 2: Delivery Details -->
+  <!-- Step 2: Cart Confirmation-->
   <mat-step [stepControl]="deliveryForm">
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Delivery Details</ng-template>
       <app-delivery [formGroup]="deliveryForm"></app-delivery>
       <div>
         <button mat-button matStepperPrevious>Cart</button>
-        <button mat-button matStepperNext [disabled]="!deliveryForm.valid" (click)="confirmDelivery()">Payment</button>
+        <button mat-button matStepperNext (click)="confirmOrder()">Order Review</button>
       </div>
     </form>
   </mat-step>
 
-   <!-- Step 3: Payment -->
+  <!-- Step 3: Delivery Details -->
+  <mat-step [stepControl]="deliveryForm">
+    <form [formGroup]="deliveryForm">
+      <ng-template matStepLabel>Order Review</ng-template>
+      <ng-container *ngIf="currentStepIndex === 2">
+        <app-order-review></app-order-review>
+      </ng-container>
+      <div>
+        <button mat-button matStepperPrevious>Delivery Details</button>
+        <button mat-button matStepperNext>Confirm Order</button>
+      </div>
+    </form>
+  </mat-step>
+
+   <!-- Step 4: Payment -->
    <mat-step [stepControl]="paymentForm">
     <form [formGroup]="paymentForm">
       <ng-template matStepLabel>Payment</ng-template>
-      <app-payment [formGroup]="paymentForm"></app-payment>
+      <ng-container *ngIf="currentStepIndex === 3">
+        <app-payment [formGroup]="paymentForm"></app-payment>
+      </ng-container>
       <div>
-        <button mat-button matStepperPrevious>Delivery</button>
+        <button mat-button matStepperPrevious>Order Review</button>
         <button mat-button matStepperNext (click)="clearOrder()">Confirm</button>
       </div>
     </form>
   </mat-step>
 
-  <!-- Step 4: Confirmation -->
+  <!-- Step 5: Confirmation -->
   <mat-step>
     <ng-template matStepLabel>Confirmation</ng-template>
     <p>Your order has been placed successfully!</p>

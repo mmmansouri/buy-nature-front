@@ -6,16 +6,5 @@ export interface DeliveryState {
 }
 
 export const initialDeliveryState: DeliveryState = {
-  delivery: {
-    firstname: '',
-    lastname: '',
-    phone: '',
-    email: '',
-    address: {
-      street: '',
-      number: '',
-      region: '',
-      country: '',
-    }
-  },
+  delivery:{} as Delivery,
 };

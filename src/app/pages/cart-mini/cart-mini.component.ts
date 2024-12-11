@@ -3,13 +3,14 @@ import {CartService} from "../../services/cart.service";
 import {OrderItem} from "../../models/order.item.model";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {CurrencyPipe, NgIf, NgFor, AsyncPipe} from "@angular/common";
-import {MatFormField} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
-import {async, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {Item} from "../../models/item.model";
 import {MatButton, MatIconButton} from "@angular/material/button";
+import { OrderService } from '../../services/order.service';
+import { StepperService } from '../../services/stepper.service';
 
 @Component({
   selector: 'app-cart-mini',
@@ -39,7 +40,11 @@ export class CartMiniComponent implements OnInit {
 
   @Output() cartOpenChange = new EventEmitter<boolean>();
 
-  constructor(private cartService: CartService) {
+  constructor(
+    private orderService: OrderService, 
+    private cartService: CartService,
+    private stepperService: StepperService
+  ) {
     this.cartItems$ = this.cartService.getCartItems();
     this.totalPrice$ = this.cartService.getTotalPrice();
   }
@@ -55,14 +60,19 @@ export class CartMiniComponent implements OnInit {
   // Delegate actions to the CartService
   removeItem(itemId: string): void {
     this.cartService.removeFromCart(itemId);
+    this.stepperService.setStep(2);
   }
 
   increaseQuantity(item: Item): void {
     this.cartService.addToCart({ item, quantity:1});
+    this.orderService.updateOrderItem({ item, quantity:1});
+    this.stepperService.setStep(2);
   }
 
   decreaseQuantity(item: Item): void {
     this.cartService.addToCart({ item, quantity:-1});
+    this.orderService.updateOrderItem({ item, quantity:-1});
+    this.stepperService.setStep(2);
   }
 
 }

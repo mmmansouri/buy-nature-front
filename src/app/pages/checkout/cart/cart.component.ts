@@ -1,14 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {OrderItem} from "../../models/order.item.model";
-import {CartService} from "../../services/cart.service";
-import {ClickOutsideDirective} from "../../directives/click-outside.directive";
+import {OrderItem} from "../../../models/order.item.model";
+import {CartService} from "../../../services/cart.service";
+import {ClickOutsideDirective} from "../../../directives/click-outside.directive";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {Item} from "../../models/item.model";
+import {Item} from "../../../models/item.model";
+import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-cart',
@@ -35,7 +36,7 @@ export class CartComponent implements OnInit {
 
   @Input() formGroup!: FormGroup;
 
-  constructor(private cartService: CartService, private fb: FormBuilder) {
+  constructor(private orderService: OrderService, private cartService: CartService, private fb: FormBuilder) {
 
     this.cartItems$ = this.cartService.getCartItems();
     this.totalPrice$ = this.cartService.getTotalPrice();
@@ -69,10 +70,12 @@ export class CartComponent implements OnInit {
 
   increaseQuantity(item: Item): void {
     this.cartService.addToCart({ item, quantity:1});
+    this.orderService.updateOrderItem({ item, quantity:1});
   }
 
   decreaseQuantity(item: Item): void {
     this.cartService.addToCart({ item, quantity:-1});
+    this.orderService.updateOrderItem({ item, quantity:-1});
   }
 
 }
