@@ -1,4 +1,4 @@
-<div *ngIf="cartOpen" class="mini-cart-container">
+<div *ngIf="cartOpen" class="mini-cart-container" appClickOutside (clickOutside)="closeCart()">
   <!-- Show this when the cart is empty -->
   <div *ngIf="(cartItems$ | async)?.length === 0" class="empty-cart-message">
     Your cart is empty

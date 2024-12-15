@@ -85,7 +85,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   setStep(index: number): void {
-   if(index < this.stepper.selectedIndex) {
+   if(this.stepper && index < this.stepper.selectedIndex) {
     this.stepper.selectedIndex = index;
    }
   }

@@ -42,6 +42,11 @@ export const orderReducer = createReducer(
     if (!state.order) {
       return state;
     }
+
+    
+    if (!state.order.orderItems) {
+      return state;
+    }
     
     const existingItem = state.order.orderItems.find((item) => item.item.id === orderItem.item.id);
 
