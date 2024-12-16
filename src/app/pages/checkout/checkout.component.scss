@@ -1,0 +1,30 @@
+.stepper-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+.stepper-button-container button {
+    margin: 0 10px; /* Add horizontal margin to space out the buttons */
+}
+
+.mat-mdc-button {
+  border: 1px solid #f7ac09; /* Primary color */
+  background-color: #f7ac09; /* Primary color */
+  color: rgb(35, 238, 113);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+
+  &:hover {
+    background-color: #76eb32; /* Darker primary color */
+    border-color: #76eb32; /* Darker primary color */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+  }
+
+  &:disabled {
+    background-color: #c5cae9; /* Lighter primary color */
+    border-color: #c5cae9; /* Lighter primary color */
+    color: rgba(255, 255, 255, 0.3);
+    box-shadow: none; /* No shadow when disabled */
+  }
+  }

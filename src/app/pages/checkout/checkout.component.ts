@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious} from "@angular/material/stepper";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CartComponent} from "./cart/cart.component";
 import {DeliveryComponent} from "./delivery/delivery.component";
-import {MatButton} from "@angular/material/button";
+import {MatButtonModule} from "@angular/material/button";
 import { CartService } from '../../services/cart.service';
 import { DeliveryService } from '../../services/delivery.service';
 import { PaymentComponent } from "./payment/payment.component";
@@ -24,7 +24,7 @@ import { StepperService } from '../../services/stepper.service';
     CartComponent,
     DeliveryComponent,
     MatStepLabel,
-    MatButton,
+    MatButtonModule,
     MatStepperNext,
     MatStepperPrevious,
     PaymentComponent,

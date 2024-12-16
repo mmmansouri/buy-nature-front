@@ -28,7 +28,7 @@ import { MatCardModule } from '@angular/material/card';
 export class OrderReviewComponent implements OnInit {
   order$: Observable<Order>;
   totalPrice$: Observable<number>;
-  displayedColumns: string[] = ['name', 'quantity'];
+  displayedColumns: string[] = ['name', 'quantity', 'unitPrice', 'totalPrice'];
 
   constructor(private orderService: OrderService, private cartService: CartService) {
     this.order$ = this.orderService.getOrder();

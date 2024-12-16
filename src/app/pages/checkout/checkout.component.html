@@ -5,8 +5,8 @@
       <ng-template matStepLabel>Cart</ng-template>
       <!-- Pass the formGroup from the parent to the child -->
       <app-cart [formGroup]="cartForm"></app-cart>
-      <div>
-        <button mat-button matStepperNext [disabled]="!cartForm.valid">Delivery</button>
+      <div class="stepper-button-container">
+        <button mat-raised-button color="primary" matStepperNext [disabled]="!cartForm.valid">Delivery</button>
       </div>
     </form>
   </mat-step>
@@ -16,9 +16,9 @@
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Delivery Details</ng-template>
       <app-delivery [formGroup]="deliveryForm"></app-delivery>
-      <div>
-        <button mat-button matStepperPrevious>Cart</button>
-        <button mat-button matStepperNext (click)="confirmOrder()">Order Review</button>
+      <div class="stepper-button-container">
+        <button mat-raised-button color="primary" matStepperPrevious>Cart</button>
+        <button mat-raised-button color="primary" matStepperNext (click)="confirmOrder()">Order Review</button>
       </div>
     </form>
   </mat-step>
@@ -30,9 +30,9 @@
       <ng-container *ngIf="currentStepIndex === 2">
         <app-order-review></app-order-review>
       </ng-container>
-      <div>
-        <button mat-button matStepperPrevious>Delivery Details</button>
-        <button mat-button matStepperNext>Confirm Order</button>
+      <div class="stepper-button-container">
+        <button mat-raised-button color="primary" matStepperPrevious>Delivery Details</button>
+        <button mat-raised-button color="primary" matStepperNext>Confirm Order</button>
       </div>
     </form>
   </mat-step>
@@ -44,9 +44,9 @@
       <ng-container *ngIf="currentStepIndex === 3">
         <app-payment [formGroup]="paymentForm"></app-payment>
       </ng-container>
-      <div>
-        <button mat-button matStepperPrevious>Order Review</button>
-        <button mat-button matStepperNext (click)="clearOrder()">Confirm</button>
+      <div class="stepper-button-container">
+        <button mat-raised-button color="primary" matStepperPrevious>Order Review</button>
+        <button mat-raised-button color="primary" matStepperNext (click)="clearOrder()">Confirm</button>
       </div>
     </form>
   </mat-step>
@@ -55,6 +55,6 @@
   <mat-step>
     <ng-template matStepLabel>Confirmation</ng-template>
     <p>Your order has been placed successfully!</p>
-    <button mat-button (click)="resetStepper(stepper)">Finish</button>
+    <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Finish</button>
   </mat-step>
 </mat-horizontal-stepper>
