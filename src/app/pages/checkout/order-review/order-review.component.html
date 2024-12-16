@@ -1,14 +1,57 @@
-
-<div *ngIf="(order$ | async) as order">
-  <h2>Order Review</h2>
-  <div *ngIf="order.orderItems.length > 0">
-    <h3>Items</h3>
-    <ul>
-      <li *ngFor="let orderItem of order.orderItems ">{{ orderItem.item.name }} - {{ orderItem.quantity }}</li>
-    </ul>
+<div class="order-review-container">
+  <div class="delivery-review-container">
+    <div *ngIf="(order$ | async) as order">
+      <mat-card class="delivery-card">
+        <mat-card-header>
+          <mat-card-title><h2>Delivery Information</h2></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ order.delivery.firstname}} {{ order.delivery.lastname}}</p>
+          <p>{{ order.delivery.phone }}</p>
+          <p>{{ order.delivery.email }}</p>
+          <p><strong>Address : </strong>{{ order.delivery.address.number }} {{ order.delivery.address.street }}</p>
+          <p><strong>City : </strong> {{ order.delivery.address.city }}</p>
+          <p><strong>Region : </strong> {{ order.delivery.address.region }}</p>
+          <p><strong>Postal Code : </strong> {{ order.delivery.address.postalCode }}</p>
+          <p><strong>Country : </strong> {{ order.delivery.address.country }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
-  <div>
-    <h3>Total Price</h3>
-    <p>{{ totalPrice$ | async | currency }}</p>
+  <div class="cart-review-container">
+    <div *ngIf="(order$ | async) as order">
+      <mat-card class="delivery-card">
+        <mat-card-header>
+          <mat-card-title><h2>Order Review</h2></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="order.orderItems.length > 0">
+            <h3>Items</h3>
+            <table mat-table [dataSource]="order.orderItems" class="mat-elevation-z8">
+              <!-- Item Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Item Name </th>
+                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.item.name }} </td>
+              </ng-container>
+
+              <!-- Quantity Column -->
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.quantity }} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <div>
+        <h3>Total Price</h3>
+        <p>{{ totalPrice$ | async | currency }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="total-price-review-container">
   </div>
 </div>

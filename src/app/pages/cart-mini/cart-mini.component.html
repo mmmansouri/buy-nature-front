@@ -12,15 +12,15 @@
       <div class="item-details">
         <span class="item-name">{{ cartItem.item.name }}</span>
       </div>
-      <button mat-icon-button (click)="removeItem(cartItem.item.id)" aria-label="Remove item" class="delete-button">
+      <button mat-icon-button (click)="removeItem(cartItem.item.id); $event.stopPropagation()" aria-label="Remove item" class="delete-button">
         <mat-icon>delete</mat-icon>
       </button>
       <div class="item-actions">
-        <button mat-icon-button (click)="decreaseQuantity(cartItem.item)" aria-label="Decrease quantity" class="quantity-button-increase">
+        <button mat-icon-button (click)="decreaseQuantity(cartItem.item); $event.stopPropagation()" aria-label="Decrease quantity" class="quantity-button-increase">
           <mat-icon>remove</mat-icon>
         </button>
         <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>
-        <button mat-icon-button (click)="increaseQuantity(cartItem.item)" aria-label="Increase quantity" class="quantity-button-increase">
+        <button mat-icon-button (click)="increaseQuantity(cartItem.item); $event.stopPropagation()" aria-label="Increase quantity" class="quantity-button-increase">
           <mat-icon>add</mat-icon>
         </button>
       </div>

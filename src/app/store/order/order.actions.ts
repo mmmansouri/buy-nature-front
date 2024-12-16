@@ -47,3 +47,7 @@ export const updateOrderItems = createAction('[Order] Update Order Items',
 export const updateOrderItem = createAction('[Order] Update Order Item',
   props<{ orderItem: OrderItem }>()
 );
+
+export const removeOrderItem = createAction('[Order] Remove Order Item',
+  props<{ orderItemId: string }>()
+);

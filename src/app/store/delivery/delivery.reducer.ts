@@ -18,6 +18,8 @@ export const deliveryReducer = createReducer(
       number: '',
       region: '',
       country: '',
+      postalCode: 0,
+      city: ''
     }
   } }))
 );

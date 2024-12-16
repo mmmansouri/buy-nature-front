@@ -46,10 +46,12 @@ export class DeliveryComponent implements OnInit {
     this.formGroup.addControl('phone', this.fb.control('', [Validators.required, Validators.minLength(2)]));
     this.formGroup.addControl('email', this.fb.control('', [Validators.required, Validators.email]));
     this.formGroup.addControl('address', this.fb.group({
-      street: ['', Validators.required],
       number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
       region: ['', Validators.required],
-      country: ['', Validators.required],
+      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      country: ['', Validators.required]
     }));
 
     // Subscribe to delivery$ to prefill form values

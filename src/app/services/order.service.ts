@@ -31,4 +31,7 @@ export class OrderService {
   updateOrderItem(orderItem: OrderItem): void {
     this.store.dispatch(updateOrderItem({ orderItem }));
   }
+  removeOrderItem(orderItemId: string): void {
+    this.store.dispatch(OrderActions.removeOrderItem({orderItemId}));
+  }
 }

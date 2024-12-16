@@ -60,6 +60,7 @@ export class CartMiniComponent implements OnInit {
   // Delegate actions to the CartService
   removeItem(itemId: string): void {
     this.cartService.removeFromCart(itemId);
+    this.orderService.removeOrderItem(itemId);
     this.stepperService.setStep(2);
   }
 
