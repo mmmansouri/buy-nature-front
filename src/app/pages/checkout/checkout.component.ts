@@ -12,6 +12,7 @@ import { NgIf } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
+import { Delivery } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-checkout',
@@ -42,6 +43,8 @@ export class CheckoutComponent implements OnInit {
   paymentForm!: FormGroup;
   currentStepIndex: number = 0;
 
+  deliveryConfirmed: boolean = false;
+
   constructor(
    private router: Router,
    private fb: FormBuilder, 
@@ -61,7 +64,10 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-
+  onDeliveryConfirmedChange(confirmed: boolean) {
+    this.deliveryConfirmed = confirmed;
+  }
+  
   onStepChange(event: any): void {
     this.currentStepIndex = event.selectedIndex;
   }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {NgIf} from "@angular/common";
@@ -29,6 +29,9 @@ export class DeliveryComponent implements OnInit {
   delivery$: Observable<Delivery>;
 
   @Input() formGroup!: FormGroup;
+  @Output() deliveryConfirmedChange = new EventEmitter<boolean>();
+
+  private deliveryDetails!: Delivery;
 
   constructor(private deliveryService: DeliveryService,private fb: FormBuilder) {
     this.delivery$ = this.deliveryService.getDeliveryDetails();
@@ -57,10 +60,33 @@ export class DeliveryComponent implements OnInit {
     // Subscribe to delivery$ to prefill form values
     this.delivery$.subscribe(delivery => {
       if (delivery) {
+        this.deliveryDetails = delivery;
         this.formGroup.patchValue(delivery);
+        this.checkDeliveryConfirmed();
       }
     });
+    
+    this.formGroup.valueChanges.subscribe(() => {
+      this.checkDeliveryConfirmed();
+    });
 
+  }
+
+  checkDeliveryConfirmed() {
+    const deliveryDetails = this.formGroup.value as Delivery;
+
+    const deliveryConfirmed = deliveryDetails.firstname === this.deliveryDetails.firstname &&
+                              deliveryDetails.lastname === this.deliveryDetails.lastname &&
+                              deliveryDetails.phone === this.deliveryDetails.phone &&
+                              deliveryDetails.email === this.deliveryDetails.email &&
+                              deliveryDetails.address.number === this.deliveryDetails.address.number &&
+                              deliveryDetails.address.street === this.deliveryDetails.address.street &&
+                              deliveryDetails.address.city === this.deliveryDetails.address.city &&
+                              deliveryDetails.address.region === this.deliveryDetails.address.region &&
+                              deliveryDetails.address.postalCode === this.deliveryDetails.address.postalCode &&
+                              deliveryDetails.address.country === this.deliveryDetails.address.country;
+
+    this.deliveryConfirmedChange.emit(deliveryConfirmed);
   }
 
   // Method to handle form submission

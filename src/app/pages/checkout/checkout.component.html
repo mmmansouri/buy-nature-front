@@ -1,5 +1,5 @@
 <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="onStepChange($event)">
-  <!-- Step 1: Cart -->
+  <!-- Step 1: Cart Confirmation -->
   <mat-step [stepControl]="cartForm">
     <form [formGroup]="cartForm">
       <ng-template matStepLabel>Cart</ng-template>
@@ -11,19 +11,19 @@
     </form>
   </mat-step>
 
-  <!-- Step 2: Cart Confirmation-->
+  <!-- Step 2: Delivery details -->
   <mat-step [stepControl]="deliveryForm">
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Delivery Details</ng-template>
-      <app-delivery [formGroup]="deliveryForm"></app-delivery>
+      <app-delivery [formGroup]="deliveryForm" (deliveryConfirmedChange)="onDeliveryConfirmedChange($event)"></app-delivery>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Cart</button>
-        <button mat-raised-button color="primary" matStepperNext (click)="confirmOrder()">Order Review</button>
+        <button mat-raised-button color="primary" matStepperNext (click)="confirmOrder()" [disabled]="!deliveryConfirmed">Order Review</button>
       </div>
     </form>
   </mat-step>
 
-  <!-- Step 3: Delivery Details -->
+  <!-- Step 3: Order Review  -->
   <mat-step [stepControl]="deliveryForm">
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Order Review</ng-template>
