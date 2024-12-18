@@ -70,6 +70,8 @@ export class DeliveryComponent implements OnInit {
       this.checkDeliveryConfirmed();
     });
 
+    this.deliveryConfirmedChange.emit(this.formGroup.valid);
+
   }
 
   checkDeliveryConfirmed() {
