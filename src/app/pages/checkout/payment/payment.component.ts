@@ -1,4 +1,4 @@
-import { Component,  OnInit, signal, ViewChild } from '@angular/core';
+import { Component,  inject,  OnInit, signal, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
@@ -18,9 +18,9 @@ import { DeliveryService } from '../../../services/delivery.service';
 import { CartService } from '../../../services/cart.service';
 import { PaymentService } from '../../../services/payment.service';
 import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardModule } from '@angular/material/card';
-
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-payment',
@@ -40,6 +40,7 @@ import { MatCard, MatCardModule } from '@angular/material/card';
 export class PaymentComponent implements OnInit {
 
   delivery$: Observable<Delivery>;
+  private readonly dialog = inject(MatDialog);
 
   constructor(private deliveryService: DeliveryService,private cartService:CartService, private paymentService: PaymentService, private fb: UntypedFormBuilder) {
     this.delivery$ = this.deliveryService.getDeliveryDetails();
@@ -56,7 +57,7 @@ export class PaymentComponent implements OnInit {
     address: [''],
     zipcode: [''],
     city: [''],
-    amount: [2500, [Validators.required, Validators.pattern(/d+/)]]
+    amount: [2500, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
 
   elementsOptions: StripeElementsOptions = {
@@ -76,7 +77,7 @@ export class PaymentComponent implements OnInit {
   };
 
   
-  stripe = injectStripe("pk_live_51QRIzAIeQeVliWL7801HiHv8qD8h6SBpgohPu7xfe81I815TmxpraesH4GHdidY0vmOE2Udu9BaHCwXZAfHQAKbq00qfmS88pO");
+  stripe = injectStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl");
   paying = signal(false);
 
   ngBeforeViewInit() {
@@ -114,12 +115,8 @@ export class PaymentComponent implements OnInit {
   }
 
   pay() {
-    console.log(this.paymentElementForm.invalid);
-    console.log(this.paymentElementForm);
     if (this.paying() || this.paymentElementForm.invalid) return;
     this.paying.set(true);
-
-    console.log('Payment Element', this.paymentElement);
 
     this.stripe
       .confirmPayment({
@@ -127,31 +124,46 @@ export class PaymentComponent implements OnInit {
         confirmParams: {
           payment_method_data: {
             billing_details: {
-              name: "name as string",
-              email: "email as string",
+              name: this.paymentElementForm.get('name')?.value as string,
+              email: this.paymentElementForm.get('email')?.value as string,
               address: {
-                line1: "address as string",
-                postal_code: "zipcode as string",
-                city: "city as string"
+                line1:this.paymentElementForm.get('address')?.value as string,
+                postal_code: this.paymentElementForm.get('zipcode')?.value as string,
+                city: this.paymentElementForm.get('city')?.value as string
               }
             }
           }
         },
         redirect: 'if_required'
       })
-      .subscribe(result => {
-        this.paying.set(false);
-        console.log('Result', result);
-        if (result.error) {
-          // Show error to your customer (e.g., insufficient funds)
-          alert({ success: false, error: result.error.message });
-        } else {
-          // The payment has been processed!
-          if (result.paymentIntent.status === 'succeeded') {
-            // Show a success message to your customer
-            alert({ success: true });
+      .subscribe({
+        next: (result) => {
+          this.paying.set(false);
+          if (result.error) {
+            this.dialog.open(NgxStripeDialogComponent, {
+              data: {
+                type: 'error',
+                message: result.error.message,
+              },
+            });
+          } else if (result.paymentIntent.status === 'succeeded') {
+            this.dialog.open(NgxStripeDialogComponent, {
+              data: {
+                type: 'success',
+                message: 'Payment processed successfully',
+              },
+            });
           }
-        }
+        },
+        error: (err) => {
+          this.paying.set(false);
+          this.dialog.open(NgxStripeDialogComponent, {
+            data: {
+              type: 'error',
+              message: err.message || 'Unknown Error',
+            },
+          });
+        },
       });
   }
 }

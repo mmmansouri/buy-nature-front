@@ -13,7 +13,7 @@
         }
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit" (click)="pay()">
+        <button mat-raised-button color="primary" type="submit" [disabled]="paying()" (click)="pay()">
             Comfirm Payment
         </button>
     </mat-card-actions>
