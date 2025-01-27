@@ -21,6 +21,7 @@ import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinn
 import { MatDialog } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
 
 @Component({
   selector: 'app-payment',
@@ -140,29 +141,14 @@ export class PaymentComponent implements OnInit {
         next: (result) => {
           this.paying.set(false);
           if (result.error) {
-            this.dialog.open(NgxStripeDialogComponent, {
-              data: {
-                type: 'error',
-                message: result.error.message,
-              },
-            });
+            this.dialog.open(PaymentDialogComponent, {data : result});
           } else if (result.paymentIntent.status === 'succeeded') {
-            this.dialog.open(NgxStripeDialogComponent, {
-              data: {
-                type: 'success',
-                message: 'Payment processed successfully',
-              },
-            });
+            this.dialog.open(PaymentDialogComponent , {data : result});
           }
         },
         error: (err) => {
           this.paying.set(false);
-          this.dialog.open(NgxStripeDialogComponent, {
-            data: {
-              type: 'error',
-              message: err.message || 'Unknown Error',
-            },
-          });
+          this.dialog.open(PaymentDialogComponent, {data : err});
         },
       });
   }
