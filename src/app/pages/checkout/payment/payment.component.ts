@@ -1,6 +1,5 @@
 import { Component,  inject,  OnInit, signal, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-
 import { MatInputModule } from '@angular/material/input';
 
 import {
@@ -12,12 +11,13 @@ import {
   StripeElementsOptions,
   StripePaymentElementOptions
 } from '@stripe/stripe-js';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Delivery } from '../../../models/delivery.model';
 import { DeliveryService } from '../../../services/delivery.service';
 import { CartService } from '../../../services/cart.service';
 import { PaymentService } from '../../../services/payment.service';
-import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinner} from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -115,11 +115,11 @@ export class PaymentComponent implements OnInit {
   
   }
 
-  pay() {
-    if (this.paying() || this.paymentElementForm.invalid) return;
+  pay(): Observable<boolean> {
+    if (this.paying() || this.paymentElementForm.invalid) return of(false);
     this.paying.set(true);
-
-    this.stripe
+  
+    return this.stripe
       .confirmPayment({
         elements: this.paymentElement.elements,
         confirmParams: {
@@ -128,7 +128,7 @@ export class PaymentComponent implements OnInit {
               name: this.paymentElementForm.get('name')?.value as string,
               email: this.paymentElementForm.get('email')?.value as string,
               address: {
-                line1:this.paymentElementForm.get('address')?.value as string,
+                line1: this.paymentElementForm.get('address')?.value as string,
                 postal_code: this.paymentElementForm.get('zipcode')?.value as string,
                 city: this.paymentElementForm.get('city')?.value as string
               }
@@ -137,19 +137,22 @@ export class PaymentComponent implements OnInit {
         },
         redirect: 'if_required'
       })
-      .subscribe({
-        next: (result) => {
+      .pipe(
+        map(result => {
           this.paying.set(false);
           if (result.error) {
-            this.dialog.open(PaymentDialogComponent, {data : result});
+            this.dialog.open(PaymentDialogComponent, { data: result });
+            return false;
           } else if (result.paymentIntent.status === 'succeeded') {
-            this.dialog.open(PaymentDialogComponent , {data : result});
+            return true;
           }
-        },
-        error: (err) => {
+          return false;
+        }),
+        catchError(err => {
           this.paying.set(false);
-          this.dialog.open(PaymentDialogComponent, {data : err});
-        },
-      });
+          this.dialog.open(PaymentDialogComponent, { data: err });
+          return of(false);
+        })
+      );
   }
 }

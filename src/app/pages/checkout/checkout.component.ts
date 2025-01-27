@@ -37,6 +37,7 @@ import { Delivery } from '../../models/delivery.model';
 export class CheckoutComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
+  @ViewChild(PaymentComponent) paymentComponent!: PaymentComponent;
 
   cartForm: FormGroup;
   deliveryForm!: FormGroup;
@@ -80,9 +81,19 @@ export class CheckoutComponent implements OnInit {
       delivery: this.deliveryForm.value});
   }
 
-  clearOrder() { 
+  clearOrderBak() { 
     this.cartService.clearCart();
     this.deliveryService.clearDeliveryDetails();
+  }
+
+  confirmPayment() {
+    if (this.paymentComponent) {
+      this.paymentComponent.pay().subscribe(success => {
+        if (success) {
+          this.stepper.next();
+        }
+      });
+    }
   }
 
   resetStepper(stepper: any): void {

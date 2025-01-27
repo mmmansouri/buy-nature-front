@@ -46,7 +46,7 @@
       </ng-container>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Order Review</button>
-        <button mat-raised-button color="primary" matStepperNext (click)="clearOrder()">Confirm</button>
+        <button mat-raised-button color="primary" (click)="confirmPayment()" [disabled]="paymentComponent?.paying()">Confirm payment</button>
       </div>
     </form>
   </mat-step>
