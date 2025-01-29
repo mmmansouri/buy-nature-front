@@ -73,12 +73,17 @@ export class CheckoutComponent implements OnInit {
     this.currentStepIndex = event.selectedIndex;
   }
 
+
   confirmOrder() {
-    this.orderService.createOrUpdateOrder({
-      id : '1',
-      status : 'pending',
-      orderItems: this.cartForm.value.items, 
-      delivery: this.deliveryForm.value});
+    if (!this.deliveryConfirmed && this.deliveryForm.valid) {
+      const delivery = this.deliveryForm.value;
+      this.deliveryService.updateDeliveryDetails(delivery);
+   }
+   this.orderService.createOrUpdateOrder({
+    id : '1',
+    status : 'pending',
+    orderItems: this.cartForm.value.items, 
+    delivery: this.deliveryForm.value});
   }
 
   clearOrderBak() { 

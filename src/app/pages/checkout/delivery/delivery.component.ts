@@ -46,7 +46,10 @@ export class DeliveryComponent implements OnInit {
     // Add controls to the existing formGroup
     this.formGroup.addControl('firstname', this.fb.control('', [Validators.required, Validators.minLength(2)]));
     this.formGroup.addControl('lastname', this.fb.control('', [Validators.required, Validators.minLength(2)]));
-    this.formGroup.addControl('phone', this.fb.control('', [Validators.required, Validators.minLength(2)]));
+    this.formGroup.addControl('phone', this.fb.control('', [
+      Validators.required,
+      Validators.pattern('^(\\+33|0)[1-9](\\d{2}){4}$') // French phone number format
+    ]));
     this.formGroup.addControl('email', this.fb.control('', [Validators.required, Validators.email]));
     this.formGroup.addControl('address', this.fb.group({
       number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],

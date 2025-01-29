@@ -18,7 +18,7 @@
       <app-delivery [formGroup]="deliveryForm" (deliveryConfirmedChange)="onDeliveryConfirmedChange($event)"></app-delivery>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Cart</button>
-        <button mat-raised-button color="primary" matStepperNext (click)="confirmOrder()" [disabled]="!deliveryConfirmed">Order Review</button>
+        <button mat-raised-button color="primary" matStepperNext (click)="confirmOrder()" [disabled]="!this.deliveryForm.valid">Confirm Delivery</button>
       </div>
     </form>
   </mat-step>
