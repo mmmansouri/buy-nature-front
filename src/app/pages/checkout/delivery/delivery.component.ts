@@ -5,7 +5,7 @@ import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Observable} from "rxjs";
-import {Delivery} from "../../../models/delivery.model";
+import {ShippingAddress} from "../../../models/delivery.model";
 import { DeliveryService } from '../../../services/delivery.service';
 
 
@@ -26,12 +26,12 @@ import { DeliveryService } from '../../../services/delivery.service';
 })
 export class DeliveryComponent implements OnInit {
 
-  delivery$: Observable<Delivery>;
+  delivery$: Observable<ShippingAddress>;
 
   @Input() formGroup!: FormGroup;
   @Output() deliveryConfirmedChange = new EventEmitter<boolean>();
 
-  private deliveryDetails!: Delivery;
+  private deliveryDetails!: ShippingAddress;
 
   constructor(private deliveryService: DeliveryService,private fb: FormBuilder) {
     this.delivery$ = this.deliveryService.getDeliveryDetails();
@@ -78,7 +78,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   checkDeliveryConfirmed() {
-    const deliveryDetails = this.formGroup.value as Delivery;
+    const deliveryDetails = this.formGroup.value as ShippingAddress;
 
     const deliveryConfirmed = deliveryDetails.firstname === this.deliveryDetails.firstname &&
                               deliveryDetails.lastname === this.deliveryDetails.lastname &&

@@ -1,6 +1,6 @@
 import {Address} from "./address.model";
 
-export interface Delivery {
+export interface ShippingAddress {
   firstname: string;
   lastname: string;
   phone: string;

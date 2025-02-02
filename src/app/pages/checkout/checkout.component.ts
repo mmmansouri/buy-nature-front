@@ -12,7 +12,6 @@ import { NgIf } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
-import { Delivery } from '../../models/delivery.model';
 
 @Component({
   selector: 'app-checkout',
@@ -83,7 +82,7 @@ export class CheckoutComponent implements OnInit {
     id : '1',
     status : 'pending',
     orderItems: this.cartForm.value.items, 
-    delivery: this.deliveryForm.value});
+    shippingAddress: this.deliveryForm.value});
   }
 
   clearOrderBak() { 
