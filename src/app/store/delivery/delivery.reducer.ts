@@ -15,7 +15,7 @@ export const deliveryReducer = createReducer(
     email: '',
     address: {
       street: '',
-      number: '',
+      streetNumber: '',
       region: '',
       country: '',
       postalCode: undefined,

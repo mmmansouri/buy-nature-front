@@ -84,7 +84,7 @@ export class DeliveryComponent implements OnInit {
                               deliveryDetails.lastname === this.deliveryDetails.lastname &&
                               deliveryDetails.phone === this.deliveryDetails.phone &&
                               deliveryDetails.email === this.deliveryDetails.email &&
-                              deliveryDetails.address.number === this.deliveryDetails.address.number &&
+                              deliveryDetails.address.streetNumber === this.deliveryDetails.address.streetNumber &&
                               deliveryDetails.address.street === this.deliveryDetails.address.street &&
                               deliveryDetails.address.city === this.deliveryDetails.address.city &&
                               deliveryDetails.address.region === this.deliveryDetails.address.region &&
