@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Delivery } from '../models/delivery.model';
+import { ShippingAddress } from '../models/shipping-address.model';
 import { selectDelivery } from '../store/delivery/delivery.selector';
 import { clearDeliveryDetails, updateDeliveryDetails } from '../store/delivery/delivery.actions';
 
@@ -15,11 +15,11 @@ export class DeliveryService {
 
   constructor(private store: Store) {}
 
-  getDeliveryDetails() : Observable<Delivery> {
+  getDeliveryDetails() : Observable<ShippingAddress> {
     return  this.store.select(selectDelivery);
   }
 
-  updateDeliveryDetails(delivery: Delivery): void {
+  updateDeliveryDetails(delivery: ShippingAddress): void {
     this.store.dispatch(updateDeliveryDetails({ delivery }))
   }
 

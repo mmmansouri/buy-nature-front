@@ -8,7 +8,7 @@ import { Item } from '../../models/item.model';
 
 @Injectable()
 export class ItemsEffects {
-  private itemsUrl = 'assets/mock-data/items.json';
+  private itemsUrl = 'http://localhost:8080/items';
 
   constructor(
     @Inject(Actions) private actions$: Actions,

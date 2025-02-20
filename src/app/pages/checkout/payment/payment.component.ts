@@ -13,7 +13,7 @@ import {
 } from '@stripe/stripe-js';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Delivery } from '../../../models/delivery.model';
+import { ShippingAddress } from '../../../models/shipping-address.model';
 import { DeliveryService } from '../../../services/delivery.service';
 import { CartService } from '../../../services/cart.service';
 import { PaymentService } from '../../../services/payment.service';
@@ -40,7 +40,7 @@ import { PaymentDialogComponent } from './payment-dialog/payment-dialog.componen
 })
 export class PaymentComponent implements OnInit {
 
-  delivery$: Observable<Delivery>;
+  delivery$: Observable<ShippingAddress>;
   private readonly dialog = inject(MatDialog);
 
   constructor(private deliveryService: DeliveryService,private cartService:CartService, private paymentService: PaymentService, private fb: UntypedFormBuilder) {

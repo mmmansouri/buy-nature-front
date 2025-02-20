@@ -5,7 +5,7 @@ import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {Observable} from "rxjs";
-import {ShippingAddress} from "../../../models/delivery.model";
+import {ShippingAddress} from "../../../models/shipping-address.model";
 import { DeliveryService } from '../../../services/delivery.service';
 
 

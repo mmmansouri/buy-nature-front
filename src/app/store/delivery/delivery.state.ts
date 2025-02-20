@@ -1,10 +1,9 @@
-import {Address} from "../../models/address.model";
-import {Delivery} from "../../models/delivery.model";
+import {ShippingAddress} from "../../models/shipping-address.model";
 
 export interface DeliveryState {
-  delivery: Delivery
+  delivery: ShippingAddress
 }
 
 export const initialDeliveryState: DeliveryState = {
-  delivery:{} as Delivery,
+  delivery:{} as ShippingAddress,
 };

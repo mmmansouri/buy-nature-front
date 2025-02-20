@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import {Delivery} from "../../models/delivery.model";
+import {ShippingAddress} from "../../models/shipping-address.model";
 
 export const updateDeliveryDetails = createAction(
   '[Delivery] Update Delivery Details',
-  props<{ delivery: Delivery }>()
+  props<{ delivery: ShippingAddress }>()
 );
 
 export const clearDeliveryDetails = createAction('[Delivery] Clear Delivery Details');
