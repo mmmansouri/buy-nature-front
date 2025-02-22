@@ -22,5 +22,9 @@ export const selectCartTotalItems = createSelector(
 
 export const selectCartTotalPrice = createSelector(
   selectCartState,
-  (state) => state.orderItems.reduce((total, cartItem) => total + cartItem.item.price * cartItem.quantity, 0)
+  (state) => {
+    const total = state.orderItems.reduce((total, cartItem) =>
+      total + cartItem.item.price * cartItem.quantity, 0);
+    return Math.round(total * 100) / 100;
+  }
 );

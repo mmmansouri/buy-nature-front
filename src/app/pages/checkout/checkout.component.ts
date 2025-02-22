@@ -78,7 +78,7 @@ export class CheckoutComponent implements OnInit {
       const delivery = this.deliveryForm.value;
       this.deliveryService.updateDeliveryDetails(delivery);
    }
-   this.orderService.createOrUpdateOrder({
+   this.orderService.createOrder({
     id : '1',
     status : 'pending',
     orderItems: this.cartForm.value.items, 

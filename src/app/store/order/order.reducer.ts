@@ -2,7 +2,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as OrderActions from './order.actions';
 import { initialState } from './oder.state';
-import { createOrUpdateOrder, createOrUpdateOrderFailure, getOrderByIdFailure, getOrderByIdSuccess, getOrdersFailure, getOrdersSuccess, updateOrderItem, updateOrderItems, removeOrderItem } from './order.actions';
+import { createOrder, createOrderFailure, getOrderByIdFailure, getOrderByIdSuccess, getOrdersFailure, getOrdersSuccess, updateOrderItem, updateOrderItems, removeOrderItem } from './order.actions';
 
 export const orderReducer = createReducer(
   initialState,
@@ -22,11 +22,11 @@ export const orderReducer = createReducer(
     ...state,
     error
   })),
-  on(createOrUpdateOrder, (state, { order }) => ({
+  on(createOrder, (state, { order }) => ({
     ...state,
     order
   })),
-  on(createOrUpdateOrderFailure, (state, { error }) => ({
+  on(createOrderFailure, (state, { error }) => ({
     ...state,
     error
   })),

@@ -7,6 +7,7 @@ import * as OrderActions from './order.actions';
 
 @Injectable()
 export class OrderEffects {
+
   constructor(
     private actions$: Actions,
     private orderService: OrderService

@@ -77,7 +77,7 @@ export class PaymentComponent implements OnInit {
     }
   };
 
-  
+
   stripe = injectStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl");
   paying = signal(false);
 
@@ -92,13 +92,14 @@ export class PaymentComponent implements OnInit {
           name: delivery.firstname + ' ' + delivery.lastname,
           email: delivery.email,
           address: delivery.address.street,
-          zipcode: "1122",
-          city: "tunis"
+          zipcode: delivery.address.postalCode,
+          city: delivery.address.city
         });
       }
     });
 
     this.cartService.getTotalPrice().subscribe(totalPrice => {
+      console.log("total price: " + totalPrice);
       this.paymentElementForm.patchValue({
         amount: totalPrice});
       })
@@ -112,13 +113,16 @@ export class PaymentComponent implements OnInit {
       .subscribe((pi) => {
         this.elementsOptions.clientSecret = pi.client_secret as string;
       });
-  
+
   }
 
   pay(): Observable<boolean> {
+    console.log("inside pay");
+    console.log(this.paymentElementForm);
+    console.log(this.paying());
     if (this.paying() || this.paymentElementForm.invalid) return of(false);
     this.paying.set(true);
-  
+    console.log("after set");
     return this.stripe
       .confirmPayment({
         elements: this.paymentElement.elements,

@@ -7,7 +7,7 @@ import * as OrderActions from '../store/order/order.actions';
 import { OrderState } from '../store/order/oder.state';
 import { selectCurrentOrder } from '../store/order/order.selectors';
 import { OrderItem } from '../models/order.item.model';
-import { createOrUpdateOrder, getOrderById, updateOrderItem } from '../store/order/order.actions';
+import { createOrder as createOrder, getOrderById, updateOrderItem } from '../store/order/order.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class OrderService {
     this.store.dispatch(getOrderById({ id }));
   }
 
-  createOrUpdateOrder(order: Order): void {
-    this.store.dispatch(createOrUpdateOrder({ order }));
+  createOrder(order: Order): void {
+    this.store.dispatch(createOrder({ order }));
   }
   updateOrderItem(orderItem: OrderItem): void {
     this.store.dispatch(updateOrderItem({ orderItem }));

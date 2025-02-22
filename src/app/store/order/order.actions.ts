@@ -30,12 +30,12 @@ export const getOrderByIdFailure = createAction(
   props<{ error: any }>()
 );
 
-export const createOrUpdateOrder = createAction(
+export const createOrder = createAction(
   '[Order] Create Or Update Order',
   props<{ order: Order }>()
 );
 
-export const createOrUpdateOrderFailure = createAction(
+export const createOrderFailure = createAction(
   '[Order] Create Or Update Order Failure',
   props<{ error: any }>()
 );
