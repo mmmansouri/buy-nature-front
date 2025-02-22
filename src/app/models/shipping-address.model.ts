@@ -1,9 +1,12 @@
-import {Address} from "./address.model";
-
 export interface ShippingAddress {
-  firstname: string;
-  lastname: string;
-  phone: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
   email: string;
-  address: Address
+  streetNumber: string;
+  street: string;
+  city: string;
+  region: string;
+  postalCode?: number;
+  country: string;
 }

@@ -89,17 +89,16 @@ export class PaymentComponent implements OnInit {
     this.delivery$.subscribe(delivery => {
       if (delivery) {
         this.paymentElementForm.patchValue({
-          name: delivery.firstname + ' ' + delivery.lastname,
+          name: delivery.firstName + ' ' + delivery.lastName,
           email: delivery.email,
-          address: delivery.address.street,
-          zipcode: delivery.address.postalCode,
-          city: delivery.address.city
+          address: delivery.street,
+          zipcode: delivery.postalCode,
+          city: delivery.city
         });
       }
     });
 
     this.cartService.getTotalPrice().subscribe(totalPrice => {
-      console.log("total price: " + totalPrice);
       this.paymentElementForm.patchValue({
         amount: totalPrice});
       })

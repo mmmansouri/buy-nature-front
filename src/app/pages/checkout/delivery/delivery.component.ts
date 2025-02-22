@@ -44,21 +44,19 @@ export class DeliveryComponent implements OnInit {
     }
 
     // Add controls to the existing formGroup
-    this.formGroup.addControl('firstname', this.fb.control('', [Validators.required, Validators.minLength(2)]));
-    this.formGroup.addControl('lastname', this.fb.control('', [Validators.required, Validators.minLength(2)]));
-    this.formGroup.addControl('phone', this.fb.control('', [
+    this.formGroup.addControl('firstName', this.fb.control('', [Validators.required, Validators.minLength(2)]));
+    this.formGroup.addControl('lastName', this.fb.control('', [Validators.required, Validators.minLength(2)]));
+    this.formGroup.addControl('phoneNumber', this.fb.control('', [
       Validators.required,
       Validators.pattern('^(\\+33|0)[1-9](\\d{2}){4}$') // French phone number format
     ]));
     this.formGroup.addControl('email', this.fb.control('', [Validators.required, Validators.email]));
-    this.formGroup.addControl('address', this.fb.group({
-      number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      region: ['', Validators.required],
-      postalCode: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      country: ['', Validators.required]
-    }));
+    this.formGroup.addControl('streetNumber', this.fb.control('', Validators.required));
+    this.formGroup.addControl('street', this.fb.control('', Validators.required));
+    this.formGroup.addControl('city', this.fb.control('', Validators.required));
+    this.formGroup.addControl('region', this.fb.control('', Validators.required));
+    this.formGroup.addControl('postalCode', this.fb.control('', Validators.required));
+    this.formGroup.addControl('country', this.fb.control('', Validators.required));
 
     // Subscribe to delivery$ to prefill form values
     this.delivery$.subscribe(delivery => {
@@ -68,7 +66,7 @@ export class DeliveryComponent implements OnInit {
         this.checkDeliveryConfirmed();
       }
     });
-    
+
     this.formGroup.valueChanges.subscribe(() => {
       this.checkDeliveryConfirmed();
     });
@@ -80,16 +78,16 @@ export class DeliveryComponent implements OnInit {
   checkDeliveryConfirmed() {
     const deliveryDetails = this.formGroup.value as ShippingAddress;
 
-    const deliveryConfirmed = deliveryDetails.firstname === this.deliveryDetails.firstname &&
-                              deliveryDetails.lastname === this.deliveryDetails.lastname &&
-                              deliveryDetails.phone === this.deliveryDetails.phone &&
+    const deliveryConfirmed = deliveryDetails.firstName === this.deliveryDetails.firstName &&
+                              deliveryDetails.lastName === this.deliveryDetails.lastName &&
+                              deliveryDetails.phoneNumber === this.deliveryDetails.phoneNumber &&
                               deliveryDetails.email === this.deliveryDetails.email &&
-                              deliveryDetails.address.streetNumber === this.deliveryDetails.address.streetNumber &&
-                              deliveryDetails.address.street === this.deliveryDetails.address.street &&
-                              deliveryDetails.address.city === this.deliveryDetails.address.city &&
-                              deliveryDetails.address.region === this.deliveryDetails.address.region &&
-                              deliveryDetails.address.postalCode === this.deliveryDetails.address.postalCode &&
-                              deliveryDetails.address.country === this.deliveryDetails.address.country;
+                              deliveryDetails.streetNumber === this.deliveryDetails.streetNumber &&
+                              deliveryDetails.street === this.deliveryDetails.street &&
+                              deliveryDetails.city === this.deliveryDetails.city &&
+                              deliveryDetails.region === this.deliveryDetails.region &&
+                              deliveryDetails.postalCode === this.deliveryDetails.postalCode &&
+                              deliveryDetails.country === this.deliveryDetails.country;
 
     this.deliveryConfirmedChange.emit(deliveryConfirmed);
   }

@@ -9,18 +9,16 @@ export const deliveryReducer = createReducer(
     delivery,
   })),
   on(clearDeliveryDetails, (state) => ({ ...state, delivery: {
-    firstname: '',
-    lastname: '',
-    phone: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
     email: '',
-    address: {
-      street: '',
-      streetNumber: '',
-      region: '',
-      country: '',
-      postalCode: undefined,
-      city: ''
-    }
+    street: '',
+    streetNumber: '',
+    region: '',
+    country: '',
+    postalCode: undefined,
+    city: ''
   } }))
 );
 

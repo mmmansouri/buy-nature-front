@@ -3,11 +3,11 @@
     <!-- Firstname -->
     <mat-form-field appearance="outline">
       <mat-label>Firstname</mat-label>
-      <input matInput formControlName="firstname" placeholder="Enter your firstname" />
-      <mat-error *ngIf="formGroup.get('firstname')?.hasError('required')">
+      <input matInput formControlName="firstName" placeholder="Enter your firstName" />
+      <mat-error *ngIf="formGroup.get('firstName')?.hasError('required')">
         Firstname is required
       </mat-error>
-      <mat-error *ngIf="formGroup.get('firstname')?.hasError('minlength')">
+      <mat-error *ngIf="formGroup.get('firstName')?.hasError('minlength')">
         Firstname must be at least 2 characters
       </mat-error>
     </mat-form-field>
@@ -15,11 +15,11 @@
     <!-- Lastname -->
     <mat-form-field appearance="outline">
       <mat-label>Lastname</mat-label>
-      <input matInput formControlName="lastname" placeholder="Enter your lastname" />
-      <mat-error *ngIf="formGroup.get('lastname')?.hasError('required')">
+      <input matInput formControlName="lastName" placeholder="Enter your lastName" />
+      <mat-error *ngIf="formGroup.get('lastName')?.hasError('required')">
         Lastname is required
       </mat-error>
-      <mat-error *ngIf="formGroup.get('lastname')?.hasError('minlength')">
+      <mat-error *ngIf="formGroup.get('lastName')?.hasError('minlength')">
         Lastname must be at least 2 characters
       </mat-error>
     </mat-form-field>
@@ -27,11 +27,11 @@
     <!-- Phone number -->
     <mat-form-field appearance="outline">
       <mat-label>Phone</mat-label>
-      <input matInput formControlName="phone" placeholder="Enter your phone" />
-      <mat-error *ngIf="formGroup.get('phone')?.hasError('required')">
+      <input matInput formControlName="phoneNumber" placeholder="Enter your phone" />
+      <mat-error *ngIf="formGroup.get('phoneNumber')?.hasError('required')">
         Lastname is required
       </mat-error>
-      <mat-error *ngIf="formGroup.get('phone')?.hasError('minlength')">
+      <mat-error *ngIf="formGroup.get('phoneNumber')?.hasError('minlength')">
         Lastname must be at least 2 characters
       </mat-error>
     </mat-form-field>
@@ -48,16 +48,13 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Address -->
-    <div formGroupName="address">
-
-      <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline">
         <mat-label>Number</mat-label>
-        <input matInput formControlName="number" placeholder="Enter the number" />
-        <mat-error *ngIf="formGroup.get('address.number')?.hasError('required')">
+        <input matInput formControlName="streetNumber" placeholder="Enter the street number" />
+        <mat-error *ngIf="formGroup.get('streetNumber')?.hasError('required')">
           Number is required
         </mat-error>
-        <mat-error *ngIf="formGroup.get('address.number')?.hasError('pattern')">
+        <mat-error *ngIf="formGroup.get('streetNumber')?.hasError('pattern')">
           Number must be a valid numeric value
         </mat-error>
       </mat-form-field>
@@ -65,7 +62,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Street</mat-label>
         <input matInput formControlName="street" placeholder="Enter your street" />
-        <mat-error *ngIf="formGroup.get('address.street')?.hasError('required')">
+        <mat-error *ngIf="formGroup.get('street')?.hasError('required')">
           Street is required
         </mat-error>
       </mat-form-field>
@@ -74,7 +71,7 @@
       <mat-form-field appearance="outline">
         <mat-label>City</mat-label>
         <input matInput formControlName="city" placeholder="Enter your city" />
-        <mat-error *ngIf="formGroup.get('address.city')?.hasError('required')">
+        <mat-error *ngIf="formGroup.get('city')?.hasError('required')">
           City is required
         </mat-error>
       </mat-form-field>
@@ -83,7 +80,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Region</mat-label>
         <input matInput formControlName="region" placeholder="Enter your region" />
-        <mat-error *ngIf="formGroup.get('address.region')?.hasError('required')">
+        <mat-error *ngIf="formGroup.get('region')?.hasError('required')">
           Region is required
         </mat-error>
       </mat-form-field>
@@ -91,10 +88,10 @@
       <mat-form-field appearance="outline">
         <mat-label>Postal code</mat-label>
         <input matInput formControlName="postalCode" placeholder="Enter the postal code" />
-        <mat-error *ngIf="formGroup.get('address.postalCode')?.hasError('required')">
+        <mat-error *ngIf="formGroup.get('postalCode')?.hasError('required')">
           Postal code is required
         </mat-error>
-        <mat-error *ngIf="formGroup.get('address.postalCode')?.hasError('pattern')">
+        <mat-error *ngIf="formGroup.get('postalCode')?.hasError('pattern')">
           Postal code must be a valid numeric value
         </mat-error>
       </mat-form-field>
@@ -102,10 +99,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Country</mat-label>
         <input matInput formControlName="country" placeholder="Enter your country" />
-        <mat-error *ngIf="formGroup.get('address.country')?.hasError('required')">
+        <mat-error *ngIf="formGroup.get('country')?.hasError('required')">
           Country is required
         </mat-error>
       </mat-form-field>
-    </div>
   </form>
 </div>

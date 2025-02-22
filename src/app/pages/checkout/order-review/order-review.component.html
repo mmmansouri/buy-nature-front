@@ -6,14 +6,14 @@
           <mat-card-title><h2>Delivery Information</h2></mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p>{{ order.shippingAddress.firstname}} {{ order.shippingAddress.lastname}}</p>
-          <p>{{ order.shippingAddress.phone }}</p>
+          <p>{{ order.shippingAddress.firstName}} {{ order.shippingAddress.lastName}}</p>
+          <p>{{ order.shippingAddress.phoneNumber }}</p>
           <p>{{ order.shippingAddress.email }}</p>
-          <p><strong>Address : </strong>{{ order.shippingAddress.address.streetNumber }} {{ order.shippingAddress.address.street }}</p>
-          <p><strong>City : </strong> {{ order.shippingAddress.address.city }}</p>
-          <p><strong>Region : </strong> {{ order.shippingAddress.address.region }}</p>
-          <p><strong>Postal Code : </strong> {{ order.shippingAddress.address.postalCode }}</p>
-          <p><strong>Country : </strong> {{ order.shippingAddress.address.country }}</p>
+          <p><strong>Address : </strong>{{ order.shippingAddress.streetNumber }} {{ order.shippingAddress.street }}</p>
+          <p><strong>City : </strong> {{ order.shippingAddress.city }}</p>
+          <p><strong>Region : </strong> {{ order.shippingAddress.region }}</p>
+          <p><strong>Postal Code : </strong> {{ order.shippingAddress.postalCode }}</p>
+          <p><strong>Country : </strong> {{ order.shippingAddress.country }}</p>
         </mat-card-content>
       </mat-card>
     </div>

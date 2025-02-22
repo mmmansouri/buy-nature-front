@@ -11,6 +11,7 @@ import { ItemsEffects } from './store/items/items.effects';
 import { metaReducers, rootReducer } from './store/app.reducer';
 import { provideNgxStripe } from 'ngx-stripe';
 import { PLUTO_ID } from './services/payment.service';
+import { OrderEffects } from "./store/order/order.effects";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideStore(rootReducer, { metaReducers }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects([ItemsEffects]),
+    provideEffects([ItemsEffects, OrderEffects]),
     provideNgxStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl"),
     {
       provide: PLUTO_ID,

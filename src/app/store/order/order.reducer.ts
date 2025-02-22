@@ -22,9 +22,9 @@ export const orderReducer = createReducer(
     ...state,
     error
   })),
-  on(createOrder, (state, { order }) => ({
+  on(createOrder, (state, { orderCreationRequest }) => ({
     ...state,
-    order
+    orderCreationRequest
   })),
   on(createOrderFailure, (state, { error }) => ({
     ...state,
@@ -53,14 +53,14 @@ export const orderReducer = createReducer(
       return state;
     }
 
-    
+
     if (!state.order.orderItems) {
       return state;
     }
-    
+
     const existingItem = state.order.orderItems.find((item) => item.item.id === orderItem.item.id);
 
-    if(existingItem && (orderItem.quantity + existingItem!.quantity) <= 0 ) {  
+    if(existingItem && (orderItem.quantity + existingItem!.quantity) <= 0 ) {
       return {
         ...state,
         order: {
@@ -69,16 +69,16 @@ export const orderReducer = createReducer(
         }
       }
     }
-  
-    
+
+
     if (existingItem) {
       // Update quantity of existing item
       return {
         ...state,
-        order: { 
+        order: {
           ...state.order,
           orderItems: state.order.orderItems.map((item) =>
-            orderItem.item.id === item.item.id ? 
+            orderItem.item.id === item.item.id ?
                 { ...item, quantity: item.quantity + orderItem.quantity }
                   : item)
         }
@@ -86,13 +86,13 @@ export const orderReducer = createReducer(
     }
 
     // Add new item to the order
-    return { 
-      ...state, 
+    return {
+      ...state,
       order : {
           ...state.order,
           orderItems: [...state.order.orderItems,  orderItem ]
          }
     };
-    
+
   })
 );

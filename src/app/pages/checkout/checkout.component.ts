@@ -47,8 +47,8 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
    private router: Router,
-   private fb: FormBuilder, 
-   private cartService: CartService, 
+   private fb: FormBuilder,
+   private cartService: CartService,
    private deliveryService: DeliveryService,
    private orderService: OrderService,
    private stepperService: StepperService) {
@@ -57,7 +57,7 @@ export class CheckoutComponent implements OnInit {
     this.deliveryForm = this.fb.group({});
   }
 
-  
+
   ngOnInit() {
     this.stepperService.step$.subscribe(index => {
       this.setStep(index);
@@ -67,7 +67,7 @@ export class CheckoutComponent implements OnInit {
   onDeliveryConfirmedChange(confirmed: boolean) {
     this.deliveryConfirmed = confirmed;
   }
-  
+
   onStepChange(event: any): void {
     this.currentStepIndex = event.selectedIndex;
   }
@@ -78,14 +78,10 @@ export class CheckoutComponent implements OnInit {
       const delivery = this.deliveryForm.value;
       this.deliveryService.updateDeliveryDetails(delivery);
    }
-   this.orderService.createOrder({
-    id : '1',
-    status : 'pending',
-    orderItems: this.cartForm.value.items, 
-    shippingAddress: this.deliveryForm.value});
+   this.orderService.createOrder(this.cartForm.value.items, this.deliveryForm.value);
   }
 
-  clearOrderBak() { 
+  clearOrderBak() {
     this.cartService.clearCart();
     this.deliveryService.clearDeliveryDetails();
   }

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Order } from '../../models/order.model';
 import { OrderItem } from '../../models/order.item.model';
+import {OrderCreationRequest} from "../../models/order-creation-request.model";
 
 
 export const getOrders = createAction('[Order] Get Orders');
@@ -32,7 +33,12 @@ export const getOrderByIdFailure = createAction(
 
 export const createOrder = createAction(
   '[Order] Create Or Update Order',
-  props<{ order: Order }>()
+  props<{ orderCreationRequest: OrderCreationRequest }>()
+);
+
+export const createOrderSuccess = createAction(
+  '[Order] Create Order Success',
+  props<{ orderId: string }>()
 );
 
 export const createOrderFailure = createAction(
