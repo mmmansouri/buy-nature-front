@@ -34,4 +34,18 @@ export class OrderEffects {
     )
   );
 
+  createOrderSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.createOrderSuccess),
+      map(() => OrderActions.setOrderCreationState({ state: 'success' }))
+    )
+  );
+
+  createOrderFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.createOrderFailure),
+      map(() => OrderActions.setOrderCreationState({ state: 'error' }))
+    )
+  );
+
 }

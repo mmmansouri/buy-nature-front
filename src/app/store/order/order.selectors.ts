@@ -24,3 +24,8 @@ export const selectCurrentOrder =  createSelector(
     return state.order;
   }
 );
+
+export const selectOrderCreationState = createSelector(
+  selectOrderState,
+  (state) => state.orderCreationState
+);

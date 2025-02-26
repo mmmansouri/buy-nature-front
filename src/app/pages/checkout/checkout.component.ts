@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, signal, ViewChild} from '@angular/core';
 import {MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious} from "@angular/material/stepper";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CartComponent} from "./cart/cart.component";
 import {DeliveryComponent} from "./delivery/delivery.component";
 import {MatButtonModule} from "@angular/material/button";
-import { CartService } from '../../services/cart.service';
 import { DeliveryService } from '../../services/delivery.service';
 import { PaymentComponent } from "./payment/payment.component";
 import { Router } from '@angular/router';
@@ -12,6 +11,8 @@ import { NgIf } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {OrderCreationComponent} from "./order-result/order-creation.component";
 
 @Component({
   selector: 'app-checkout',
@@ -28,8 +29,10 @@ import { StepperService } from '../../services/stepper.service';
     MatStepperNext,
     MatStepperPrevious,
     PaymentComponent,
-    OrderReviewComponent
-],
+    OrderReviewComponent,
+    MatProgressSpinner,
+    OrderCreationComponent
+  ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
@@ -48,7 +51,6 @@ export class CheckoutComponent implements OnInit {
   constructor(
    private router: Router,
    private fb: FormBuilder,
-   private cartService: CartService,
    private deliveryService: DeliveryService,
    private orderService: OrderService,
    private stepperService: StepperService) {
@@ -72,18 +74,24 @@ export class CheckoutComponent implements OnInit {
     this.currentStepIndex = event.selectedIndex;
   }
 
+  isPaymentInProgress(): boolean {
+    return this.currentStepIndex === 3 && this.paymentComponent?.paying() || false;
+  }
 
-  confirmOrder() {
+
+  confirmDelivery() {
     if (!this.deliveryConfirmed && this.deliveryForm.valid) {
       const delivery = this.deliveryForm.value;
       this.deliveryService.updateDeliveryDetails(delivery);
-   }
-   this.orderService.createOrder(this.cartForm.value.items, this.deliveryForm.value);
+    }
   }
 
-  clearOrderBak() {
-    this.cartService.clearCart();
-    this.deliveryService.clearDeliveryDetails();
+  confirmOrder() {
+      this.orderService.confirmOrder();
+  }
+
+  clearOrder() {
+    this.orderService.clearOrder()
   }
 
   confirmPayment() {
@@ -91,6 +99,8 @@ export class CheckoutComponent implements OnInit {
       this.paymentComponent.pay().subscribe(success => {
         if (success) {
           this.stepper.next();
+        } else {
+          //TODO: Handle payment error
         }
       });
     }

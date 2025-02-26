@@ -1,8 +1,21 @@
 
 import { createReducer, on } from '@ngrx/store';
 import * as OrderActions from './order.actions';
-import { initialState } from './oder.state';
-import { createOrder, createOrderFailure, getOrderByIdFailure, getOrderByIdSuccess, getOrdersFailure, getOrdersSuccess, updateOrderItem, updateOrderItems, removeOrderItem } from './order.actions';
+import {initialState, OrderCreationStateType} from './oder.state';
+import {
+  createOrder,
+  createOrderFailure,
+  getOrderByIdFailure,
+  getOrderByIdSuccess,
+  getOrdersFailure,
+  getOrdersSuccess,
+  updateOrderItem,
+  updateOrderItems,
+  removeOrderItem,
+  clearOrder,
+  confirmOrder,
+  createOrderSuccess
+} from './order.actions';
 
 export const orderReducer = createReducer(
   initialState,
@@ -22,13 +35,27 @@ export const orderReducer = createReducer(
     ...state,
     error
   })),
+  on(confirmOrder, (state, { order }) => ({
+    ...state,
+    order
+  })),
   on(createOrder, (state, { orderCreationRequest }) => ({
     ...state,
-    orderCreationRequest
+    orderCreationRequest: orderCreationRequest,
+    orderCreationState: 'loading' as OrderCreationStateType
   })),
-  on(createOrderFailure, (state, { error }) => ({
+  on(clearOrder, state => ({
     ...state,
-    error
+    initialState
+  }))
+  ,
+  on(createOrderSuccess, state => ({
+    ...state,
+    orderCreationState: 'success' as OrderCreationStateType
+  })),
+  on(createOrderFailure, state => ({
+    ...state,
+    orderCreationState: 'error' as OrderCreationStateType
   })),
   on(updateOrderItems, (state, { orderItems }) => ({
     ...state,

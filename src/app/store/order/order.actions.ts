@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { Order } from '../../models/order.model';
 import { OrderItem } from '../../models/order.item.model';
 import {OrderCreationRequest} from "../../models/order-creation-request.model";
+import {OrderCreationStateType} from "./oder.state";
 
 
 export const getOrders = createAction('[Order] Get Orders');
@@ -31,6 +32,11 @@ export const getOrderByIdFailure = createAction(
   props<{ error: any }>()
 );
 
+export const confirmOrder = createAction(
+  '[Order] Confirm Order',
+  props<{ order: Order }>()
+);
+
 export const createOrder = createAction(
   '[Order] Create Or Update Order',
   props<{ orderCreationRequest: OrderCreationRequest }>()
@@ -46,6 +52,11 @@ export const createOrderFailure = createAction(
   props<{ error: any }>()
 );
 
+export const setOrderCreationState = createAction(
+  '[Order Creation] Set State',
+  props<{ state: OrderCreationStateType }>()
+);
+
 export const updateOrderItems = createAction('[Order] Update Order Items',
   props<{ orderItems: OrderItem[] }>()
 );
@@ -57,3 +68,5 @@ export const updateOrderItem = createAction('[Order] Update Order Item',
 export const removeOrderItem = createAction('[Order] Remove Order Item',
   props<{ orderItemId: string }>()
 );
+
+export const clearOrder = createAction('[Order] Clear Order');

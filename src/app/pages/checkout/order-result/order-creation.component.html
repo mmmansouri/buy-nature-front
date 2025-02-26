@@ -1,0 +1,12 @@
+<div class="confirmation-content">
+  @if (orderStatus() === 'loading') {
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Processing your order...</p>
+  } @else if (orderStatus() === 'success') {
+    <p class="success-message">Your order has been placed successfully!</p>
+
+  } @else if (orderStatus() === 'error') {
+    <p class="error-message">Your payment has accepted but we failed to place your order. Nothing is to be done from your side.
+      We will contact you ASAP when we fix the issue. Sorry for the inconvenience </p>
+  }
+</div>

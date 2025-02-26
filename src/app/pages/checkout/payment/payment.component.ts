@@ -79,11 +79,9 @@ export class PaymentComponent implements OnInit {
 
 
   stripe = injectStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl");
-  paying = signal(false);
+  paying = signal<boolean>(false);
 
-  ngBeforeViewInit() {
 
-  }
   ngOnInit() {
     // Subscribe to delivery$ to prefill form values
     this.delivery$.subscribe(delivery => {
@@ -116,12 +114,8 @@ export class PaymentComponent implements OnInit {
   }
 
   pay(): Observable<boolean> {
-    console.log("inside pay");
-    console.log(this.paymentElementForm);
-    console.log(this.paying());
     if (this.paying() || this.paymentElementForm.invalid) return of(false);
     this.paying.set(true);
-    console.log("after set");
     return this.stripe
       .confirmPayment({
         elements: this.paymentElement.elements,

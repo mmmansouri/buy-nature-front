@@ -9,14 +9,16 @@ import { clearDeliveryDetails, updateDeliveryDetails } from '../store/delivery/d
   providedIn: 'root',
 })
 export class DeliveryService {
-  clearDeliveryDetails() {
-    this.store.dispatch(clearDeliveryDetails());
-  }
+
 
   constructor(private store: Store) {}
 
   getDeliveryDetails() : Observable<ShippingAddress> {
     return  this.store.select(selectDelivery);
+  }
+
+  clearDeliveryDetails() {
+    this.store.dispatch(clearDeliveryDetails());
   }
 
   updateDeliveryDetails(delivery: ShippingAddress): void {

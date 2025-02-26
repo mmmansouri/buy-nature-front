@@ -14,6 +14,9 @@ import {
   MatTable
 } from "@angular/material/table";
 import { MatCardModule } from '@angular/material/card';
+import {DeliveryService} from "../../../services/delivery.service";
+import {ShippingAddress} from "../../../models/shipping-address.model";
+import {OrderItem} from "../../../models/order.item.model";
 
 @Component({
   selector: 'app-order-review',
@@ -27,14 +30,20 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class OrderReviewComponent implements OnInit {
   order$: Observable<Order>;
+  delivery$: Observable<ShippingAddress>;
   totalPrice$: Observable<number>;
+  cartItems$: Observable<OrderItem[]>;
+
   displayedColumns: string[] = ['name', 'quantity', 'unitPrice', 'totalPrice'];
 
-  constructor(private orderService: OrderService, private cartService: CartService) {
+  constructor(private orderService: OrderService,
+              private cartService: CartService,
+              private deliveryService: DeliveryService) {
     this.order$ = this.orderService.getOrder();
+    this.delivery$ = this.deliveryService.getDeliveryDetails();
     this.totalPrice$ = this.cartService.getTotalPrice();
+    this.cartItems$ = this.cartService.getCartItems();
   }
-
   ngOnInit(): void {
   }
 }

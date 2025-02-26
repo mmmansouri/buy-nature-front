@@ -1,55 +1,55 @@
 <div class="order-review-container">
   <div class="delivery-review-container">
-    <div *ngIf="(order$ | async) as order">
+    <div *ngIf="(delivery$ | async) as delivery">
       <mat-card class="delivery-card">
         <mat-card-header>
           <mat-card-title><h2>Delivery Information</h2></mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <p>{{ order.shippingAddress.firstName}} {{ order.shippingAddress.lastName}}</p>
-          <p>{{ order.shippingAddress.phoneNumber }}</p>
-          <p>{{ order.shippingAddress.email }}</p>
-          <p><strong>Address : </strong>{{ order.shippingAddress.streetNumber }} {{ order.shippingAddress.street }}</p>
-          <p><strong>City : </strong> {{ order.shippingAddress.city }}</p>
-          <p><strong>Region : </strong> {{ order.shippingAddress.region }}</p>
-          <p><strong>Postal Code : </strong> {{ order.shippingAddress.postalCode }}</p>
-          <p><strong>Country : </strong> {{ order.shippingAddress.country }}</p>
+          <p>{{ delivery.firstName}} {{ delivery.lastName}}</p>
+          <p>{{ delivery.phoneNumber }}</p>
+          <p>{{ delivery.email }}</p>
+          <p><strong>Address : </strong>{{ delivery.streetNumber }} {{ delivery.street }}</p>
+          <p><strong>City : </strong> {{ delivery.city }}</p>
+          <p><strong>Region : </strong> {{ delivery.region }}</p>
+          <p><strong>Postal Code : </strong> {{ delivery.postalCode }}</p>
+          <p><strong>Country : </strong> {{ delivery.country }}</p>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
   <div class="cart-review-container">
-    <div *ngIf="(order$ | async) as order">
+    <div *ngIf="(cartItems$ | async) as cartItems">
       <mat-card class="delivery-card">
         <mat-card-header>
           <mat-card-title><h2>Order Review</h2></mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div *ngIf="order.orderItems.length > 0">
+          <div *ngIf="cartItems.length > 0">
             <h3>Items</h3>
-            <table mat-table [dataSource]="order.orderItems" class="mat-elevation-z8">
+            <table mat-table [dataSource]="cartItems" class="mat-elevation-z8">
               <!-- Item Name Column -->
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Item Name </th>
-                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.item.name }} </td>
+                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.item.name }} </td>
               </ng-container>
 
               <!-- Quantity Column -->
               <ng-container matColumnDef="quantity">
                 <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.quantity }} </td>
+                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.quantity }} </td>
               </ng-container>
 
               <!-- Quantity Column -->
               <ng-container matColumnDef="unitPrice">
                 <th mat-header-cell *matHeaderCellDef> Unit </th>
-                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.item.price }} </td>
+                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.item.price }} </td>
               </ng-container>
 
               <!-- Quantity Column -->
               <ng-container matColumnDef="totalPrice">
                 <th mat-header-cell *matHeaderCellDef> Total </th>
-                <td mat-cell *matCellDef="let orderItem"> {{ orderItem.quantity * orderItem.item.price }} </td>
+                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.quantity * cartItem.item.price }} </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
