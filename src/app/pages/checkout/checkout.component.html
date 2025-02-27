@@ -58,9 +58,14 @@
   <!-- Step 5: Order Creation -->
   <mat-step>
     <ng-template matStepLabel>Confirmation</ng-template>
-    <ng-container *ngIf="currentStepIndex === 4">
-      <app-order-creation></app-order-creation>
-      <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Continue Shopping</button>
-    </ng-container>
+    @if (paymentStatus() === 'success') {
+      <ng-container *ngIf="currentStepIndex === 4">
+        <app-order-creation></app-order-creation>
+        <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Continue Shopping</button>
+      </ng-container>
+    } @else {
+      <p>Please complete the payment step first.</p>
+      <button mat-raised-button color="primary" matStepperPrevious>Back to Payment</button>
+    }
   </mat-step>
 </mat-horizontal-stepper>

@@ -12,7 +12,7 @@ import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {OrderCreationComponent} from "./order-result/order-creation.component";
+import {OrderCreationComponent} from "./order-creation/order-creation.component";
 
 @Component({
   selector: 'app-checkout',
@@ -40,6 +40,7 @@ export class CheckoutComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild(PaymentComponent) paymentComponent!: PaymentComponent;
+  paymentStatus = signal<'pending' | 'success' | 'error'>('pending');
 
   cartForm: FormGroup;
   deliveryForm!: FormGroup;
@@ -64,6 +65,11 @@ export class CheckoutComponent implements OnInit {
     this.stepperService.step$.subscribe(index => {
       this.setStep(index);
     });
+  }
+  setStep(index: number): void {
+    if(this.stepper && index < this.stepper.selectedIndex) {
+      this.stepper.selectedIndex = index;
+    }
   }
 
   onDeliveryConfirmedChange(confirmed: boolean) {
@@ -90,17 +96,15 @@ export class CheckoutComponent implements OnInit {
       this.orderService.confirmOrder();
   }
 
-  clearOrder() {
-    this.orderService.clearOrder()
-  }
-
   confirmPayment() {
     if (this.paymentComponent) {
       this.paymentComponent.pay().subscribe(success => {
         if (success) {
+          this.paymentStatus.set('success');
           this.stepper.next();
         } else {
           //TODO: Handle payment error
+          this.paymentStatus.set('error');
         }
       });
     }
@@ -109,12 +113,6 @@ export class CheckoutComponent implements OnInit {
   resetStepper(stepper: any): void {
     stepper.reset();
     this.router.navigate(['/items']);
-  }
-
-  setStep(index: number): void {
-   if(this.stepper && index < this.stepper.selectedIndex) {
-    this.stepper.selectedIndex = index;
-   }
   }
 
 }
