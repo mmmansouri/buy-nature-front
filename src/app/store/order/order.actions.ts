@@ -52,11 +52,6 @@ export const createOrderFailure = createAction(
   props<{ error: any }>()
 );
 
-export const setOrderCreationState = createAction(
-  '[Order Creation] Set State',
-  props<{ state: OrderCreationStateType }>()
-);
-
 export const updateOrderItems = createAction('[Order] Update Order Items',
   props<{ orderItems: OrderItem[] }>()
 );

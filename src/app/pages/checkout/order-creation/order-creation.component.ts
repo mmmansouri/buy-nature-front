@@ -26,7 +26,6 @@ export class OrderCreationComponent implements OnInit {
   ngOnInit() {
     this.orderService.createOrder().subscribe(status => {
       this.orderStatus.set(status);
-      this.orderService.clearOrder();
     });
   }
 

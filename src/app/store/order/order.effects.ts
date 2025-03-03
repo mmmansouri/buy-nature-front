@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import {of, tap} from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import * as OrderActions from './order.actions';
 import { HttpClient } from '@angular/common/http';
+import {OrderService} from "../../services/order.service";
 
 @Injectable()
 export class OrderEffects {
@@ -12,7 +13,8 @@ export class OrderEffects {
 
   constructor(
     private actions$: Actions,
-    private http: HttpClient
+    private http: HttpClient,
+    private orderService: OrderService
   ) {}
 
   createOrder$ = createEffect(() =>
@@ -35,17 +37,19 @@ export class OrderEffects {
   );
 
   createOrderSuccess$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrderActions.createOrderSuccess),
-      map(() => OrderActions.setOrderCreationState({ state: 'success' }))
-    )
+      this.actions$.pipe(
+        ofType(OrderActions.createOrderSuccess),
+        tap(() => this.orderService.clearOrder())
+      ),
+    { dispatch: false }
   );
 
-  createOrderFailure$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrderActions.createOrderFailure),
-      map(() => OrderActions.setOrderCreationState({ state: 'error' }))
-    )
-  );
+  /*createOrderFailure$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(OrderActions.createOrderFailure),
+        tap(() => this.orderService.clearOrder())
+      ),
+    { dispatch: false }
+  );*/
 
 }

@@ -44,9 +44,8 @@ export const orderReducer = createReducer(
     orderCreationRequest: orderCreationRequest,
     orderCreationState: 'loading' as OrderCreationStateType
   })),
-  on(clearOrder, state => ({
-    ...state,
-    initialState
+  on(clearOrder, () => ({
+    ...initialState
   }))
   ,
   on(createOrderSuccess, state => ({

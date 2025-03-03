@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {filter, Observable, switchMap, take} from 'rxjs';
+import {filter, forkJoin, Observable, switchMap, take} from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Order } from '../models/order.model';
 import * as OrderActions from '../store/order/order.actions';
@@ -34,32 +34,30 @@ export class OrderService {
   }
 
   confirmOrder(): void {
-    this.store.select(selectCurrentOrder).pipe(
-      take(1),
-      switchMap(order =>
-        this.cartService.getCartItems().pipe(
-          switchMap(items =>
-            this.deliveryService.getDeliveryDetails().pipe(
-              map(shippingAddress => ({
-                ...order,
-                shippingAddress,
-                orderItems: items,
-                status: OrderStatus.Pending,
-                customerId: order.customerId? order.customerId : crypto.randomUUID()
-              }))
-            )
-          )
-        )
-      )
+    // Use forkJoin to get all required data in a single operation
+    forkJoin({
+      order: this.store.select(selectCurrentOrder).pipe(take(1)),
+      items: this.cartService.getCartItems().pipe(take(1)),
+      shippingAddress: this.deliveryService.getDeliveryDetails().pipe(take(1))
+    }).pipe(
+      take(1), // Ensure this only happens once
+      map(({ order, items, shippingAddress }) => ({
+        ...order,
+        shippingAddress,
+        orderItems: items,
+        status: OrderStatus.Pending,
+        customerId: order.customerId || crypto.randomUUID()
+      }))
     ).subscribe(updatedOrder => {
       this.store.dispatch(OrderActions.confirmOrder({ order: updatedOrder }));
     });
   }
 
   clearOrder(): void {
+    this.store.dispatch(OrderActions.clearOrder());
     this.cartService.clearCart();
     this.deliveryService.clearDeliveryDetails();
-    this.store.dispatch(OrderActions.clearOrder());
+
   }
 
   createOrder(): Observable<'success' | 'error'>{
