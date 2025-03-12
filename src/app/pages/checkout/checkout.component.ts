@@ -11,8 +11,8 @@ import { NgIf } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {OrderCreationComponent} from "./order-creation/order-creation.component";
+import {take} from "rxjs";
 
 @Component({
   selector: 'app-checkout',
@@ -30,7 +30,6 @@ import {OrderCreationComponent} from "./order-creation/order-creation.component"
     MatStepperPrevious,
     PaymentComponent,
     OrderReviewComponent,
-    MatProgressSpinner,
     OrderCreationComponent
   ],
   templateUrl: './checkout.component.html',
@@ -94,17 +93,29 @@ export class CheckoutComponent implements OnInit {
 
   confirmOrder() {
       this.orderService.confirmOrder();
+      this.stepper.next();
   }
 
   confirmPayment() {
     if (this.paymentComponent) {
-      this.paymentComponent.pay().subscribe(success => {
-        if (success) {
-          this.paymentStatus.set('success');
-          this.stepper.next();
-        } else {
-          //TODO: Handle payment error
-          this.paymentStatus.set('error');
+      // First, dispatch that we're starting payment process
+      this.orderService.getCurrentOrder().pipe(
+        take(1)
+      ).subscribe(order => {
+        if (order && order.id) {
+          // Process the payment
+          this.paymentComponent.pay().subscribe(success => {
+            if (success) {
+              // On success, dispatch payment success action
+              this.orderService.handlePaymentSuccess(order.id!);
+              this.paymentStatus.set('success');
+              this.stepper.next();
+            } else {
+              // On failure, dispatch payment failure action
+              this.orderService.handlePaymentFailure(order.id!);
+              this.paymentStatus.set('error');
+            }
+          });
         }
       });
     }

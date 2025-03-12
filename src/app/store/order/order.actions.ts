@@ -47,6 +47,21 @@ export const createOrderSuccess = createAction(
   props<{ orderId: string }>()
 );
 
+export const orderPaymentCreated = createAction(
+  '[Order] Order Payment Created',
+  props<{ paymentIntent: string }>()
+);
+
+export const orderPaymentSuccess = createAction(
+  '[Order] Order Payment Success',
+  props<{ orderId: string }>()
+);
+
+export const orderPaymentFailure = createAction(
+  '[Order] Order Payment Failure',
+  props<{ orderId: string }>()
+);
+
 export const createOrderFailure = createAction(
   '[Order] Create Or Update Order Failure',
   props<{ error: any }>()
@@ -65,3 +80,7 @@ export const removeOrderItem = createAction('[Order] Remove Order Item',
 );
 
 export const clearOrder = createAction('[Order] Clear Order');
+
+export const clearAfterSuccessfulOrderCreation = createAction(
+  '[Order] Clear After Successful Order Creation'
+);

@@ -16,6 +16,7 @@ import {
   confirmOrder,
   createOrderSuccess
 } from './order.actions';
+import {OrderStatus} from "../../models/order-stauts.model";
 
 export const orderReducer = createReducer(
   initialState,
@@ -48,8 +49,13 @@ export const orderReducer = createReducer(
     ...initialState
   }))
   ,
-  on(createOrderSuccess, state => ({
+  on(createOrderSuccess, (state, { orderId })  => ({
     ...state,
+    order: {
+      ...state.order,
+      id: orderId,
+      status: 'CREATED'
+    },
     orderCreationState: 'success' as OrderCreationStateType
   })),
   on(createOrderFailure, state => ({
@@ -96,7 +102,6 @@ export const orderReducer = createReducer(
       }
     }
 
-
     if (existingItem) {
       // Update quantity of existing item
       return {
@@ -110,7 +115,6 @@ export const orderReducer = createReducer(
         }
       };
     }
-
     // Add new item to the order
     return {
       ...state,
@@ -119,6 +123,31 @@ export const orderReducer = createReducer(
           orderItems: [...state.order.orderItems,  orderItem ]
          }
     };
-
-  })
+  }),
+  on(OrderActions.orderPaymentCreated, (state, { paymentIntent }) => ({
+    ...state,
+    order: {
+      ...state.order,
+      paymentStatus: 'pending',
+      paymentIntent: paymentIntent,
+      status: OrderStatus.PaymentPending
+    }
+  })),
+  on(OrderActions.orderPaymentSuccess, (state, { orderId }) => ({
+    ...state,
+    order: {
+      ...state.order,
+      id: orderId,
+      paymentStatus: 'success',
+      status: OrderStatus.PaymentConfirmed
+    }
+  })),
+  on(OrderActions.orderPaymentFailure, (state, { orderId }) => ({
+    ...state,
+    order: {
+      ...state.order,
+      paymentStatus: 'error',
+      id: orderId
+    }
+  }))
 );

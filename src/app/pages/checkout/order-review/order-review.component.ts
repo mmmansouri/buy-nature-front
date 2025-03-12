@@ -39,7 +39,7 @@ export class OrderReviewComponent implements OnInit {
   constructor(private orderService: OrderService,
               private cartService: CartService,
               private deliveryService: DeliveryService) {
-    this.order$ = this.orderService.getOrder();
+    this.order$ = this.orderService.getCurrentOrder();
     this.delivery$ = this.deliveryService.getDeliveryDetails();
     this.totalPrice$ = this.cartService.getTotalPrice();
     this.cartItems$ = this.cartService.getCartItems();

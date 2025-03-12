@@ -19,7 +19,6 @@ export class PaymentService {
   ) {}
 
   createPaymentIntent(params: any): Observable<PaymentIntent> {
-    console.log('Creating payment intent');
     return this.http.post<PaymentIntent>(
       `${PaymentService.BASE_URL}/create-payment-intent`,
       params,

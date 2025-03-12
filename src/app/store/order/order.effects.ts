@@ -5,6 +5,7 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import * as OrderActions from './order.actions';
 import { HttpClient } from '@angular/common/http';
 import {OrderService} from "../../services/order.service";
+import {OrderCreationRequest} from "../../models/order-creation-request.model";
 
 @Injectable()
 export class OrderEffects {
@@ -17,18 +18,41 @@ export class OrderEffects {
     private orderService: OrderService
   ) {}
 
+  confirmOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.confirmOrder),
+      map(action => {
+        const order = action.order;
+
+        // If the order already has an ID, don't create a new one
+        if (order.id) {
+          return OrderActions.createOrderSuccess({ orderId: order.id });
+        }
+
+        const orderItemsObj: Record<string, number> = {};
+        order.orderItems.forEach(item => {
+          orderItemsObj[item.item.id] = item.quantity;
+        });
+
+        const orderCreationRequest: OrderCreationRequest = {
+          customerId: order.customerId,
+          status: 'CREATED',
+          orderItems: orderItemsObj,
+          total: order.orderItems.reduce((acc, item) => acc + item.item.price * item.quantity, 0),
+          shippingAddress: order.shippingAddress
+        };
+
+        return OrderActions.createOrder({ orderCreationRequest });
+      })
+    )
+  );
+
   createOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.createOrder),
       mergeMap(action => {
-        // Convert the Map to a plain object
-        const orderItemsObj = Object.fromEntries(action.orderCreationRequest.orderItems.entries());
-        const orderCreationRequestPayload = {
-          ...action.orderCreationRequest,
-          orderItems: orderItemsObj
-        };
-          return this.http.post<string>(this.ordersUrl, orderCreationRequestPayload).pipe(
-            map(orderId => OrderActions.createOrderSuccess({orderId})),
+          return this.http.post<string>(this.ordersUrl, action.orderCreationRequest).pipe(
+            map(orderId => OrderActions.createOrderSuccess({orderId: orderId.toString()})),
             catchError(error => of(OrderActions.createOrderFailure({error})))
           )
         }
@@ -39,17 +63,11 @@ export class OrderEffects {
   createOrderSuccess$ = createEffect(() =>
       this.actions$.pipe(
         ofType(OrderActions.createOrderSuccess),
-        tap(() => this.orderService.clearOrder())
+        tap((action) => {
+          console.log(`Order created successfully with ID: ${action.orderId}`);
+        })
       ),
     { dispatch: false }
   );
-
-  /*createOrderFailure$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(OrderActions.createOrderFailure),
-        tap(() => this.orderService.clearOrder())
-      ),
-    { dispatch: false }
-  );*/
 
 }

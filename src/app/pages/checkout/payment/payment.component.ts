@@ -1,4 +1,4 @@
-import { Component,  inject,  OnInit, signal, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
@@ -11,7 +11,7 @@ import {
   StripeElementsOptions,
   StripePaymentElementOptions
 } from '@stripe/stripe-js';
-import { Observable, of } from 'rxjs';
+import {Observable, of, switchMap, take} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ShippingAddress } from '../../../models/shipping-address.model';
 import { DeliveryService } from '../../../services/delivery.service';
@@ -19,9 +19,11 @@ import { CartService } from '../../../services/cart.service';
 import { PaymentService } from '../../../services/payment.service';
 import { MatProgressSpinner} from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
+import {OrderService} from "../../../services/order.service";
+import { Actions, ofType } from '@ngrx/effects';
+import * as OrderActions from '../../../store/order/order.actions';
 
 @Component({
   selector: 'app-payment',
@@ -31,19 +33,23 @@ import { PaymentDialogComponent } from './payment-dialog/payment-dialog.componen
   imports: [
     ReactiveFormsModule,
     MatInputModule,
-    MatButton,
     MatCardModule,
     MatProgressSpinner,
     StripeElementsDirective,
     StripePaymentElementComponent
   ]
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements AfterViewInit {
 
   delivery$: Observable<ShippingAddress>;
   private readonly dialog = inject(MatDialog);
 
-  constructor(private deliveryService: DeliveryService,private cartService:CartService, private paymentService: PaymentService, private fb: UntypedFormBuilder) {
+  constructor(private deliveryService: DeliveryService,
+              private orderService:OrderService,
+              private paymentService: PaymentService,
+              private cartService: CartService,
+              private fb: UntypedFormBuilder,
+              private actions$: Actions) {
     this.delivery$ = this.deliveryService.getDeliveryDetails();
 
   }
@@ -82,38 +88,69 @@ export class PaymentComponent implements OnInit {
   paying = signal<boolean>(false);
 
 
-  ngOnInit() {
-    // Subscribe to delivery$ to prefill form values
-    this.delivery$.subscribe(delivery => {
-      if (delivery) {
-        this.paymentElementForm.patchValue({
-          name: delivery.firstName + ' ' + delivery.lastName,
-          email: delivery.email,
-          address: delivery.street,
-          zipcode: delivery.postalCode,
-          city: delivery.city
-        });
-      }
+  ngAfterViewInit(){
+    this.setupPaymentIntentListener();
+  }
+
+  private setupPaymentIntentListener() {
+    // Listen for successful order creation first, then proceed with payment setup
+    this.actions$.pipe(
+      ofType(OrderActions.createOrderSuccess),
+      take(1),
+      switchMap(({ orderId }) => {
+        return this.orderService.getCurrentOrder().pipe(
+          take(1),
+          switchMap(order => {
+            // Update form values from delivery information
+            if (order.shippingAddress) {
+              this.paymentElementForm.patchValue({
+                name: order.shippingAddress.firstName + ' ' + order.shippingAddress.lastName,
+                email: order.shippingAddress.email,
+                address: order.shippingAddress.street,
+                zipcode: order.shippingAddress.postalCode,
+                city: order.shippingAddress.city
+              });
+            }
+
+            return this.cartService.getTotalPrice().pipe(
+              take(1),
+              switchMap(totalPrice => {
+                this.paymentElementForm.patchValue({ amount: totalPrice });
+
+                // Check if payment intent already exists in the order
+                if (order.paymentIntent) {
+                  // Use existing payment intent
+                  return of({ client_secret: order.paymentIntent });
+                } else {
+                  // Create a new payment intent if one doesn't exist
+                  return this.paymentService.createPaymentIntent({
+                    amount: totalPrice,
+                    email: order.shippingAddress?.email || this.paymentElementForm.get('email')?.value,
+                    orderId: orderId,
+                    productName: order.orderItems.length > 1
+                      ? `${order.orderItems[0].item.name} and more`
+                      : order.orderItems[0]?.item.name || "Products"
+                  });
+                }
+              })
+            );
+          })
+        );
+      })
+    ).subscribe((pi) => {
+      this.elementsOptions.clientSecret = pi.client_secret as string;
+      this.orderService.handlePaymentCreated(this.elementsOptions.clientSecret);
     });
-
-    this.cartService.getTotalPrice().subscribe(totalPrice => {
-      this.paymentElementForm.patchValue({
-        amount: totalPrice});
-      })
-
-      this.paymentService
-      .createPaymentIntent({
-        "amount": this.paymentElementForm.get('amount')?.value,
-        "email": this.paymentElementForm.get('email')?.value,
-        "productName": "Lemon Haze",
-      })
-      .subscribe((pi) => {
-        this.elementsOptions.clientSecret = pi.client_secret as string;
-      });
-
   }
 
   pay(): Observable<boolean> {
+    // Check if Payment Element is mounted
+    console.log(this.paymentElement.elements);
+    if (!this.paymentElement || !this.paymentElement.elements) {
+      console.error('Payment Element is not yet mounted.');
+      return of(false);
+    }
+
     if (this.paying() || this.paymentElementForm.invalid) return of(false);
     this.paying.set(true);
     return this.stripe
@@ -137,6 +174,7 @@ export class PaymentComponent implements OnInit {
       .pipe(
         map(result => {
           this.paying.set(false);
+          console.log(result);
           if (result.error) {
             this.dialog.open(PaymentDialogComponent, { data: result });
             return false;
@@ -146,6 +184,7 @@ export class PaymentComponent implements OnInit {
           return false;
         }),
         catchError(err => {
+          console.log(err)
           this.paying.set(false);
           this.dialog.open(PaymentDialogComponent, { data: err });
           return of(false);
