@@ -64,6 +64,8 @@ export class PaymentComponent implements AfterViewInit {
     address: [''],
     zipcode: [''],
     city: [''],
+    phone: [''],
+    state: [''],
     amount: [2500, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
 
@@ -108,7 +110,9 @@ export class PaymentComponent implements AfterViewInit {
                 email: order.shippingAddress.email,
                 address: order.shippingAddress.street,
                 zipcode: order.shippingAddress.postalCode,
-                city: order.shippingAddress.city
+                city: order.shippingAddress.city,
+                phone: order.shippingAddress.phoneNumber,
+                state: order.shippingAddress.region ,
               });
             }
 
@@ -127,6 +131,9 @@ export class PaymentComponent implements AfterViewInit {
                     amount: totalPrice,
                     email: order.shippingAddress?.email || this.paymentElementForm.get('email')?.value,
                     orderId: orderId,
+                    phone: order.shippingAddress?.phoneNumber || '',
+                    state: order.shippingAddress?.region || '',
+                    customerId: order.customerId || '',
                     productName: order.orderItems.length > 1
                       ? `${order.orderItems[0].item.name} and more`
                       : order.orderItems[0]?.item.name || "Products"
@@ -145,11 +152,11 @@ export class PaymentComponent implements AfterViewInit {
 
   pay(): Observable<boolean> {
     // Check if Payment Element is mounted
-    console.log(this.paymentElement.elements);
     if (!this.paymentElement || !this.paymentElement.elements) {
       console.error('Payment Element is not yet mounted.');
       return of(false);
     }
+    console.log(this.paymentElementForm);
 
     if (this.paying() || this.paymentElementForm.invalid) return of(false);
     this.paying.set(true);
@@ -161,10 +168,12 @@ export class PaymentComponent implements AfterViewInit {
             billing_details: {
               name: this.paymentElementForm.get('name')?.value as string,
               email: this.paymentElementForm.get('email')?.value as string,
+              phone: this.paymentElementForm.get('phone')?.value as string,
               address: {
                 line1: this.paymentElementForm.get('address')?.value as string,
                 postal_code: this.paymentElementForm.get('zipcode')?.value as string,
-                city: this.paymentElementForm.get('city')?.value as string
+                city: this.paymentElementForm.get('city')?.value as string,
+                state: this.paymentElementForm.get('state')?.value as string
               }
             }
           }
