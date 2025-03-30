@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^18.2.4",
     "@angular/platform-server": "^18.2.4",
     "@angular/router": "^18.2.4",
-    "@angular/ssr": "^18.2.4",
+    "@angular/ssr": "^19.0.0",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/store": "^18.1.1",
     "@ngrx/store-devtools": "^18.1.1",
@@ -34,8 +34,8 @@
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.4",
-    "@angular/cli": "^18.2.4",
+    "@angular-devkit/build-angular": "^19.0.0",
+    "@angular/cli": "^19.0.0",
     "@angular/compiler-cli": "^18.2.4",
     "@types/express": "^5.0.0",
     "@types/jasmine": "~5.1.0",
