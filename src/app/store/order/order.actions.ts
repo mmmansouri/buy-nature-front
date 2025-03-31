@@ -44,7 +44,7 @@ export const createOrder = createAction(
 
 export const createOrderSuccess = createAction(
   '[Order] Create Order Success',
-  props<{ orderId: string }>()
+  props<{ order: any }>()
 );
 
 export const orderPaymentCreated = createAction(
@@ -83,4 +83,19 @@ export const clearOrder = createAction('[Order] Clear Order');
 
 export const clearAfterSuccessfulOrderCreation = createAction(
   '[Order] Clear After Successful Order Creation'
+);
+
+export const createPaymentIntent = createAction(
+  '[Order] Create Payment Intent',
+  props<{ order: Order }>()
+);
+
+export const createPaymentIntentSuccess = createAction(
+  '[Order] Create Payment Intent Success',
+  props<{ clientSecret: string }>()
+);
+
+export const createPaymentIntentFailure = createAction(
+  '[Order] Create Payment Intent Failure',
+  props<{ error: any }>()
 );

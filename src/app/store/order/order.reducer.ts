@@ -49,11 +49,31 @@ export const orderReducer = createReducer(
     ...initialState
   }))
   ,
-  on(createOrderSuccess, (state, { orderId })  => ({
+  on(createOrderSuccess, (state, { order }) => ({
     ...state,
     order: {
       ...state.order,
-      id: orderId,
+      id: order.id,
+      customerId: order.customerId,
+      status: order.status,
+      orderItems: order.orderItems, // Already in the correct format with full item details
+      paymentStatus: state.order?.paymentStatus || 'PENDING',
+      paymentIntent: state.order?.paymentIntent || '',
+      shippingAddress: order.shippingAddress ? {
+        firstName: order.shippingAddress.firstName,
+        lastName: order.shippingAddress.lastName,
+        phoneNumber: order.shippingAddress.phoneNumber,
+        email: order.shippingAddress.email,
+        street: order.shippingAddress.street,
+        streetNumber: order.shippingAddress.streetNumber,
+        city: order.shippingAddress.city,
+        region: order.shippingAddress.region,
+        postalCode: order.shippingAddress.postalCode,
+        country: order.shippingAddress.country
+      } : state.order?.shippingAddress
+    },
+    orderCreationRequest: {
+      ...state.orderCreationRequest,
       status: 'CREATED'
     },
     orderCreationState: 'success' as OrderCreationStateType
@@ -130,7 +150,7 @@ export const orderReducer = createReducer(
       ...state.order,
       paymentStatus: 'pending',
       paymentIntent: paymentIntent,
-      status: OrderStatus.PaymentPending
+      status: OrderStatus.PaymentPending  à enlever
     }
   })),
   on(OrderActions.orderPaymentSuccess, (state, { orderId }) => ({
@@ -139,7 +159,7 @@ export const orderReducer = createReducer(
       ...state.order,
       id: orderId,
       paymentStatus: 'success',
-      status: OrderStatus.PaymentConfirmed
+      status: OrderStatus.PaymentConfirmed  à enlever
     }
   })),
   on(OrderActions.orderPaymentFailure, (state, { orderId }) => ({

@@ -45,6 +45,7 @@ export class CheckoutComponent implements OnInit {
   deliveryForm!: FormGroup;
   paymentForm!: FormGroup;
   currentStepIndex: number = 0;
+  paymentComponentReady = false;
 
   deliveryConfirmed: boolean = false;
 
@@ -92,8 +93,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   confirmOrder() {
-      this.orderService.confirmOrder();
-      this.stepper.next();
+    this.stepper.next();
   }
 
   confirmPayment() {

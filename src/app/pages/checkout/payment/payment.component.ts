@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
-import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
+import {ReactiveFormsModule, UntypedFormBuilder, Validators} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
 
 import {
   injectStripe,
@@ -12,18 +12,14 @@ import {
   StripePaymentElementOptions
 } from '@stripe/stripe-js';
 import {Observable, of, switchMap, take} from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { ShippingAddress } from '../../../models/shipping-address.model';
-import { DeliveryService } from '../../../services/delivery.service';
-import { CartService } from '../../../services/cart.service';
-import { PaymentService } from '../../../services/payment.service';
-import { MatProgressSpinner} from '@angular/material/progress-spinner';
-import { MatDialog } from '@angular/material/dialog';
-import { MatCardModule } from '@angular/material/card';
-import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
-import {OrderService} from "../../../services/order.service";
-import { Actions, ofType } from '@ngrx/effects';
+import {catchError, map} from 'rxjs/operators';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatDialog} from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
+import {PaymentDialogComponent} from './payment-dialog/payment-dialog.component';
+import {Actions, ofType} from '@ngrx/effects';
 import * as OrderActions from '../../../store/order/order.actions';
+import {OrderService} from "../../../services/order.service";
 
 @Component({
   selector: 'app-payment',
@@ -39,18 +35,14 @@ import * as OrderActions from '../../../store/order/order.actions';
     StripePaymentElementComponent
   ]
 })
-export class PaymentComponent implements AfterViewInit {
+export class PaymentComponent implements OnInit, AfterViewInit {
 
-  delivery$: Observable<ShippingAddress>;
+
   private readonly dialog = inject(MatDialog);
 
-  constructor(private deliveryService: DeliveryService,
-              private orderService:OrderService,
-              private paymentService: PaymentService,
-              private cartService: CartService,
+  constructor(private orderService: OrderService,
               private fb: UntypedFormBuilder,
               private actions$: Actions) {
-    this.delivery$ = this.deliveryService.getDeliveryDetails();
 
   }
 
@@ -85,69 +77,23 @@ export class PaymentComponent implements AfterViewInit {
     }
   };
 
-
   stripe = injectStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl");
   paying = signal<boolean>(false);
 
-
-  ngAfterViewInit(){
-    this.setupPaymentIntentListener();
+  ngOnInit() {
+    // Just subscribe to the success action to update the component
+    this.actions$.pipe(
+      ofType(OrderActions.createPaymentIntentSuccess),
+      take(1)
+    ).subscribe(({clientSecret}) => {
+      console.log("hEEEE");
+      console.log(clientSecret);
+      this.elementsOptions.clientSecret = clientSecret;
+    });
   }
 
-  private setupPaymentIntentListener() {
-    // Listen for successful order creation first, then proceed with payment setup
-    this.actions$.pipe(
-      ofType(OrderActions.createOrderSuccess),
-      take(1),
-      switchMap(({ orderId }) => {
-        return this.orderService.getCurrentOrder().pipe(
-          take(1),
-          switchMap(order => {
-            // Update form values from delivery information
-            if (order.shippingAddress) {
-              this.paymentElementForm.patchValue({
-                name: order.shippingAddress.firstName + ' ' + order.shippingAddress.lastName,
-                email: order.shippingAddress.email,
-                address: order.shippingAddress.street,
-                zipcode: order.shippingAddress.postalCode,
-                city: order.shippingAddress.city,
-                phone: order.shippingAddress.phoneNumber,
-                state: order.shippingAddress.region ,
-              });
-            }
-
-            return this.cartService.getTotalPrice().pipe(
-              take(1),
-              switchMap(totalPrice => {
-                this.paymentElementForm.patchValue({ amount: totalPrice });
-
-                // Check if payment intent already exists in the order
-                if (order.paymentIntent) {
-                  // Use existing payment intent
-                  return of({ client_secret: order.paymentIntent });
-                } else {
-                  // Create a new payment intent if one doesn't exist
-                  return this.paymentService.createPaymentIntent({
-                    amount: totalPrice,
-                    email: order.shippingAddress?.email || this.paymentElementForm.get('email')?.value,
-                    orderId: orderId,
-                    phone: order.shippingAddress?.phoneNumber || '',
-                    state: order.shippingAddress?.region || '',
-                    customerId: order.customerId || '',
-                    productName: order.orderItems.length > 1
-                      ? `${order.orderItems[0].item.name} and more`
-                      : order.orderItems[0]?.item.name || "Products"
-                  });
-                }
-              })
-            );
-          })
-        );
-      })
-    ).subscribe((pi) => {
-      this.elementsOptions.clientSecret = pi.client_secret as string;
-      this.orderService.handlePaymentCreated(this.elementsOptions.clientSecret);
-    });
+  ngAfterViewInit() {
+    this.orderService.confirmOrder();
   }
 
   pay(): Observable<boolean> {
@@ -185,7 +131,7 @@ export class PaymentComponent implements AfterViewInit {
           this.paying.set(false);
           console.log(result);
           if (result.error) {
-            this.dialog.open(PaymentDialogComponent, { data: result });
+            this.dialog.open(PaymentDialogComponent, {data: result});
             return false;
           } else if (result.paymentIntent.status === 'succeeded') {
             return true;
@@ -195,7 +141,7 @@ export class PaymentComponent implements AfterViewInit {
         catchError(err => {
           console.log(err)
           this.paying.set(false);
-          this.dialog.open(PaymentDialogComponent, { data: err });
+          this.dialog.open(PaymentDialogComponent, {data: err});
           return of(false);
         })
       );

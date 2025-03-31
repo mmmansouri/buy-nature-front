@@ -1,10 +1,10 @@
 import { ShippingAddress } from "./shipping-address.model";
 import { UUID } from "node:crypto";
+import {OrderItemRequest} from "./order-item-request.model";
 
 export interface OrderCreationRequest {
   customerId: string;
-  orderItems: Record<string, number>;
+  orderItems: OrderItemRequest[];
   total: number;
-  status: string;
   shippingAddress: ShippingAddress
 }
