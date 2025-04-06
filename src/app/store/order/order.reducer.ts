@@ -149,8 +149,7 @@ export const orderReducer = createReducer(
     order: {
       ...state.order,
       paymentStatus: 'pending',
-      paymentIntent: paymentIntent,
-      status: OrderStatus.PaymentPending  à enlever
+      paymentIntent: paymentIntent
     }
   })),
   on(OrderActions.orderPaymentSuccess, (state, { orderId }) => ({
@@ -158,8 +157,7 @@ export const orderReducer = createReducer(
     order: {
       ...state.order,
       id: orderId,
-      paymentStatus: 'success',
-      status: OrderStatus.PaymentConfirmed  à enlever
+      paymentStatus: 'success'
     }
   })),
   on(OrderActions.orderPaymentFailure, (state, { orderId }) => ({
