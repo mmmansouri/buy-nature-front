@@ -6,16 +6,22 @@ import { MatButtonModule } from "@angular/material/button";
 import { RouterLink } from "@angular/router";
 import { MatBadgeModule } from '@angular/material/badge';
 import {CommonModule} from "@angular/common";
-import {ClickOutsideDirective} from "../../directives/click-outside.directive";
 import {OrderItem} from "../../models/order.item.model";
 import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
 import {Observable} from "rxjs";
 import { CartService } from '../../services/cart.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [ClickOutsideDirective, MatBadgeModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink, CommonModule],
+  imports: [MatMenuModule,
+    MatBadgeModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+    CommonModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })

@@ -78,9 +78,10 @@ export const orderReducer = createReducer(
     },
     orderCreationState: 'success' as OrderCreationStateType
   })),
-  on(createOrderFailure, state => ({
+  on(createOrderFailure, (state, { error }) => ({
     ...state,
-    orderCreationState: 'error' as OrderCreationStateType
+    orderCreationState: 'error' as OrderCreationStateType,
+    error: error
   })),
   on(updateOrderItems, (state, { orderItems }) => ({
     ...state,

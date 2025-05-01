@@ -44,7 +44,7 @@ export class OrderService {
         shippingAddress,
         orderItems: items,
         status: OrderStatus.Pending,
-        customerId: order.customerId || crypto.randomUUID()
+        customerId: order.customerId || 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
       }))
     ).subscribe(updatedOrder => {
       this.store.dispatch(OrderActions.confirmOrder({ order: updatedOrder }));

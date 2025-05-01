@@ -60,6 +60,7 @@ export class OrderEffects {
       switchMap(action =>
         this.http.post<any>(this.ordersUrl, action.orderCreationRequest).pipe(
           map(response => {
+            console.log(response);
             // Vérifier les champs obligatoires
             if (!response.id || !response.customerId || !response.orderItems ||
               !response.status || !response.shippingAddress || !response.total) {
@@ -79,7 +80,10 @@ export class OrderEffects {
 
             return OrderActions.createOrderSuccess({ order });
           }),
-          catchError(error => of(OrderActions.createOrderFailure({ error })))
+          catchError(error => {
+            console.error('Order creation failed:', error);
+            return of(OrderActions.createOrderFailure({ error }));
+          })
         )
       )
     )

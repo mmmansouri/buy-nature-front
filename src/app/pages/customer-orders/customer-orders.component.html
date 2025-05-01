@@ -1,0 +1,69 @@
+<div class="customer-orders-container">
+  <h1>My Orders</h1>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading your orders...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <p>There was an error loading your orders. Please try again later.</p>
+      <button mat-raised-button color="primary"
+              (click)="customerService.getCustomerOrdersSignal(customerId)">Retry</button>
+    </div>
+  } @else if (orders() && orders().length) {
+    <div class="orders-grid">
+      @for (order of orders(); track order.id) {
+        <mat-card class="order-card">
+          <mat-card-header>
+            <mat-card-title>Order #{{ order.id.slice(-6) }}</mat-card-title>
+            <mat-card-subtitle>{{ formatDate(order.createdAt) }}</mat-card-subtitle>
+            <div class="spacer"></div>
+            <mat-chip [class]="getOrderStatusClass(order.status)">
+              {{ order.status }}
+            </mat-chip>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="order-details">
+              <p><strong>Items:</strong> {{ order.orderItems?.length || 0 }}</p>
+              <p><strong>Total:</strong> ${{ order.totalAmount?.toFixed(2) }}</p>
+            </div>
+
+            @if (order.orderItems && order.orderItems.length) {
+              <div class="order-items">
+                <h3>Order Items</h3>
+                @for (item of order.orderItems.slice(0, 2); track item.id) {
+                  <div class="order-item">
+                    <p>{{ item.quantity }} × {{ item.productName }}</p>
+                    <p>${{ item.price?.toFixed(2) }}</p>
+                  </div>
+                }
+                @if (order.orderItems.length > 2) {
+                  <p class="more-items">+{{ order.orderItems.length - 2 }} more items</p>
+                }
+              </div>
+            }
+          </mat-card-content>
+
+          <mat-divider></mat-divider>
+
+          <mat-card-actions>
+            <button mat-button color="primary" [routerLink]="['/orders', order.id]">
+              View Details
+            </button>
+            @if (order.status === 'Processing') {
+              <button mat-button color="warn">Cancel Order</button>
+            }
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="no-orders">
+      <p>You don't have any orders yet.</p>
+      <button mat-raised-button color="primary" routerLink="/shop">Start Shopping</button>
+    </div>
+  }
+</div>
