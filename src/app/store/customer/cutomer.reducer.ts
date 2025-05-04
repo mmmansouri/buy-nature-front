@@ -21,5 +21,23 @@ export const customerReducer = createReducer(
     ...state,
     error,
     loading: false
+  })),
+  on(CustomerActions.getCustomerProfile, (state, { customerId }) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+  on(CustomerActions.getCustomerProfileSuccess, (state, { customer }) => ({
+    ...state,
+    customer: {
+      ...customer,
+      orders: state.customer.orders || []
+    },
+    loading: false
+  })),
+  on(CustomerActions.getCustomerProfileFailure, (state, { error }) => ({
+    ...state,
+    error,
+    loading: false
   }))
 );

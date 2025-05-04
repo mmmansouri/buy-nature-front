@@ -1,4 +1,6 @@
 export interface ShippingAddress {
+  customerId: string;
+  label: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;

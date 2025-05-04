@@ -4,11 +4,13 @@ import { HomeComponent } from "./pages/home/home.component";
 import {ItemDetailsComponent} from "./pages/item-details/item-details.component";
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {CustomerOrdersComponent} from "./pages/customer-orders/customer-orders.component";
+import {CustomerProfileComponent} from "./pages/customer-profile/customer-profile.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'items', component: ItemsComponent },
   { path: 'item-details/:id', component: ItemDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
-  { path: 'customer/orders', component: CustomerOrdersComponent }
+  { path: 'customer/orders', component: CustomerOrdersComponent },
+  { path: 'customer/profile', component: CustomerProfileComponent }
 ];

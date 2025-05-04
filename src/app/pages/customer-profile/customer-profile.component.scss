@@ -1,0 +1,75 @@
+.profile-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+
+  h1 {
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+}
+
+.loading-container, .error-container, .no-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  p {
+    margin: 16px 0;
+  }
+}
+
+.profile-card, .address-card, .delivery-addresses-card {
+  margin-bottom: 24px;
+}
+
+.profile-info, .address-info {
+  padding: 8px 0;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 12px;
+
+  .label {
+    font-weight: 500;
+    width: 120px;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .value {
+    flex: 1;
+  }
+}
+
+.address-block {
+  padding: 12px 0;
+}
+
+.address-divider {
+  margin: 8px 0;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+
+  button {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-row {
+    flex-direction: column;
+
+    .label {
+      width: 100%;
+      margin-bottom: 4px;
+    }
+  }
+}

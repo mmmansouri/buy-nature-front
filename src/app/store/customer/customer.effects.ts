@@ -5,10 +5,12 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import * as CustomerActions from './customer.actions';
 import { Order } from '../../models/order.model';
+import {Customer} from "../../models/customer.model";
 
 @Injectable()
 export class CustomerEffects {
   private baseUrl = 'http://localhost:8080/orders';
+  private baseCustomerUrl = 'http://localhost:8080/customers';
 
   constructor(
     private actions$: Actions,
@@ -24,6 +26,21 @@ export class CustomerEffects {
           catchError(error => {
             console.error('Error fetching customer orders:', error);
             return of(CustomerActions.getCustomerOrdersFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
+  getCustomerProfile$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CustomerActions.getCustomerProfile),
+      switchMap(({ customerId }) =>
+        this.http.get<Customer>(`${this.baseCustomerUrl}/${customerId}`).pipe(
+          map(customer => CustomerActions.getCustomerProfileSuccess({ customer })),
+          catchError(error => {
+            console.error('Error fetching customer profile:', error);
+            return of(CustomerActions.getCustomerProfileFailure({ error }));
           })
         )
       )

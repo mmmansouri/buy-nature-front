@@ -1,1 +1,100 @@
-<p>customer-profile works!</p>
+<div class="profile-container">
+    <h1>My Profile</h1>
+
+    @if (loading()) {
+        <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading your profile...</p>
+        </div>
+    } @else if (error()) {
+        <div class="error-container">
+            <p>There was an error loading your profile. Please try again later.</p>
+            <button mat-raised-button color="primary"
+                    (click)="customerService.getCustomerProfileSignal(customerId)">Retry</button>
+        </div>
+    } @else if (customer()) {
+        <mat-card class="profile-card">
+            <mat-card-header>
+                <mat-card-title>Personal Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span class="value">{{ customer().firstName }} {{ customer().lastName }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span>
+                        <span class="value">{{ customer().email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Phone:</span>
+                        <span class="value">{{ customer().phoneNumber }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Member Since:</span>
+                        <span class="value">{{ formatDate(customer().createdAt) }}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <button mat-button color="primary">
+                    <mat-icon>edit</mat-icon> Edit Profile
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="address-card">
+            <mat-card-header>
+                <mat-card-title>Address Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="address-info">
+                    <div class="info-row">
+                        <span class="label">Street Number:</span>
+                        <span class="value">{{ customer().streetNumber }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Street:</span>
+                        <span class="value">{{ customer().street }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">City:</span>
+                        <span class="value">{{ customer().city }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Region:</span>
+                        <span class="value">{{ customer().region }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Postal Code:</span>
+                        <span class="value">{{ customer().postalCode }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Country:</span>
+                        <span class="value">{{ customer().country }}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-divider></mat-divider>
+            <mat-card-actions>
+                <button mat-button color="primary">
+                    <mat-icon>edit</mat-icon> Edit Address
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <div class="action-buttons">
+            <button mat-raised-button color="primary" routerLink="/customer/orders">
+                <mat-icon>shopping_bag</mat-icon> View My Orders
+            </button>
+        </div>
+    } @else {
+        <div class="no-profile">
+            <p>Unable to load your profile information.</p>
+            <button mat-raised-button color="primary"
+                    (click)="customerService.getCustomerProfileSignal(customerId)">Try Again</button>
+        </div>
+    }
+</div>

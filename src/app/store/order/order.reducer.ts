@@ -60,6 +60,8 @@ export const orderReducer = createReducer(
       paymentStatus: state.order?.paymentStatus || 'PENDING',
       paymentIntent: state.order?.paymentIntent || '',
       shippingAddress: order.shippingAddress ? {
+        customerId: order.customerId,
+        label: order.shippingAddress.label,
         firstName: order.shippingAddress.firstName,
         lastName: order.shippingAddress.lastName,
         phoneNumber: order.shippingAddress.phoneNumber,

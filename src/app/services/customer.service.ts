@@ -1,5 +1,10 @@
 import {Injectable} from "@angular/core";
-import {selectCustomerError, selectCustomerLoading, selectCustomerOrders} from "../store/customer/customer.selectors";
+import {
+  selectCustomer,
+  selectCustomerError,
+  selectCustomerLoading,
+  selectCustomerOrders
+} from "../store/customer/customer.selectors";
 import {CustomerState} from "../store/customer/customer.state";
 import {Store} from "@ngrx/store";
 import * as CustomerActions from '../store/customer/customer.actions';
@@ -22,6 +27,11 @@ export class CustomerService {
 
   getCustomerErrorSignal() {
     return this.store.selectSignal(selectCustomerError);
+  }
+
+  getCustomerProfileSignal(customerId: string) {
+    this.store.dispatch(CustomerActions.getCustomerProfile({ customerId }));
+    return this.store.selectSignal(selectCustomer);
   }
 
 }

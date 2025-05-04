@@ -41,6 +41,7 @@ export class OrderEffects {
             quantity: item.quantity
           }));
 
+          console.log(order);
           const orderCreationRequest: OrderCreationRequest = {
             customerId: order.customerId,
             orderItems: orderItems,
