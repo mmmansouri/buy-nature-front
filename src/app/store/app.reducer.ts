@@ -5,6 +5,7 @@ import { deliveryReducer } from './delivery/delivery.reducer';
 import { itemsReducer } from './items/items.reducer';
 import { orderReducer } from './order/order.reducer';
 import { customerReducer}  from "./customer/cutomer.reducer";
+import { userReducer } from "./user/user.reducer";
 
 // Define your root state
 export interface AppState {
@@ -13,6 +14,7 @@ export interface AppState {
   items: any; // Replace with the actual items state interface
   order: any; // Replace with the actual orders state interface
   customer: any; // Replace with the actual customer state interface
+  user: any; // Replace with the actual user state interface
 }
 
 // Map reducers to state properties
@@ -21,7 +23,8 @@ export const rootReducer: ActionReducerMap<AppState> = {
   delivery: deliveryReducer,
   items: itemsReducer,
   order: orderReducer,
-  customer: customerReducer
+  customer: customerReducer,
+  user: userReducer
 };
 
 // Apply meta-reducers

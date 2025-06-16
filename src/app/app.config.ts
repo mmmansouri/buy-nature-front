@@ -13,6 +13,7 @@ import { provideNgxStripe } from 'ngx-stripe';
 import { PLUTO_ID } from './services/payment.service';
 import { OrderEffects } from "./store/order/order.effects";
 import { CustomerEffects } from "./store/customer/customer.effects";
+import { UserEffects } from "./store/user/user.effects";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,8 +22,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideStore(rootReducer, { metaReducers }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects([ItemsEffects, OrderEffects, CustomerEffects]),
-    provideNgxStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl"),
+    provideEffects([ItemsEffects, OrderEffects, CustomerEffects, UserEffects]),
+    provideNgxStripe("pk_test_51RaMArIWYChH7MJu7tjbLAIHh4BVlPpeUKJVjhFrAvU1mEVogrhlJIgJhxcQfnjJjVDVGJr1zZwyxxIcP1VdATbM00j99WEFAM"),
     {
       provide: PLUTO_ID,
       useValue: '449f8516-791a-49ab-a09d-50f79a0678b6',

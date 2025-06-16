@@ -77,7 +77,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     }
   };
 
-  stripe = injectStripe("pk_test_51QRIzAIeQeVliWL72uY9gQCp0VDTYHwVR1zLG0ewOP0MFtBQGe4nRnZ8wFyGuwxepmLd9cVIiGNGovV5eFuA1rG600lv2xvRVl");
+  stripe = injectStripe("pk_test_51RaMArIWYChH7MJu7tjbLAIHh4BVlPpeUKJVjhFrAvU1mEVogrhlJIgJhxcQfnjJjVDVGJr1zZwyxxIcP1VdATbM00j99WEFAM");
   paying = signal<boolean>(false);
 
   ngOnInit() {

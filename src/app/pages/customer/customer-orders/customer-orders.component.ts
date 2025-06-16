@@ -1,8 +1,8 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CustomerService } from '../../services/customer.service';
-import { Order } from '../../models/order.model';
+import { CustomerService } from '../../../services/customer.service';
+import { Order } from '../../../models/order.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';

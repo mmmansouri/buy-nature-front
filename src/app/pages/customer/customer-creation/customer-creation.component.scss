@@ -1,0 +1,28 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+  margin: 16px auto; /* Centers the form horizontally */
+}
+
+.button-container {
+  margin: 16px auto;
+  max-width: 500px;
+  display: flex;
+  justify-content: center; /* Changed from flex-end to center */
+}
+
+.error-container {
+  margin: 16px auto; /* Center error messages too */
+  max-width: 500px;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+}
+
+h2 {
+  margin-bottom: 24px;
+}
