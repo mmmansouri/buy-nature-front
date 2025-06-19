@@ -4,6 +4,7 @@ import { ShippingAddress } from "./shipping-address.model";
 
 export interface Customer {
   id: UUID;
+  userId: UUID;
   firstName: string;
   lastName: string;
   phoneNumber: string;

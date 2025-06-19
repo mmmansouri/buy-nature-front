@@ -8,6 +8,7 @@ import {
 import {CustomerState} from "../store/customer/customer.state";
 import {Store} from "@ngrx/store";
 import * as CustomerActions from '../store/customer/customer.actions';
+import {CustomerCreationRequest} from "../models/customer-creation-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,15 @@ export class CustomerService {
   getCustomerProfileSignal(customerId: string) {
     this.store.dispatch(CustomerActions.getCustomerProfile({ customerId }));
     return this.store.selectSignal(selectCustomer);
+  }
+
+  createCustomer(customerRequest: CustomerCreationRequest) {
+    this.store.dispatch(CustomerActions.createCustomer({ customerRequest }));
+
+    return {
+      loading: this.store.selectSignal(selectCustomerLoading),
+      error: this.store.selectSignal(selectCustomerError)
+    };
   }
 
 }

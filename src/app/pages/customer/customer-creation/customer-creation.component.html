@@ -1,6 +1,6 @@
 <h2>Create New Customer</h2>
 
-<mat-stepper linear>
+<mat-stepper linear #stepper>
   <!-- User Creation Step -->
   <mat-step [stepControl]="userForm">
     <ng-template matStepLabel>Create User Account</ng-template>
@@ -43,16 +43,167 @@
     </form>
   </mat-step>
 
-  <!-- Additional steps will go here -->
-  <mat-step>
+  <!-- Customer Details Step -->
+  <mat-step [stepControl]="customerForm">
     <ng-template matStepLabel>Customer Details</ng-template>
-    <!-- Second step content will go here -->
-    <p>Customer details form will be here</p>
+
+    <form [formGroup]="customerForm">
+      <div class="form-container">
+        <!-- Personal Information -->
+        <h3>Personal Information</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="Enter first name" required>
+            <mat-error *ngIf="customerForm.get('firstName')?.hasError('required')">
+              First name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Enter last name" required>
+            <mat-error *ngIf="customerForm.get('lastName')?.hasError('required')">
+              Last name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter email" required>
+          <mat-error *ngIf="customerForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="customerForm.get('email')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="Enter phone number" required>
+          <mat-error *ngIf="customerForm.get('phoneNumber')?.hasError('required')">
+            Phone number is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Address Information -->
+        <h3>Address</h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="street-number">
+            <mat-label>Street Number</mat-label>
+            <input matInput formControlName="streetNumber" placeholder="Enter street number" required>
+            <mat-error *ngIf="customerForm.get('streetNumber')?.hasError('required')">
+              Street number is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="street">
+            <mat-label>Street</mat-label>
+            <input matInput formControlName="street" placeholder="Enter street" required>
+            <mat-error *ngIf="customerForm.get('street')?.hasError('required')">
+              Street is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" placeholder="Enter city" required>
+          <mat-error *ngIf="customerForm.get('city')?.hasError('required')">
+            City is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Region</mat-label>
+            <input matInput formControlName="region" placeholder="Enter region/state/province" required>
+            <mat-error *ngIf="customerForm.get('region')?.hasError('required')">
+              Region is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Postal Code</mat-label>
+            <input matInput formControlName="postalCode" placeholder="Enter postal code" required>
+            <mat-error *ngIf="customerForm.get('postalCode')?.hasError('required')">
+              Postal code is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="country" placeholder="Enter country" required>
+          <mat-error *ngIf="customerForm.get('country')?.hasError('required')">
+            Country is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="button-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          [disabled]="customerForm.invalid">Next</button>
+      </div>
+    </form>
   </mat-step>
 
+  <!-- Review & Submit Step -->
   <mat-step>
     <ng-template matStepLabel>Review & Submit</ng-template>
-    <!-- Third step content will go here -->
-    <p>Review customer information</p>
+
+    <div class="form-container review-container" *ngIf="!customerCreationSuccess">
+      <h3>Review Customer Information</h3>
+
+      <div class="review-section">
+        <h4>Account Details</h4>
+        <p><strong>Email:</strong> {{userForm.get('email')?.value}}</p>
+      </div>
+
+      <div class="review-section">
+        <h4>Personal Information</h4>
+        <p><strong>First Name:</strong> {{customerForm.get('firstName')?.value}}</p>
+        <p><strong>Last Name:</strong> {{customerForm.get('lastName')?.value}}</p>
+        <p><strong>Email:</strong> {{customerForm.get('email')?.value}}</p>
+        <p><strong>Phone:</strong> {{customerForm.get('phoneNumber')?.value}}</p>
+      </div>
+
+      <div class="review-section">
+        <h4>Address</h4>
+        <p>{{customerForm.get('streetNumber')?.value}} {{customerForm.get('street')?.value}}</p>
+        <p>{{customerForm.get('city')?.value}}, {{customerForm.get('region')?.value}} {{customerForm.get('postalCode')?.value}}</p>
+        <p>{{customerForm.get('country')?.value}}</p>
+      </div>
+
+      <div class="error-container" *ngIf="customerCreationError()">
+        <p class="error-message">{{customerCreationError()}}</p>
+      </div>
+
+      <div class="button-container">
+        <button mat-button matStepperPrevious>Back</button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="submitCustomerForm()"
+          [disabled]="customerCreationLoading()">
+          {{customerCreationLoading() ? 'Creating Customer...' : 'Create Customer'}}
+        </button>
+      </div>
+    </div>
+
+    <div class="success-container" *ngIf="customerCreationSuccess">
+      <mat-icon color="primary">check_circle</mat-icon>
+      <h3>Customer Created Successfully!</h3>
+      <p>The customer has been created in the system.</p>
+      <button mat-raised-button color="primary" routerLink="/customers">View All Customers</button>
+    </div>
   </mat-step>
 </mat-stepper>

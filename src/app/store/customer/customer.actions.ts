@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Order } from '../../models/order.model';
 import {Customer} from "../../models/customer.model";
+import {CustomerCreationRequest} from "../../models/customer-creation-request.model";
 
 export const getCustomerOrders = createAction(
   '[Customer] Get Customer Orders',
@@ -29,5 +30,20 @@ export const getCustomerProfileSuccess = createAction(
 
 export const getCustomerProfileFailure = createAction(
   '[Customer] Get Customer Profile Failure',
+  props<{ error: any }>()
+);
+
+export const createCustomer = createAction(
+  '[Customer] Create Customer',
+  props<{ customerRequest: CustomerCreationRequest }>()
+);
+
+export const createCustomerSuccess = createAction(
+  '[Customer] Create Customer Success',
+  props<{ customerId: string }>()
+);
+
+export const createCustomerFailure = createAction(
+  '[Customer] Create Customer Failure',
   props<{ error: any }>()
 );

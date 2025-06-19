@@ -46,4 +46,19 @@ export class CustomerEffects {
       )
     )
   );
+
+  createCustomer$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CustomerActions.createCustomer),
+      switchMap(({ customerRequest }) =>
+        this.http.post<string>(`${this.baseCustomerUrl}`, customerRequest).pipe(
+          map(customerId => CustomerActions.createCustomerSuccess({ customerId })),
+          catchError(error => {
+            console.error('Error creating customer:', error);
+            return of(CustomerActions.createCustomerFailure({ error }));
+          })
+        )
+      )
+    )
+  );
 }

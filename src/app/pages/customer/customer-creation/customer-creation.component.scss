@@ -26,3 +26,60 @@
 h2 {
   margin-bottom: 24px;
 }
+
+.form-row {
+  display: flex;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1;
+  }
+
+  .street-number {
+    flex: 0.3;
+  }
+
+  .street {
+    flex: 0.7;
+  }
+}
+
+h3 {
+  margin: 24px 0 8px;
+  color: #3f51b5;
+}
+
+h4 {
+  margin: 16px 0 8px;
+  color: #3f51b5;
+}
+
+.review-container {
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.review-section {
+  margin-bottom: 24px;
+
+  p {
+    margin: 4px 0;
+  }
+}
+
+.success-container {
+  text-align: center;
+  padding: 32px 16px;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  button {
+    margin-top: 24px;
+  }
+}

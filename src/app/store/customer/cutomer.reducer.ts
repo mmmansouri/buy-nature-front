@@ -39,5 +39,20 @@ export const customerReducer = createReducer(
     ...state,
     error,
     loading: false
-  }))
+  })),
+  on(CustomerActions.createCustomer, (state) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+    on(CustomerActions.createCustomerSuccess, (state, { customerId }) => ({
+      ...state,
+      loading: false,
+      error: null
+    })),
+    on(CustomerActions.createCustomerFailure, (state, { error }) => ({
+      ...state,
+      loading: false,
+      error
+    }))
 );
