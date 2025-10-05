@@ -1,74 +1,85 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of, switchMap, tap} from 'rxjs';
+import { of, switchMap, tap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import * as OrderActions from './order.actions';
 import { HttpClient } from '@angular/common/http';
-import {OrderService} from "../../services/order.service";
-import {OrderCreationRequest} from "../../models/order-creation-request.model";
-import {ItemsService} from "../../services/items.service";
-import {PaymentService} from "../../services/payment.service";
-import {Order} from "../../models/order.model";
-import {createPaymentIntentSuccess} from "./order.actions";
+
+import * as OrderActions from './order.actions';
+import { OrderService } from "../../services/order.service";
+import { OrderCreationRequest } from "../../models/order-creation-request.model";
+import { PaymentService } from "../../services/payment.service";
+import { Order } from "../../models/order.model";
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class OrderEffects {
-
-  private ordersUrl = 'http://localhost:8080/orders';
+  private ordersUrl = `${environment.apiUrl}/orders`;
 
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private itemsService: ItemsService,
     private paymentService: PaymentService,
     private orderService: OrderService
-
   ) {}
 
-  confirmOrder$ = createEffect(() => {
-      return this.actions$.pipe(
-        ofType(OrderActions.confirmOrder),
-        map(action => {
-          const order = action.order;
+  /**
+   * Confirm Order Effect
+   * Checks if order already exists, if not creates a new one
+   */
+  confirmOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.confirmOrder),
+      map(action => {
+        const order = action.order;
 
-          // If the order already has an ID, don't create a new one
-          if (order.id && order.paymentIntent) {
-            return OrderActions.createPaymentIntentSuccess({clientSecret: order.paymentIntent});
-          }
+        console.log('📋 Confirming order:', order.id ? 'existing' : 'new');
 
-          const orderItems = order.orderItems.map(item => ({
-            itemId: item.item.id,
-            quantity: item.quantity
-          }));
+        // If order already has ID and payment intent, skip creation
+        if (order.id && order.paymentIntent) {
+          console.log('✅ Order already exists with payment intent');
+          return OrderActions.createPaymentIntentSuccess({
+            clientSecret: order.paymentIntent
+          });
+        }
 
-          console.log(order);
-          const orderCreationRequest: OrderCreationRequest = {
-            customerId: order.customerId,
-            orderItems: orderItems,
-            total: order.orderItems.reduce((acc, item) => acc + item.item.price * item.quantity, 0),
-            shippingAddress: order.shippingAddress
-          };
+        // Create new order
+        const orderItems = order.orderItems.map(item => ({
+          itemId: item.item.id,
+          quantity: item.quantity
+        }));
 
-          return OrderActions.createOrder({orderCreationRequest});
-        })
-      );
-    }
+        const orderCreationRequest: OrderCreationRequest = {
+          customerId: order.customerId,
+          orderItems: orderItems,
+          total: order.orderItems.reduce((acc, item) => acc + item.item.price * item.quantity, 0),
+          shippingAddress: order.shippingAddress
+        };
+
+        console.log('🆕 Creating new order...');
+        return OrderActions.createOrder({ orderCreationRequest });
+      })
+    )
   );
 
+  /**
+   * Create Order Effect
+   * Calls backend API to create order
+   */
   createOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.createOrder),
       switchMap(action =>
         this.http.post<any>(this.ordersUrl, action.orderCreationRequest).pipe(
           map(response => {
-            console.log(response);
-            // Vérifier les champs obligatoires
+            console.log('📦 Order created:', response.id);
+
+            // Validate response
             if (!response.id || !response.customerId || !response.orderItems ||
               !response.status || !response.shippingAddress || !response.total) {
-              throw new Error('Réponse API incomplète: champs obligatoires manquants');
+              throw new Error('Incomplete API response: required fields missing');
             }
 
-            // Mapper la réponse au modèle Order
+            // Map response to Order model
             const order: Order = {
               id: response.id,
               customerId: response.customerId,
@@ -82,7 +93,7 @@ export class OrderEffects {
             return OrderActions.createOrderSuccess({ order });
           }),
           catchError(error => {
-            console.error('Order creation failed:', error);
+            console.error('❌ Order creation failed:', error);
             return of(OrderActions.createOrderFailure({ error }));
           })
         )
@@ -90,33 +101,39 @@ export class OrderEffects {
     )
   );
 
+  /**
+   * Create Order Success Effect
+   * Automatically triggers payment intent creation after order is created
+   */
   createOrderSuccess$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(OrderActions.createOrderSuccess),
-        tap((action) => {
-          console.log(`Order created successfully with ID: ${action.order.id}`);
-        })
-      ),
-    { dispatch: false }
-  );
-
-  createPaymentIntent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.createOrderSuccess),
-      map(({order}) => OrderActions.createPaymentIntent({order}))
+      map(({ order }) => {
+        console.log('✅ Order created successfully:', order.id);
+        console.log('💳 Creating payment intent for order...');
+        return OrderActions.createPaymentIntent({ order });
+      })
     )
   );
 
-  processPaymentIntent$ = createEffect(() =>
+  /**
+   * Create Payment Intent Effect
+   * Calls payment service to create Stripe payment intent
+   * IMPORTANT: This is the ONLY place where payment intent API is called
+   */
+  createPaymentIntent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.createPaymentIntent),
-      switchMap(({order}) => {
+      switchMap(({ order }) => {
         // Check if payment intent already exists
         if (order.paymentIntent) {
+          console.log('✅ Payment intent already exists');
           return of(OrderActions.createPaymentIntentSuccess({
             clientSecret: order.paymentIntent
           }));
         }
+
+        console.log('🔄 Calling payment API...');
 
         // Calculate total from order items
         const totalPrice = order.orderItems.reduce(
@@ -124,7 +141,7 @@ export class OrderEffects {
           0
         );
 
-        // Create new payment intent
+        // Create new payment intent via API
         return this.paymentService.createPaymentIntent({
           amount: totalPrice,
           email: order.shippingAddress?.email || '',
@@ -136,23 +153,33 @@ export class OrderEffects {
             ? `${order.orderItems[0].item.name} and more`
             : order.orderItems[0]?.item.name || "Products"
         }).pipe(
-          map(response => OrderActions.createPaymentIntentSuccess({
-            clientSecret: response.client_secret as string
-          })),
-          catchError(error => of(OrderActions.createPaymentIntentFailure({error})))
+          map(response => {
+            console.log('✅ Payment intent created:', response.client_secret?.substring(0, 20) + '...');
+            return OrderActions.createPaymentIntentSuccess({
+              clientSecret: response.client_secret as string
+            });
+          }),
+          catchError(error => {
+            console.error('❌ Payment intent creation failed:', error);
+            return of(OrderActions.createPaymentIntentFailure({ error }));
+          })
         );
       })
     )
   );
 
+  /**
+   * Payment Intent Success Effect
+   * Stores the payment intent in the order service
+   */
   handlePaymentCreated$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(OrderActions.createPaymentIntentSuccess),
-        tap(({clientSecret}) => {
-          // You'll need to inject OrderService in the constructor
-          this.orderService.handlePaymentCreated(clientSecret);
-        })
-      ),
-    {dispatch: false}
+    this.actions$.pipe(
+      ofType(OrderActions.createPaymentIntentSuccess),
+      tap(({ clientSecret }) => {
+        console.log('💾 Storing payment intent...');
+        this.orderService.handlePaymentCreated(clientSecret);
+      })
+    ),
+    { dispatch: false }
   );
 }

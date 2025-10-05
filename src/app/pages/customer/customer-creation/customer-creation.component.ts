@@ -14,6 +14,7 @@ import { CustomerCreationRequest } from '../../../models/customer-creation-reque
 import { Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { UserAuthService } from "../../../services/user-auth.service";
 
 @Component({
   selector: 'app-customer-creation',
@@ -54,7 +55,8 @@ export class CustomerCreationComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private userAuth: UserAuthService
   ) {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -128,7 +130,7 @@ export class CustomerCreationComponent implements OnInit, OnDestroy {
       ...this.customerForm.value
     };
 
-    const { loading, error } = this.customerService.createCustomer(customerRequest);
+    const { loading, error, customerId } = this.customerService.createCustomer(customerRequest);
 
     // Run toObservable in injection context
     runInInjectionContext(this.injector, () => {
@@ -138,8 +140,10 @@ export class CustomerCreationComponent implements OnInit, OnDestroy {
         filter(isLoading => !isLoading),
         take(1)
       ).subscribe(() => {
-        if (!error()) {
+        if (!error() && customerId()) {
           this.customerCreationSuccess = true;
+          // Update the auth service with the new customer ID
+          this.userAuth.setCustomerId(customerId()!);
         }
       });
 

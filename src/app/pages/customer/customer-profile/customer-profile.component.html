@@ -10,7 +10,7 @@
         <div class="error-container">
             <p>There was an error loading your profile. Please try again later.</p>
             <button mat-raised-button color="primary"
-                    (click)="customerService.getCustomerProfileSignal(customerId)">Retry</button>
+                    (click)="customerService.getCustomerProfileSignal(userAuth.customerId()!)">Retry</button>
         </div>
     } @else if (customer()) {
         <mat-card class="profile-card">
@@ -94,7 +94,7 @@
         <div class="no-profile">
             <p>Unable to load your profile information.</p>
             <button mat-raised-button color="primary"
-                    (click)="customerService.getCustomerProfileSignal(customerId)">Try Again</button>
+                    (click)="customerService.getCustomerProfileSignal(userAuth.customerId()!)">Try Again</button>
         </div>
     }
 </div>

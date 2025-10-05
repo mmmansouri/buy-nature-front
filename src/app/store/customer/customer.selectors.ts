@@ -23,7 +23,7 @@ export const selectCustomerError = createSelector(
   (state) => state.error
 );
 
-export const selectCustomerById = (customerId: string) => createSelector(
-  selectCustomer,
-  (customer) => customer.id === customerId ? customer : null
+export const selectCustomerId = createSelector(
+  selectCustomerState,
+  (state: CustomerState) => state.customer.id
 );

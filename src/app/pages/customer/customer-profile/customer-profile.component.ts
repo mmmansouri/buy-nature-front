@@ -1,6 +1,7 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomerService } from '../../../services/customer.service';
+import { UserAuthService } from '../../../services/user-auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,22 +24,14 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './customer-profile.component.html',
   styleUrl: './customer-profile.component.scss'
 })
-export class CustomerProfileComponent implements OnInit {
-  @Input() customerId!: string;
-
+export class CustomerProfileComponent {
   protected customerService = inject(CustomerService);
+  protected userAuth = inject(UserAuthService);
 
-  customer = this.customerService.getCustomerProfileSignal(this.customerId);
+  // Use the customer ID from auth service
+  customer = this.customerService.getCustomerProfileSignal(this.userAuth.customerId()!);
   loading = this.customerService.getCustomerLoadingSignal();
   error = this.customerService.getCustomerErrorSignal();
-
-  ngOnInit(): void {
-    if (!this.customerId) {
-      // For demo purposes, using a hardcoded ID
-      this.customerId = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
-      this.customer = this.customerService.getCustomerProfileSignal(this.customerId);
-    }
-  }
 
   formatDate(date: string | Date): string {
     return date ? new Date(date).toLocaleDateString() : '';

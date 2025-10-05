@@ -29,3 +29,8 @@ export const selectOrderCreationState = createSelector(
   selectOrderState,
   (state) => state.orderCreationState
 );
+
+export const selectPaymentClientSecret = createSelector(
+  selectOrderState,
+  (state) => state.order?.paymentIntent || null
+);

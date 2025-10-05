@@ -6,13 +6,43 @@ import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {CustomerOrdersComponent} from "./pages/customer/customer-orders/customer-orders.component";
 import {CustomerProfileComponent} from "./pages/customer/customer-profile/customer-profile.component";
 import {CustomerCreationComponent} from "./pages/customer/customer-creation/customer-creation.component";
+import {LoginComponent} from "./components/login/login.component";
+import { userAuthGuard } from "./guards/user-auth.guard";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'items', component: ItemsComponent },
   { path: 'item-details/:id', component: ItemDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
-  { path: 'customer/orders', component: CustomerOrdersComponent },
-  { path: 'customer/profile', component: CustomerProfileComponent },
-  { path: 'customer/creation', component: CustomerCreationComponent }
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'customer/profile',
+    component: CustomerProfileComponent,
+    canActivate: [userAuthGuard],
+    data: { requiresCustomer: true }
+  },
+  {
+    path: 'customer/orders',
+    component: CustomerOrdersComponent,
+    canActivate: [userAuthGuard],
+    data: { requiresCustomer: true }
+  },
+  {
+    path: 'customer/create',
+    component: CustomerCreationComponent,
+    canActivate: [userAuthGuard]
+    // No requiresCustomer flag - user must be logged in but doesn't need customer profile yet
+  },
+  {
+    path: '',
+    redirectTo: 'customer/profile',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: 'customer/profile'
+  }
 ];

@@ -1,14 +1,13 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CustomerService } from '../../../services/customer.service';
-import { Order } from '../../../models/order.model';
+import { UserAuthService } from '../../../services/user-auth.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-customer-orders',
@@ -25,24 +24,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './customer-orders.component.html',
   styleUrl: './customer-orders.component.scss'
 })
-export class CustomerOrdersComponent implements OnInit {
-  @Input() customerId!: string;
-
+export class CustomerOrdersComponent {
   protected customerService = inject(CustomerService);
+  protected userAuth = inject(UserAuthService);
 
-  orders: any;
+  // Use the customer ID from auth service
+  orders = this.customerService.getCustomerOrdersSignal(this.userAuth.customerId()!);
   loading = this.customerService.getCustomerLoadingSignal();
   error = this.customerService.getCustomerErrorSignal();
-
-  ngOnInit(): void {
-    // If customerId isn't provided as an input, you might want to get it from another source
-    if (!this.customerId) {
-      // For demo purposes, using a hardcoded ID
-      this.customerId = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
-    }
-
-    this.orders = this.customerService.getCustomerOrdersSignal(this.customerId);
-  }
 
   getOrderStatusClass(status: string): string {
     switch(status?.toLowerCase()) {

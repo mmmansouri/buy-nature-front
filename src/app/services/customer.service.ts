@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {
   selectCustomer,
-  selectCustomerError,
+  selectCustomerError, selectCustomerId,
   selectCustomerLoading,
   selectCustomerOrders
 } from "../store/customer/customer.selectors";
@@ -40,7 +40,8 @@ export class CustomerService {
 
     return {
       loading: this.store.selectSignal(selectCustomerLoading),
-      error: this.store.selectSignal(selectCustomerError)
+      error: this.store.selectSignal(selectCustomerError),
+      customerId: this.store.selectSignal(selectCustomerId) // Add this line
     };
   }
 

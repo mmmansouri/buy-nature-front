@@ -1,6 +1,12 @@
-import {AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
-import {ReactiveFormsModule, UntypedFormBuilder, Validators} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
+import { Component, inject, signal, ViewChild, effect } from '@angular/core';
+import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
+import { catchError, map, take, filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
 import {
   injectStripe,
@@ -11,16 +17,21 @@ import {
   StripeElementsOptions,
   StripePaymentElementOptions
 } from '@stripe/stripe-js';
-import {Observable, of, switchMap, take} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatDialog} from '@angular/material/dialog';
-import {MatCardModule} from '@angular/material/card';
-import {PaymentDialogComponent} from './payment-dialog/payment-dialog.component';
-import {Actions, ofType} from '@ngrx/effects';
-import * as OrderActions from '../../../store/order/order.actions';
-import {OrderService} from "../../../services/order.service";
 
+import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
+import { OrderService } from "../../../services/order.service";
+import { selectCurrentOrder, selectPaymentClientSecret } from '../../../store/order/order.selectors';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+/**
+ * Payment Component - Modern Angular 18+ Implementation
+ *
+ * Features:
+ * - Signal-based state management
+ * - Automatic payment intent initialization
+ * - Single API call with proper error handling
+ * - Clean separation of concerns
+ */
 @Component({
   selector: 'app-payment',
   standalone: true,
@@ -35,21 +46,29 @@ import {OrderService} from "../../../services/order.service";
     StripePaymentElementComponent
   ]
 })
-export class PaymentComponent implements OnInit, AfterViewInit {
-
-
-  private readonly dialog = inject(MatDialog);
-
-  constructor(private orderService: OrderService,
-              private fb: UntypedFormBuilder,
-              private actions$: Actions) {
-
-  }
-
+export class PaymentComponent {
   @ViewChild(StripePaymentElementComponent)
   paymentElement!: StripePaymentElementComponent;
 
+  private readonly store = inject(Store);
+  private readonly orderService = inject(OrderService);
+  private readonly dialog = inject(MatDialog);
+  private readonly fb = inject(UntypedFormBuilder);
 
+  // Signals for reactive state
+  readonly paying = signal<boolean>(false);
+  readonly clientSecret = toSignal(
+    this.store.select(selectPaymentClientSecret).pipe(
+      filter(secret => !!secret)
+    )
+  );
+
+  // Stripe instance
+  readonly stripe = injectStripe(
+    "pk_test_51QRIzAIeQeVliWL7EvK7n3Lr8iNmwIcYxkOjYHZ7UWJcpYWyFjRgeZEmgtHhtk2JV6ngn6BqUvKUojco8uKJ38Rr00KFkebO76"
+  );
+
+  // Payment form
   paymentElementForm = this.fb.group({
     name: ['John doe', [Validators.required]],
     email: ['support@ngx-stripe.dev', [Validators.required]],
@@ -61,6 +80,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     amount: [2500, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
   });
 
+  // Stripe Elements configuration
   elementsOptions: StripeElementsOptions = {
     locale: 'en',
     appearance: {
@@ -77,35 +97,79 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     }
   };
 
-  stripe = injectStripe("pk_test_51RaMArIWYChH7MJu7tjbLAIHh4BVlPpeUKJVjhFrAvU1mEVogrhlJIgJhxcQfnjJjVDVGJr1zZwyxxIcP1VdATbM00j99WEFAM");
-  paying = signal<boolean>(false);
+  constructor() {
+    // Effect to update elementsOptions when clientSecret changes
+    effect(() => {
+      const secret = this.clientSecret();
+      if (secret) {
+        console.log('💳 Payment Intent ready:', secret.substring(0, 20) + '...');
+        // Update with correct type
+        this.elementsOptions = {
+          locale: 'en',
+          appearance: {
+            theme: 'flat',
+          },
+          clientSecret: secret
+        } as StripeElementsOptions;
+      }
+    });
 
-  ngOnInit() {
-    // Just subscribe to the success action to update the component
-    this.actions$.pipe(
-      ofType(OrderActions.createPaymentIntentSuccess),
+    // Initialize payment on component creation
+    this.initializePayment();
+  }
+
+  /**
+   * Initialize payment by confirming order
+   * This will trigger the payment intent creation chain
+   * Note: Order should already be confirmed by CheckoutComponent
+   */
+  private initializePayment(): void {
+    console.log('🔄 Initializing payment...');
+
+    // Get current order to check if already initialized
+    this.store.select(selectCurrentOrder).pipe(
       take(1)
-    ).subscribe(({clientSecret}) => {
-      console.log("hEEEE");
-      console.log(clientSecret);
-      this.elementsOptions.clientSecret = clientSecret;
+    ).subscribe(order => {
+      // Only confirm order if no payment intent exists yet
+      if (!order.paymentIntent) {
+        console.log('📝 Confirming order for payment...');
+        this.orderService.confirmOrder().pipe(
+          take(1),
+          catchError(error => {
+            console.error('❌ Failed to confirm order:', error);
+            return of(false);
+          })
+        ).subscribe(success => {
+          if (success) {
+            console.log('✅ Order confirmed for payment');
+          } else {
+            console.error('❌ Order confirmation failed - user may need to login');
+          }
+        });
+      } else {
+        console.log('✅ Payment intent already exists');
+      }
     });
   }
 
-  ngAfterViewInit() {
-    this.orderService.confirmOrder();
-  }
-
+  /**
+   * Process payment with Stripe
+   */
   pay(): Observable<boolean> {
-    // Check if Payment Element is mounted
+    // Validation checks
     if (!this.paymentElement || !this.paymentElement.elements) {
-      console.error('Payment Element is not yet mounted.');
+      console.error('❌ Payment Element is not yet mounted.');
       return of(false);
     }
-    console.log(this.paymentElementForm);
 
-    if (this.paying() || this.paymentElementForm.invalid) return of(false);
+    if (this.paying() || this.paymentElementForm.invalid) {
+      console.warn('⚠️  Payment already in progress or form invalid');
+      return of(false);
+    }
+
+    console.log('💰 Processing payment...');
     this.paying.set(true);
+
     return this.stripe
       .confirmPayment({
         elements: this.paymentElement.elements,
@@ -129,19 +193,25 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       .pipe(
         map(result => {
           this.paying.set(false);
-          console.log(result);
+
           if (result.error) {
-            this.dialog.open(PaymentDialogComponent, {data: result});
+            console.error('❌ Payment failed:', result.error);
+            this.dialog.open(PaymentDialogComponent, { data: result });
             return false;
-          } else if (result.paymentIntent.status === 'succeeded') {
+          }
+
+          if (result.paymentIntent.status === 'succeeded') {
+            console.log('✅ Payment succeeded!');
             return true;
           }
+
+          console.warn('⚠️  Payment status:', result.paymentIntent.status);
           return false;
         }),
         catchError(err => {
-          console.log(err)
+          console.error('❌ Payment error:', err);
           this.paying.set(false);
-          this.dialog.open(PaymentDialogComponent, {data: err});
+          this.dialog.open(PaymentDialogComponent, { data: err });
           return of(false);
         })
       );

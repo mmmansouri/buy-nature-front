@@ -11,6 +11,7 @@ import {CartMiniComponent} from "../../pages/cart-mini/cart-mini.component";
 import {Observable} from "rxjs";
 import { CartService } from '../../services/cart.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { UserAuthService } from "../../services/user-auth.service";
 
 @Component({
   selector: 'app-toolbar',
@@ -37,7 +38,9 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
   private cartMiniComponentInstance: CartMiniComponent | null = null; // Hold the instance of CartMiniComponent
 
-  constructor(private sidenavService: SidenavService,private cartService: CartService) {
+  constructor(private sidenavService: SidenavService,
+              private cartService: CartService,
+              private userAuth: UserAuthService ) {
     this.cartItems$ = this.cartService.getCartItems();
     this.totalItems$ = this.cartService.getTotalItems();
   }
@@ -84,6 +87,10 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     if (this.cartMiniComponentInstance) {
       this.cartMiniComponentInstance.cartOpen = this.cartOpen;
     }
+  }
+
+  logout() {
+    this.userAuth.logout();
   }
 
 }

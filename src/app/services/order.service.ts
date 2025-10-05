@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { forkJoin, Observable, take} from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { forkJoin, Observable, take, throwError } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Order } from '../models/order.model';
 import * as OrderActions from '../store/order/order.actions';
@@ -7,19 +7,22 @@ import { OrderState } from '../store/order/oder.state';
 import { selectCurrentOrder } from '../store/order/order.selectors';
 import { OrderItem } from '../models/order.item.model';
 import { getOrderById, updateOrderItem } from '../store/order/order.actions';
-import {CartService} from "./cart.service";
-import {OrderStatus} from "../models/order-stauts.model";
-import {map} from "rxjs/operators";
-import {DeliveryService} from "./delivery.service";
+import { CartService } from "./cart.service";
+import { OrderStatus } from "../models/order-stauts.model";
+import { map, catchError } from "rxjs/operators";
+import { DeliveryService } from "./delivery.service";
+import { UserAuthService } from './user-auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
+  private userAuth = inject(UserAuthService);
 
-  constructor(private store: Store<OrderState>,
-              private cartService: CartService,
-              private deliveryService: DeliveryService
+  constructor(
+    private store: Store<OrderState>,
+    private cartService: CartService,
+    private deliveryService: DeliveryService
   ) {
   }
 
@@ -31,24 +34,46 @@ export class OrderService {
     this.store.dispatch(getOrderById({ id }));
   }
 
-  confirmOrder(): void {
+  /**
+   * Confirm order and prepare for payment
+   * Requires user to be logged in with a valid customerId
+   *
+   * @returns Observable that emits true if order confirmed, false if user not authenticated
+   */
+  confirmOrder(): Observable<boolean> {
+    // Check if user is authenticated and has a customerId
+    if (!this.userAuth.isAuthenticated() || !this.userAuth.customerId()) {
+      console.error('❌ Cannot confirm order: User not authenticated or missing customer ID');
+      return throwError(() => new Error('User must be logged in to place an order'));
+    }
+
+    const customerId = this.userAuth.customerId()!;
+    console.log('✅ Confirming order for customer:', customerId);
+
     // Use forkJoin to get all required data in a single operation
-    forkJoin({
+    return forkJoin({
       order: this.store.select(selectCurrentOrder).pipe(take(1)),
       items: this.cartService.getCartItems().pipe(take(1)),
       shippingAddress: this.deliveryService.getDeliveryDetails().pipe(take(1))
     }).pipe(
-      take(1), // Ensure this only happens once
-      map(({ order, items, shippingAddress }) => ({
-        ...order,
-        shippingAddress,
-        orderItems: items,
-        status: OrderStatus.Pending,
-        customerId: order.customerId || 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
-      }))
-    ).subscribe(updatedOrder => {
-      this.store.dispatch(OrderActions.confirmOrder({ order: updatedOrder }));
-    });
+      take(1),
+      map(({ order, items, shippingAddress }) => {
+        const updatedOrder = {
+          ...order,
+          shippingAddress,
+          orderItems: items,
+          status: OrderStatus.Pending,
+          customerId // Use authenticated customer's ID
+        };
+
+        this.store.dispatch(OrderActions.confirmOrder({ order: updatedOrder }));
+        return true;
+      }),
+      catchError(error => {
+        console.error('❌ Error confirming order:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   clearAllOrderData(): void {

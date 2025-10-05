@@ -12,6 +12,10 @@ import { selectAllItems, selectItemById } from "../store/items/items.selectors";
 export class ItemsService {
 
   constructor(private store: Store) {
+    // Don't dispatch loadItems in constructor - let components control when to load
+  }
+
+  loadItems(): void {
     this.store.dispatch(loadItems());
   }
 

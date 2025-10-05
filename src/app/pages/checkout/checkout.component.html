@@ -1,12 +1,9 @@
-<mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="onStepChange($event)">
+<mat-horizontal-stepper [linear]="true" [selectedIndex]="initialStepIndex()" #stepper (selectionChange)="onStepChange($event)">
   <!-- Step 1: Cart Confirmation -->
   <mat-step [stepControl]="cartForm">
     <form [formGroup]="cartForm">
       <ng-template matStepLabel>Cart</ng-template>
-      <!-- Pass the formGroup from the parent to the child -->
-      <ng-container *ngIf="currentStepIndex === 0">
-        <app-cart [formGroup]="cartForm"></app-cart>
-      </ng-container>
+      <app-cart [formGroup]="cartForm"></app-cart>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperNext [disabled]="!cartForm.valid">Delivery</button>
       </div>
@@ -17,9 +14,7 @@
   <mat-step [stepControl]="deliveryForm">
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Delivery Details</ng-template>
-      <ng-container *ngIf="currentStepIndex === 1">
-        <app-delivery [formGroup]="deliveryForm" (deliveryConfirmedChange)="onDeliveryConfirmedChange($event)"></app-delivery>
-      </ng-container>
+      <app-delivery [formGroup]="deliveryForm" (deliveryConfirmedChange)="onDeliveryConfirmedChange($event)"></app-delivery>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Cart</button>
         <button mat-raised-button color="primary" matStepperNext (click)="confirmDelivery()" [disabled]="!this.deliveryForm.valid">Confirm Delivery</button>
@@ -31,9 +26,7 @@
   <mat-step [stepControl]="deliveryForm">
     <form [formGroup]="deliveryForm">
       <ng-template matStepLabel>Order Review</ng-template>
-      <ng-container *ngIf="currentStepIndex === 2">
-        <app-order-review></app-order-review>
-      </ng-container>
+      <app-order-review></app-order-review>
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Delivery Details</button>
         <button mat-raised-button color="primary" (click)="confirmOrder()">Confirm Order</button>
@@ -45,9 +38,9 @@
    <mat-step [stepControl]="paymentForm">
     <form [formGroup]="paymentForm">
       <ng-template matStepLabel>Payment</ng-template>
-      <ng-container *ngIf="currentStepIndex === 3">
+      @if (currentStepIndex() === 3) {
         <app-payment [formGroup]="paymentForm"></app-payment>
-      </ng-container>
+      }
       <div class="stepper-button-container">
         <button mat-raised-button color="primary" matStepperPrevious>Order Review</button>
         <button mat-raised-button color="primary" (click)="confirmPayment()" [disabled]="isPaymentInProgress()">Confirm payment</button>
@@ -59,10 +52,10 @@
   <mat-step>
     <ng-template matStepLabel>Confirmation</ng-template>
     @if (paymentStatus() === 'success') {
-      <ng-container *ngIf="currentStepIndex === 4">
+      @if (currentStepIndex() === 4) {
         <app-order-creation></app-order-creation>
         <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Continue Shopping</button>
-      </ng-container>
+      }
     } @else {
       <p>Please complete the payment step first.</p>
       <button mat-raised-button color="primary" matStepperPrevious>Back to Payment</button>

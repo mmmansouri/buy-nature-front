@@ -1,5 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Custom snackbar styles for login required notification */
+.login-required-snackbar {
+  background-color: #ff6b6b !important;
+  color: white !important;
+  font-weight: 500;
+
+  .mat-mdc-button {
+    color: white !important;
+    font-weight: 600;
+  }
+}
+
 /*@use '@angular/material' as mat;
 
 @include mat.core();

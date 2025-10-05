@@ -27,6 +27,10 @@ export class ItemsComponent implements OnInit {
   constructor(private itemsService: ItemsService, private cartService: CartService) {}
 
   ngOnInit() {
+    // Dispatch action to load items
+    this.itemsService.loadItems();
+
+    // Subscribe to items from store
     this.loadItems();
   }
 

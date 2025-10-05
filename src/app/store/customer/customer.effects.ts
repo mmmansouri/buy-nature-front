@@ -5,12 +5,13 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import * as CustomerActions from './customer.actions';
 import { Order } from '../../models/order.model';
-import {Customer} from "../../models/customer.model";
+import { Customer } from "../../models/customer.model";
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class CustomerEffects {
-  private baseUrl = 'http://localhost:8080/orders';
-  private baseCustomerUrl = 'http://localhost:8080/customers';
+  private baseUrl = `${environment.apiUrl}/orders`;
+  private baseCustomerUrl = `${environment.apiUrl}/customers`;
 
   constructor(
     private actions$: Actions,
