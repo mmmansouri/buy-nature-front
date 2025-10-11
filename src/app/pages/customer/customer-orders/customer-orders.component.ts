@@ -10,19 +10,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
-  selector: 'app-customer-orders',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatDividerModule,
-    MatButtonModule,
-    MatChipsModule
-  ],
-  templateUrl: './customer-orders.component.html',
-  styleUrl: './customer-orders.component.scss'
+    selector: 'app-customer-orders',
+    imports: [
+        CommonModule,
+        RouterLink,
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatDividerModule,
+        MatButtonModule,
+        MatChipsModule
+    ],
+    templateUrl: './customer-orders.component.html',
+    styleUrl: './customer-orders.component.scss'
 })
 export class CustomerOrdersComponent {
   protected customerService = inject(CustomerService);

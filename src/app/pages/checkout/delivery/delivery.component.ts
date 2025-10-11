@@ -3,26 +3,23 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
-import {MatButton} from "@angular/material/button";
 import {Observable} from "rxjs";
 import {ShippingAddress} from "../../../models/shipping-address.model";
 import { DeliveryService } from '../../../services/delivery.service';
 
 
 @Component({
-  selector: 'app-delivery',
-  standalone: true,
-  imports: [
-    NgIf,
-    MatFormField,
-    MatLabel,
-    MatError,
-    ReactiveFormsModule,
-    MatInput,
-    MatButton
-  ],
-  templateUrl: './delivery.component.html',
-  styleUrls: ['./delivery.component.scss']
+    selector: 'app-delivery',
+    imports: [
+        NgIf,
+        MatFormField,
+        MatLabel,
+        MatError,
+        ReactiveFormsModule,
+        MatInput
+    ],
+    templateUrl: './delivery.component.html',
+    styleUrls: ['./delivery.component.scss']
 })
 export class DeliveryComponent implements OnInit {
 

@@ -13,22 +13,21 @@ import { OrderService } from '../../services/order.service';
 import { StepperService } from '../../services/stepper.service';
 
 @Component({
-  selector: 'app-cart-mini',
-  standalone: true,
-  imports: [
-    ClickOutsideDirective,
-    NgIf,
-    NgFor,
-    CurrencyPipe,
-    MatIcon,
-    FormsModule,
-    RouterLink,
-    AsyncPipe,
-    MatIconButton,
-    MatButton
-  ],
-  templateUrl: './cart-mini.component.html',
-  styleUrl: './cart-mini.component.scss'
+    selector: 'app-cart-mini',
+    imports: [
+        ClickOutsideDirective,
+        NgIf,
+        NgFor,
+        CurrencyPipe,
+        MatIcon,
+        FormsModule,
+        RouterLink,
+        AsyncPipe,
+        MatIconButton,
+        MatButton
+    ],
+    templateUrl: './cart-mini.component.html',
+    styleUrl: './cart-mini.component.scss'
 })
 export class CartMiniComponent implements OnInit {
 

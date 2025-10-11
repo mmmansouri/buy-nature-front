@@ -14,17 +14,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { UserAuthService } from "../../services/user-auth.service";
 
 @Component({
-  selector: 'app-toolbar',
-  standalone: true,
-  imports: [MatMenuModule,
-    MatBadgeModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    RouterLink,
-    CommonModule],
-  templateUrl: './toolbar.component.html',
-  styleUrl: './toolbar.component.scss'
+    selector: 'app-toolbar',
+    imports: [MatMenuModule,
+        MatBadgeModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        RouterLink,
+        CommonModule],
+    templateUrl: './toolbar.component.html',
+    styleUrl: './toolbar.component.scss'
 })
 export class ToolbarComponent implements OnInit, AfterViewInit {
   @ViewChild('miniCartContainer', { read: ViewContainerRef }) miniCartContainer!: ViewContainerRef;

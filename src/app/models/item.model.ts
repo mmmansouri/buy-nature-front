@@ -1,7 +1,5 @@
-import {UUID} from "node:crypto";
-
 export interface Item {
-  id: UUID;
+  id: string;
   name: string;
   description: string;
   price: number;

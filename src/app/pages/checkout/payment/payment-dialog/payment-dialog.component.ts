@@ -11,12 +11,11 @@ import {
 } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-payment-dialog',
-  standalone: true,
-  templateUrl: './payment-dialog.component.html',
-  styleUrl: './payment-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, NgIf]
+    selector: 'app-payment-dialog',
+    templateUrl: './payment-dialog.component.html',
+    styleUrl: './payment-dialog.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, NgIf]
 })
 export class PaymentDialogComponent {
 

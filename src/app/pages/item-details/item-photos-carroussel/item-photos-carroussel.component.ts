@@ -3,7 +3,6 @@ import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {CommonModule, isPlatformBrowser} from "@angular/common";
-import {RouterLink} from "@angular/router";
 import {transition, trigger, useAnimation} from "@angular/animations";
 import {
   AnimationType,
@@ -19,46 +18,42 @@ import {
 import {Photo} from "./photo.interface";
 
 @Component({
-  selector: 'app-item-photos-carroussel',
-  standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatGridListModule, CommonModule, RouterLink],
-  templateUrl: './item-photos-carroussel.component.html',
-  styleUrl: './item-photos-carroussel.component.scss',
-  animations: [
-    trigger("slideAnimation", [
-      /* scale */
-      transition("void => scale", [
-        useAnimation(scaleIn, { params: { time: "500ms" } })
-      ]),
-      transition("scale => void", [
-        useAnimation(scaleOut, { params: { time: "500ms" } })
-      ]),
-
-      /* fade */
-      transition("void => fade", [
-        useAnimation(fadeIn, { params: { time: "500ms" } })
-      ]),
-      transition("fade => void", [
-        useAnimation(fadeOut, { params: { time: "500ms" } })
-      ]),
-
-      /* flip */
-      transition("void => flip", [
-        useAnimation(flipIn, { params: { time: "500ms" } })
-      ]),
-      transition("flip => void", [
-        useAnimation(flipOut, { params: { time: "500ms" } })
-      ]),
-
-      /* JackInTheBox */
-      transition("void => jackInTheBox", [
-        useAnimation(jackIn, { params: { time: "700ms" } })
-      ]),
-      transition("jackInTheBox => void", [
-        useAnimation(jackOut, { params: { time: "700ms" } })
-      ])
-    ])
-  ]
+    selector: 'app-item-photos-carroussel',
+    imports: [MatCardModule, MatButtonModule, MatGridListModule, CommonModule],
+    templateUrl: './item-photos-carroussel.component.html',
+    styleUrl: './item-photos-carroussel.component.scss',
+    animations: [
+        trigger("slideAnimation", [
+            /* scale */
+            transition("void => scale", [
+                useAnimation(scaleIn, { params: { time: "500ms" } })
+            ]),
+            transition("scale => void", [
+                useAnimation(scaleOut, { params: { time: "500ms" } })
+            ]),
+            /* fade */
+            transition("void => fade", [
+                useAnimation(fadeIn, { params: { time: "500ms" } })
+            ]),
+            transition("fade => void", [
+                useAnimation(fadeOut, { params: { time: "500ms" } })
+            ]),
+            /* flip */
+            transition("void => flip", [
+                useAnimation(flipIn, { params: { time: "500ms" } })
+            ]),
+            transition("flip => void", [
+                useAnimation(flipOut, { params: { time: "500ms" } })
+            ]),
+            /* JackInTheBox */
+            transition("void => jackInTheBox", [
+                useAnimation(jackIn, { params: { time: "700ms" } })
+            ]),
+            transition("jackInTheBox => void", [
+                useAnimation(jackOut, { params: { time: "700ms" } })
+            ])
+        ])
+    ]
 })
 export class ItemPhotosCarrousselComponent implements OnInit {
 

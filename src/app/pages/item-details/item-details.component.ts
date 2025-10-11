@@ -10,7 +10,6 @@ import {CommonModule} from "@angular/common";
 import {ItemPhotosCarrousselComponent} from "./item-photos-carroussel/item-photos-carroussel.component";
 import {ItemDescriptionComponent} from "./item-description/item-description.component";
 import {ItemDetailsBuyOptionsComponent} from "./item-details-buy-options/item-details-buy-options.component";
-import {MatCard, MatCardContent} from "@angular/material/card";
 import {ActivatedRoute} from "@angular/router";
 import {Item} from "../../models/item.model";
 import { ItemsService } from '../../services/items.service';
@@ -18,11 +17,10 @@ import { ItemsService } from '../../services/items.service';
 
 
 @Component({
-  selector: 'app-item-details',
-  standalone: true,
-  imports: [MatGridListModule, CommonModule, ItemDetailsBuyOptionsComponent, ItemPhotosCarrousselComponent, ItemDescriptionComponent, MatCard, MatCardContent],
-  templateUrl: './item-details.component.html',
-  styleUrl: './item-details.component.scss'
+    selector: 'app-item-details',
+    imports: [MatGridListModule, CommonModule],
+    templateUrl: './item-details.component.html',
+    styleUrl: './item-details.component.scss'
 })
 export class ItemDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('middleContainer', { read: ViewContainerRef }) middleContainer!: ViewContainerRef;

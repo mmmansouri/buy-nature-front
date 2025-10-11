@@ -8,11 +8,10 @@ import { CommonModule } from "@angular/common";
 import {ScreenService} from "../../services/screen.service";
 
 @Component({
-  selector: 'app-sidenav',
-  standalone: true,
-  imports: [ RouterLinkActive, RouterLink , MatIconModule, MatSidenavModule, MatListModule, RouterOutlet, CommonModule],
-  templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss'
+    selector: 'app-sidenav',
+    imports: [RouterLinkActive, RouterLink, MatIconModule, MatSidenavModule, MatListModule, RouterOutlet, CommonModule],
+    templateUrl: './sidenav.component.html',
+    styleUrl: './sidenav.component.scss'
 })
 export class SidenavComponent implements OnInit  {
 

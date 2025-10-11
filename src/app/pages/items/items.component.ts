@@ -13,11 +13,10 @@ import { CartService } from '../../services/cart.service';
 
 
 @Component({
-  selector: 'app-items',
-  standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatGridListModule, CommonModule, RouterLink, MatProgressSpinner],
-  templateUrl: './items.component.html',
-  styleUrl: './items.component.scss'
+    selector: 'app-items',
+    imports: [MatCardModule, MatButtonModule, MatGridListModule, CommonModule, RouterLink, MatProgressSpinner],
+    templateUrl: './items.component.html',
+    styleUrl: './items.component.scss'
 })
 export class ItemsComponent implements OnInit {
 

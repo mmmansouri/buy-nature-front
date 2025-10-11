@@ -4,13 +4,12 @@ import {take} from "rxjs";
 import {OrderService} from "../../../services/order.service";
 
 @Component({
-  selector: 'app-order-creation',
-  standalone: true,
+    selector: 'app-order-creation',
     imports: [
         MatProgressSpinner
     ],
-  templateUrl: './order-creation.component.html',
-  styleUrl: './order-creation.component.scss'
+    templateUrl: './order-creation.component.html',
+    styleUrl: './order-creation.component.scss'
 })
 export class OrderCreationComponent implements OnInit {
 

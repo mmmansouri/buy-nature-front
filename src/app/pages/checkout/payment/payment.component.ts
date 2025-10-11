@@ -33,18 +33,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * - Clean separation of concerns
  */
 @Component({
-  selector: 'app-payment',
-  standalone: true,
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss'],
-  imports: [
-    ReactiveFormsModule,
-    MatInputModule,
-    MatCardModule,
-    MatProgressSpinner,
-    StripeElementsDirective,
-    StripePaymentElementComponent
-  ]
+    selector: 'app-payment',
+    templateUrl: './payment.component.html',
+    styleUrls: ['./payment.component.scss'],
+    imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatCardModule,
+        MatProgressSpinner,
+        StripeElementsDirective,
+        StripePaymentElementComponent
+    ]
 })
 export class PaymentComponent {
   @ViewChild(StripePaymentElementComponent)

@@ -7,7 +7,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { DeliveryService } from '../../services/delivery.service';
 import { PaymentComponent } from "./payment/payment.component";
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
@@ -25,25 +24,23 @@ import { MatSnackBar } from '@angular/material/snack-bar';
  * - Automatic step restoration after login
  */
 @Component({
-  selector: 'app-checkout',
-  standalone: true,
-  imports: [
-    NgIf,
-    MatStepper,
-    MatStep,
-    ReactiveFormsModule,
-    CartComponent,
-    DeliveryComponent,
-    MatStepLabel,
-    MatButtonModule,
-    MatStepperNext,
-    MatStepperPrevious,
-    PaymentComponent,
-    OrderReviewComponent,
-    OrderCreationComponent
-  ],
-  templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.scss'
+    selector: 'app-checkout',
+    imports: [
+        MatStepper,
+        MatStep,
+        ReactiveFormsModule,
+        CartComponent,
+        DeliveryComponent,
+        MatStepLabel,
+        MatButtonModule,
+        MatStepperNext,
+        MatStepperPrevious,
+        PaymentComponent,
+        OrderReviewComponent,
+        OrderCreationComponent
+    ],
+    templateUrl: './checkout.component.html',
+    styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent implements OnInit, AfterViewInit {
   private readonly userAuth = inject(UserAuthService);

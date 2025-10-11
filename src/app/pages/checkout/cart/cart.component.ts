@@ -1,33 +1,27 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {OrderItem} from "../../../models/order.item.model";
 import {CartService} from "../../../services/cart.service";
-import {ClickOutsideDirective} from "../../../directives/click-outside.directive";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
-import {RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatIconButton} from "@angular/material/button";
 import {Item} from "../../../models/item.model";
 import { OrderService } from '../../../services/order.service';
 
 @Component({
-  selector: 'app-cart',
-  standalone: true,
-  imports: [
-    ClickOutsideDirective,
-    CurrencyPipe,
-    FormsModule,
-    MatIcon,
-    NgForOf,
-    NgIf,
-    RouterLink,
-    MatIconButton,
-    MatButton,
-    AsyncPipe
-  ],
-  templateUrl: './cart.component.html',
-  styleUrl: './cart.component.scss'
+    selector: 'app-cart',
+    imports: [
+        CurrencyPipe,
+        FormsModule,
+        MatIcon,
+        NgForOf,
+        NgIf,
+        MatIconButton,
+        AsyncPipe
+    ],
+    templateUrl: './cart.component.html',
+    styleUrl: './cart.component.scss'
 })
 export class CartComponent implements OnInit {
 

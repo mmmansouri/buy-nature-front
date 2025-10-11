@@ -12,21 +12,20 @@ import { CustomerService } from '../../../services/customer.service';
 import { CustomerCreationRequest } from '../../../models/customer-creation-request.model';
 
 @Component({
-  selector: 'app-customer-creation',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    RouterLink
-  ],
-  templateUrl: './customer-creation.component.html',
-  styleUrl: './customer-creation.component.scss'
+    selector: 'app-customer-creation',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatProgressSpinnerModule,
+        RouterLink
+    ],
+    templateUrl: './customer-creation.component.html',
+    styleUrl: './customer-creation.component.scss'
 })
 export class CustomerCreationComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);

@@ -43,5 +43,6 @@ html {
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 

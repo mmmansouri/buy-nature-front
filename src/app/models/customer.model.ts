@@ -1,10 +1,9 @@
-import { UUID } from "node:crypto";
 import { Order } from "./order.model";
 import { ShippingAddress } from "./shipping-address.model";
 
 export interface Customer {
-  id: UUID;
-  userId: UUID;
+  id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;

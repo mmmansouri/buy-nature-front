@@ -10,19 +10,18 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-customer-profile',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    RouterLink,
-    MatIconModule
-  ],
-  templateUrl: './customer-profile.component.html',
-  styleUrl: './customer-profile.component.scss'
+    selector: 'app-customer-profile',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatDividerModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        RouterLink,
+        MatIconModule
+    ],
+    templateUrl: './customer-profile.component.html',
+    styleUrl: './customer-profile.component.scss'
 })
 export class CustomerProfileComponent {
   protected customerService = inject(CustomerService);
