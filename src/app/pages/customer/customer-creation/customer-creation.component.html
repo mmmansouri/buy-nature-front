@@ -1,209 +1,163 @@
-<h2>Create New Customer</h2>
+<div class="customer-creation-container">
+  <mat-card class="creation-card">
+    <mat-card-header>
+      <mat-card-title>Create Your Account</mat-card-title>
+      <mat-card-subtitle>Fill in your details to get started</mat-card-subtitle>
+    </mat-card-header>
 
-<mat-stepper linear #stepper>
-  <!-- User Creation Step -->
-  <mat-step [stepControl]="userForm">
-    <ng-template matStepLabel>Create User Account</ng-template>
+    <mat-card-content>
+      <!-- Success Message -->
+      @if (successMessage()) {
+        <div class="success-banner">
+          <mat-icon>check_circle</mat-icon>
+          <span>{{ successMessage() }}</span>
+        </div>
+      }
 
-    <form [formGroup]="userForm">
-      <div class="form-container">
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" placeholder="Enter email" required>
-          <mat-error *ngIf="userForm.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="userForm.get('email')?.hasError('email')">
-            Please enter a valid email address
-          </mat-error>
-        </mat-form-field>
+      <!-- Error Message -->
+      @if (error()) {
+        <div class="error-banner">
+          <mat-icon>error</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+      }
 
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Enter password" required>
-          <mat-error>
-            {{getPasswordErrorMessage()}}
-          </mat-error>
-        </mat-form-field>
-      </div>
+      <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+        <!-- Account Credentials Section -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>account_circle</mat-icon>
+            Account Credentials
+          </h3>
 
-      <div class="error-container" *ngIf="error()">
-        <p class="error-message">{{error()}}</p>
-      </div>
-
-      <div class="button-container">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="submitUserForm()"
-          [disabled]="isLoading()">
-          {{isLoading() ? 'Creating...' : 'Create User Account'}}
-        </button>
-      </div>
-    </form>
-  </mat-step>
-
-  <!-- Customer Details Step -->
-  <mat-step [stepControl]="customerForm">
-    <ng-template matStepLabel>Customer Details</ng-template>
-
-    <form [formGroup]="customerForm">
-      <div class="form-container">
-        <!-- Personal Information -->
-        <h3>Personal Information</h3>
-
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" placeholder="Enter first name" required>
-            <mat-error *ngIf="customerForm.get('firstName')?.hasError('required')">
-              First name is required
-            </mat-error>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="your.email@example.com" required>
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error>{{ getEmailErrorMessage() }}</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName" placeholder="Enter last name" required>
-            <mat-error *ngIf="customerForm.get('lastName')?.hasError('required')">
-              Last name is required
-            </mat-error>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Enter a strong password"
+              required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+            <mat-hint>Must be at least 8 characters with uppercase, lowercase, number, and special character</mat-hint>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" placeholder="Enter email" required>
-          <mat-error *ngIf="customerForm.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="customerForm.get('email')?.hasError('email')">
-            Please enter a valid email address
-          </mat-error>
-        </mat-form-field>
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>person</mat-icon>
+            Personal Information
+          </h3>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Phone Number</mat-label>
-          <input matInput formControlName="phoneNumber" placeholder="Enter phone number" required>
-          <mat-error *ngIf="customerForm.get('phoneNumber')?.hasError('required')">
-            Phone number is required
-          </mat-error>
-        </mat-form-field>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" placeholder="John" required>
+              <mat-error>First name is required</mat-error>
+            </mat-form-field>
 
-        <!-- Address Information -->
-        <h3>Address</h3>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" placeholder="Doe" required>
+              <mat-error>Last name is required</mat-error>
+            </mat-form-field>
+          </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="street-number">
-            <mat-label>Street Number</mat-label>
-            <input matInput formControlName="streetNumber" placeholder="Enter street number" required>
-            <mat-error *ngIf="customerForm.get('streetNumber')?.hasError('required')">
-              Street number is required
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="street">
-            <mat-label>Street</mat-label>
-            <input matInput formControlName="street" placeholder="Enter street" required>
-            <mat-error *ngIf="customerForm.get('street')?.hasError('required')">
-              Street is required
-            </mat-error>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput type="tel" formControlName="phoneNumber" placeholder="+1 (555) 123-4567" required>
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error>Phone number is required</mat-error>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>City</mat-label>
-          <input matInput formControlName="city" placeholder="Enter city" required>
-          <mat-error *ngIf="customerForm.get('city')?.hasError('required')">
-            City is required
-          </mat-error>
-        </mat-form-field>
+        <!-- Address Section -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>home</mat-icon>
+            Address
+          </h3>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Region</mat-label>
-            <input matInput formControlName="region" placeholder="Enter region/state/province" required>
-            <mat-error *ngIf="customerForm.get('region')?.hasError('required')">
-              Region is required
-            </mat-error>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="street-number">
+              <mat-label>Street Number</mat-label>
+              <input matInput formControlName="streetNumber" placeholder="123" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="street">
+              <mat-label>Street</mat-label>
+              <input matInput formControlName="street" placeholder="Main Street" required>
+              <mat-error>Street is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" placeholder="New York" required>
+            <mat-error>City is required</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Postal Code</mat-label>
-            <input matInput formControlName="postalCode" placeholder="Enter postal code" required>
-            <mat-error *ngIf="customerForm.get('postalCode')?.hasError('required')">
-              Postal code is required
-            </mat-error>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Region/State</mat-label>
+              <input matInput formControlName="region" placeholder="NY" required>
+              <mat-error>Region is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Postal Code</mat-label>
+              <input matInput formControlName="postalCode" placeholder="10001" required>
+              <mat-error>Postal code is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="country" placeholder="United States" required>
+            <mat-error>Country is required</mat-error>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Country</mat-label>
-          <input matInput formControlName="country" placeholder="Enter country" required>
-          <mat-error *ngIf="customerForm.get('country')?.hasError('required')">
-            Country is required
-          </mat-error>
-        </mat-form-field>
-      </div>
+        <!-- Submit Button -->
+        <div class="button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="loading() || !!successMessage()">
+            @if (loading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+              <span>Creating Account...</span>
+            } @else {
+              <ng-container>
+                <mat-icon>person_add</mat-icon>
+                <span>Create Account</span>
+              </ng-container>
+            }
+          </button>
 
-      <div class="button-container">
-        <button mat-button matStepperPrevious>Back</button>
-        <button
-          mat-raised-button
-          color="primary"
-          matStepperNext
-          [disabled]="customerForm.invalid">Next</button>
-      </div>
-    </form>
-  </mat-step>
-
-  <!-- Review & Submit Step -->
-  <mat-step>
-    <ng-template matStepLabel>Review & Submit</ng-template>
-
-    <div class="form-container review-container" *ngIf="!customerCreationSuccess">
-      <h3>Review Customer Information</h3>
-
-      <div class="review-section">
-        <h4>Account Details</h4>
-        <p><strong>Email:</strong> {{userForm.get('email')?.value}}</p>
-      </div>
-
-      <div class="review-section">
-        <h4>Personal Information</h4>
-        <p><strong>First Name:</strong> {{customerForm.get('firstName')?.value}}</p>
-        <p><strong>Last Name:</strong> {{customerForm.get('lastName')?.value}}</p>
-        <p><strong>Email:</strong> {{customerForm.get('email')?.value}}</p>
-        <p><strong>Phone:</strong> {{customerForm.get('phoneNumber')?.value}}</p>
-      </div>
-
-      <div class="review-section">
-        <h4>Address</h4>
-        <p>{{customerForm.get('streetNumber')?.value}} {{customerForm.get('street')?.value}}</p>
-        <p>{{customerForm.get('city')?.value}}, {{customerForm.get('region')?.value}} {{customerForm.get('postalCode')?.value}}</p>
-        <p>{{customerForm.get('country')?.value}}</p>
-      </div>
-
-      <div class="error-container" *ngIf="customerCreationError()">
-        <p class="error-message">{{customerCreationError()}}</p>
-      </div>
-
-      <div class="button-container">
-        <button mat-button matStepperPrevious>Back</button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="submitCustomerForm()"
-          [disabled]="customerCreationLoading()">
-          {{customerCreationLoading() ? 'Creating Customer...' : 'Create Customer'}}
-        </button>
-      </div>
-    </div>
-
-    <div class="success-container" *ngIf="customerCreationSuccess">
-      <mat-icon color="primary">check_circle</mat-icon>
-      <h3>Customer Created Successfully!</h3>
-      <p>The customer has been created in the system.</p>
-      <button mat-raised-button color="primary" routerLink="/customers">View All Customers</button>
-    </div>
-  </mat-step>
-</mat-stepper>
+          <button
+            mat-stroked-button
+            type="button"
+            routerLink="/login"
+            [disabled]="loading()">
+            Already have an account? Sign in
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,20 +1,15 @@
-import { Component, ViewChild, OnInit, OnDestroy, inject, Injector, runInInjectionContext } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
-import { UserService } from '../../../services/user.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CustomerService } from '../../../services/customer.service';
 import { CustomerCreationRequest } from '../../../models/customer-creation-request.model';
-import { Subscription } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { UserAuthService } from "../../../services/user-auth.service";
 
 @Component({
   selector: 'app-customer-creation',
@@ -22,55 +17,52 @@ import { UserAuthService } from "../../../services/user-auth.service";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
     RouterLink
   ],
   templateUrl: './customer-creation.component.html',
   styleUrl: './customer-creation.component.scss'
 })
 export class CustomerCreationComponent implements OnInit, OnDestroy {
-  @ViewChild('stepper') stepper!: MatStepper;
+  private fb = inject(FormBuilder);
+  private customerService = inject(CustomerService);
+  private router = inject(Router);
 
-  private injector = inject(Injector);
-
-  userForm: FormGroup;
+  // Form group with all fields
   customerForm: FormGroup;
 
-  userId: string | null = null;
-  isLoading = this.userService.getUserLoadingSignal();
-  error = this.userService.getUserErrorSignal();
-  passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+  // Password validation pattern
+  private readonly passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
 
-  customerCreationLoading = this.userService.getUserLoadingSignal();
-  customerCreationError = this.customerService.getCustomerErrorSignal();
-  customerCreationSuccess = false;
+  // Signals for reactive state
+  loading = signal(false);
+  error = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
-  private subscriptions = new Subscription();
+  // Password visibility toggle
+  hidePassword = signal(true);
 
-  constructor(
-    private fb: FormBuilder,
-    private userService: UserService,
-    private customerService: CustomerService,
-    private userAuth: UserAuthService
-  ) {
-    this.userForm = this.fb.group({
+  constructor() {
+    // Initialize form with all fields in one group
+    this.customerForm = this.fb.group({
+      // Account credentials
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
         Validators.pattern(this.passwordPattern)
-      ]]
-    });
+      ]],
 
-    this.customerForm = this.fb.group({
+      // Personal information
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
+
+      // Address information
       streetNumber: ['', Validators.required],
       street: ['', Validators.required],
       city: ['', Validators.required],
@@ -80,91 +72,117 @@ export class CustomerCreationComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    // No initialization needed yet
+  ngOnInit(): void {
+    // Component initialization if needed
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+  ngOnDestroy(): void {
+    // Cleanup if needed
   }
 
-  submitUserForm() {
-    if (this.userForm.invalid) {
-      this.markFormGroupTouched(this.userForm);
-      return;
-    }
-
-    const { email, password } = this.userForm.value;
-    const userIdSignal = this.userService.createUserSignal(email, password);
-
-    // Run toObservable in injection context
-    runInInjectionContext(this.injector, () => {
-      const userIdObservable = toObservable(userIdSignal);
-
-      const userSub = userIdObservable.pipe(
-        filter(id => !!id),
-        take(1)
-      ).subscribe(id => {
-        this.userId = id;
-        this.customerForm.get('email')?.setValue(email);
-
-        setTimeout(() => {
-          if (this.stepper) {
-            this.stepper.next();
-          }
-        });
-      });
-
-      this.subscriptions.add(userSub);
-    });
-  }
-
-  submitCustomerForm() {
-    if (!this.userId || this.customerForm.invalid) {
+  /**
+   * Submit the complete customer creation form
+   * Creates both user and customer in a single backend call
+   */
+  onSubmit(): void {
+    if (this.customerForm.invalid) {
       this.markFormGroupTouched(this.customerForm);
       return;
     }
 
+    // Reset states
+    this.error.set(null);
+    this.loading.set(true);
+
+    // Build the request object
     const customerRequest: CustomerCreationRequest = {
-      userId: this.userId,
-      ...this.customerForm.value
+      firstName: this.customerForm.value.firstName,
+      lastName: this.customerForm.value.lastName,
+      password: this.customerForm.value.password,
+      email: this.customerForm.value.email,
+      phoneNumber: this.customerForm.value.phoneNumber,
+      streetNumber: this.customerForm.value.streetNumber,
+      street: this.customerForm.value.street,
+      city: this.customerForm.value.city,
+      region: this.customerForm.value.region,
+      postalCode: this.customerForm.value.postalCode,
+      country: this.customerForm.value.country
     };
 
+    // Dispatch the creation action
     const { loading, error, customerId } = this.customerService.createCustomer(customerRequest);
 
-    // Run toObservable in injection context
-    runInInjectionContext(this.injector, () => {
-      const loadingObservable = toObservable(loading);
+    // Set up effect to monitor creation status
+    effect(() => {
+      const isLoading = loading();
+      const errorMsg = error();
+      const id = customerId();
 
-      const customerSub = loadingObservable.pipe(
-        filter(isLoading => !isLoading),
-        take(1)
-      ).subscribe(() => {
-        if (!error() && customerId()) {
-          this.customerCreationSuccess = true;
-          // Update the auth service with the new customer ID
-          this.userAuth.setCustomerId(customerId()!);
+      if (!isLoading) {
+        if (errorMsg) {
+          // Handle error
+          this.loading.set(false);
+          this.error.set(errorMsg);
+        } else if (id) {
+          // Success - redirect to login
+          this.loading.set(false);
+          this.successMessage.set('Account created successfully! Please log in.');
+
+          // Navigate to login after a short delay to show success message
+          setTimeout(() => {
+            this.router.navigate(['/login'], {
+              queryParams: { registered: 'true' }
+            });
+          }, 1500);
         }
-      });
-
-      this.subscriptions.add(customerSub);
-    });
+      }
+    }, { allowSignalWrites: true });
   }
 
-  // Helper method to mark all controls as touched for validation styling
-  private markFormGroupTouched(formGroup: FormGroup) {
+  /**
+   * Toggle password visibility
+   */
+  togglePasswordVisibility(): void {
+    this.hidePassword.update(value => !value);
+  }
+
+  /**
+   * Get appropriate error message for password field
+   */
+  getPasswordErrorMessage(): string {
+    const passwordControl = this.customerForm.get('password');
+    if (passwordControl?.hasError('required')) {
+      return 'Password is required';
+    }
+    if (passwordControl?.hasError('pattern')) {
+      return 'Password must be at least 8 characters and contain at least one digit, lowercase letter, uppercase letter, special character, and no whitespace';
+    }
+    return '';
+  }
+
+  /**
+   * Get error message for email field
+   */
+  getEmailErrorMessage(): string {
+    const emailControl = this.customerForm.get('email');
+    if (emailControl?.hasError('required')) {
+      return 'Email is required';
+    }
+    if (emailControl?.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+    return '';
+  }
+
+  /**
+   * Helper method to mark all controls as touched for validation styling
+   */
+  private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }
     });
-  }
-
-  getPasswordErrorMessage(): string {
-    if (this.userForm.get('password')?.hasError('required')) {
-      return 'Password is required';
-    }
-    return 'Password must be at least 8 characters and contain at least one digit, lowercase letter, uppercase letter, special character, and no whitespace';
   }
 }

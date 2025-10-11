@@ -27,3 +27,22 @@
   color: #f44336;
   margin: 10px 0;
 }
+
+.success-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 500;
+
+  mat-icon {
+    color: #4caf50;
+    font-size: 24px;
+    height: 24px;
+    width: 24px;
+  }
+}

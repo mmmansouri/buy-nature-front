@@ -25,5 +25,5 @@ export const selectCustomerError = createSelector(
 
 export const selectCustomerId = createSelector(
   selectCustomerState,
-  (state: CustomerState) => state.customer.id
+  (state: CustomerState) => state.customerId || state.customer.id
 );

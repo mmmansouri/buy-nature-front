@@ -1,8 +1,7 @@
 export interface CustomerCreationRequest {
-  userId: string; // UUID
   firstName: string;
-  password : string;
   lastName: string;
+  password: string;
   email: string;
   phoneNumber: string;
   streetNumber: string;

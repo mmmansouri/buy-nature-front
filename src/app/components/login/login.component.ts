@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -6,7 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserAuthService } from '../../services/user-auth.service';
 
 @Component({
@@ -20,13 +21,15 @@ import { UserAuthService } from '../../services/user-auth.service';
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
     RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
   protected userAuth = inject(UserAuthService);
 
   loginForm = this.fb.nonNullable.group({
@@ -37,6 +40,20 @@ export class LoginComponent {
   // Expose computed signals for template
   isLoading = this.userAuth.isLoading;
   error = this.userAuth.authError;
+
+  // Registration success message
+  showRegistrationSuccess = signal(false);
+
+  ngOnInit(): void {
+    // Check if user was redirected from registration
+    this.route.queryParams.subscribe(params => {
+      if (params['registered'] === 'true') {
+        this.showRegistrationSuccess.set(true);
+        // Auto-hide message after 5 seconds
+        setTimeout(() => this.showRegistrationSuccess.set(false), 5000);
+      }
+    });
+  }
 
   onSubmit() {
     if (this.loginForm.valid) {

@@ -43,16 +43,19 @@ export const customerReducer = createReducer(
   on(CustomerActions.createCustomer, (state) => ({
     ...state,
     loading: true,
-    error: null
+    error: null,
+    customerId: null
   })),
-    on(CustomerActions.createCustomerSuccess, (state, { customerId }) => ({
-      ...state,
-      loading: false,
-      error: null
-    })),
-    on(CustomerActions.createCustomerFailure, (state, { error }) => ({
-      ...state,
-      loading: false,
-      error
-    }))
+  on(CustomerActions.createCustomerSuccess, (state, { customerId }) => ({
+    ...state,
+    loading: false,
+    error: null,
+    customerId // Store the newly created customerId
+  })),
+  on(CustomerActions.createCustomerFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+    customerId: null
+  }))
 );
