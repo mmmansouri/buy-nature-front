@@ -14,6 +14,7 @@ export const routes: Routes = [
   { path: 'items', component: ItemsComponent },
   { path: 'item-details/:id', component: ItemDetailsComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'customer/create', component: CustomerCreationComponent },
   {
     path: 'login',
     component: LoginComponent
@@ -29,12 +30,6 @@ export const routes: Routes = [
     component: CustomerOrdersComponent,
     canActivate: [userAuthGuard],
     data: { requiresCustomer: true }
-  },
-  {
-    path: 'customer/create',
-    component: CustomerCreationComponent,
-    canActivate: [userAuthGuard]
-    // No requiresCustomer flag - user must be logged in but doesn't need customer profile yet
   },
   {
     path: '',
