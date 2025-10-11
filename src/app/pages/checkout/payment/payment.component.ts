@@ -118,35 +118,22 @@ export class PaymentComponent {
   }
 
   /**
-   * Initialize payment by confirming order
-   * This will trigger the payment intent creation chain
-   * Note: Order should already be confirmed by CheckoutComponent
+   * Initialize payment component
+   * Order should already be confirmed by CheckoutComponent
+   * This just logs the payment initialization status
    */
   private initializePayment(): void {
-    console.log('🔄 Initializing payment...');
+    console.log('🔄 Payment component initialized');
+    console.log('⏳ Waiting for payment intent from CheckoutComponent...');
 
-    // Get current order to check if already initialized
+    // Monitor payment intent status
     this.store.select(selectCurrentOrder).pipe(
       take(1)
     ).subscribe(order => {
-      // Only confirm order if no payment intent exists yet
-      if (!order.paymentIntent) {
-        console.log('📝 Confirming order for payment...');
-        this.orderService.confirmOrder().pipe(
-          take(1),
-          catchError(error => {
-            console.error('❌ Failed to confirm order:', error);
-            return of(false);
-          })
-        ).subscribe(success => {
-          if (success) {
-            console.log('✅ Order confirmed for payment');
-          } else {
-            console.error('❌ Order confirmation failed - user may need to login');
-          }
-        });
+      if (order.paymentIntent) {
+        console.log('✅ Payment intent already available');
       } else {
-        console.log('✅ Payment intent already exists');
+        console.log('⏳ Payment intent will be created by order confirmation flow');
       }
     });
   }

@@ -1,4 +1,5 @@
-import { Component, OnInit, signal, ViewChild, inject, effect, AfterViewInit } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, inject, AfterViewInit, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious } from "@angular/material/stepper";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CartComponent } from "./cart/cart.component";
@@ -11,7 +12,7 @@ import { OrderService } from '../../services/order.service';
 import { OrderReviewComponent } from './order-review/order-review.component';
 import { StepperService } from '../../services/stepper.service';
 import { OrderCreationComponent } from "./order-creation/order-creation.component";
-import { take } from "rxjs";
+import { take, finalize } from "rxjs";
 import { UserAuthService } from '../../services/user-auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -50,6 +51,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   private readonly deliveryService = inject(DeliveryService);
   private readonly orderService = inject(OrderService);
   private readonly stepperService = inject(StepperService);
+  private readonly destroyRef = inject(DestroyRef);
 
   @ViewChild('stepper') stepper!: MatStepper;
   @ViewChild(PaymentComponent) paymentComponent!: PaymentComponent;
@@ -59,6 +61,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   readonly currentStepIndex = signal<number>(0);
   readonly deliveryConfirmed = signal<boolean>(false);
   readonly initialStepIndex = signal<number>(0);
+  readonly isConfirmingOrder = signal<boolean>(false);
+  readonly isProcessingPayment = signal<boolean>(false);
 
   // Forms
   cartForm: FormGroup;
@@ -82,9 +86,12 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.stepperService.step$.subscribe(index => {
-      this.setStep(index);
-    });
+    // Use takeUntilDestroyed for automatic cleanup
+    this.stepperService.step$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(index => {
+        this.setStep(index);
+      });
   }
 
   ngAfterViewInit() {
@@ -141,13 +148,19 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   /**
    * Confirm order before proceeding to payment
    * Checks if user is authenticated and has a customer profile
+   * Prevents duplicate orders with loading state
    */
   confirmOrder() {
+    // Prevent multiple clicks
+    if (this.isConfirmingOrder()) {
+      console.log('⚠️ Order confirmation already in progress');
+      return;
+    }
+
     // Check authentication
     if (!this.userAuth.isAuthenticated()) {
-      // Store current step info for redirect after login
       sessionStorage.setItem('returnUrl', 'checkout');
-      sessionStorage.setItem('checkoutStep', '2'); // Confirm Order step
+      sessionStorage.setItem('checkoutStep', '2');
       this.showLoginRequired('You must be logged in to place an order');
       return;
     }
@@ -159,9 +172,14 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Set loading state to prevent duplicate submissions
+    this.isConfirmingOrder.set(true);
+
     // User is authenticated and has customer ID - confirm order
     this.orderService.confirmOrder().pipe(
-      take(1)
+      take(1),
+      finalize(() => this.isConfirmingOrder.set(false)),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: (success) => {
         if (success) {
@@ -205,14 +223,32 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   }
 
   confirmPayment() {
-    if (this.paymentComponent) {
-      // First, dispatch that we're starting payment process
-      this.orderService.getCurrentOrder().pipe(
-        take(1)
-      ).subscribe(order => {
-        if (order && order.id) {
-          // Process the payment
-          this.paymentComponent.pay().subscribe(success => {
+    // Prevent multiple payment attempts
+    if (this.isProcessingPayment()) {
+      console.log('⚠️ Payment already in progress');
+      return;
+    }
+
+    if (!this.paymentComponent) {
+      console.error('❌ Payment component not available');
+      return;
+    }
+
+    this.isProcessingPayment.set(true);
+
+    // Get current order and process payment
+    this.orderService.getCurrentOrder().pipe(
+      take(1),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(order => {
+      if (order && order.id) {
+        // Process the payment
+        this.paymentComponent.pay().pipe(
+          take(1),
+          finalize(() => this.isProcessingPayment.set(false)),
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+          next: (success) => {
             if (success) {
               // On success, dispatch payment success action
               this.orderService.handlePaymentSuccess(order.id!);
@@ -223,10 +259,20 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
               this.orderService.handlePaymentFailure(order.id!);
               this.paymentStatus.set('error');
             }
-          });
-        }
-      });
-    }
+          },
+          error: (error) => {
+            console.error('❌ Payment failed:', error);
+            if (order.id) {
+              this.orderService.handlePaymentFailure(order.id);
+            }
+            this.paymentStatus.set('error');
+          }
+        });
+      } else {
+        console.error('❌ No valid order found');
+        this.isProcessingPayment.set(false);
+      }
+    });
   }
 
   resetStepper(stepper: any): void {

@@ -93,6 +93,11 @@ export const orderReducer = createReducer(
     }
   })),
   on(removeOrderItem, (state, { orderItemId }) => {
+    // Guard against undefined state
+    if (!state.order || !state.order.orderItems) {
+      return state;
+    }
+
     return {
       ...state,
       order: {

@@ -25,6 +25,7 @@ export class OrderEffects {
   /**
    * Confirm Order Effect
    * Checks if order already exists, if not creates a new one
+   * PREVENTS DUPLICATE ORDER CREATION by validating existing order ID
    */
   confirmOrder$ = createEffect(() =>
     this.actions$.pipe(
@@ -32,17 +33,26 @@ export class OrderEffects {
       map(action => {
         const order = action.order;
 
-        console.log('📋 Confirming order:', order.id ? 'existing' : 'new');
+        console.log('📋 Confirming order...');
+        console.log('   - Order ID:', order.id || 'none');
+        console.log('   - Payment Intent:', order.paymentIntent ? 'exists' : 'none');
 
-        // If order already has ID and payment intent, skip creation
+        // IMPORTANT: If order already has both ID and payment intent, don't create again
         if (order.id && order.paymentIntent) {
-          console.log('✅ Order already exists with payment intent');
+          console.log('✅ Order already exists (ID: ' + order.id + '), skipping creation');
+          console.log('   Using existing payment intent');
           return OrderActions.createPaymentIntentSuccess({
             clientSecret: order.paymentIntent
           });
         }
 
-        // Create new order
+        // If order has ID but no payment intent, skip to payment creation
+        if (order.id && !order.paymentIntent) {
+          console.log('⚠️ Order exists but no payment intent, creating payment only');
+          return OrderActions.createPaymentIntent({ order });
+        }
+
+        // Create new order only if no ID exists
         const orderItems = order.orderItems.map(item => ({
           itemId: item.item.id,
           quantity: item.quantity
@@ -55,7 +65,7 @@ export class OrderEffects {
           shippingAddress: order.shippingAddress
         };
 
-        console.log('🆕 Creating new order...');
+        console.log('🆕 Creating new order (no existing ID found)...');
         return OrderActions.createOrder({ orderCreationRequest });
       })
     )
@@ -120,20 +130,30 @@ export class OrderEffects {
    * Create Payment Intent Effect
    * Calls payment service to create Stripe payment intent
    * IMPORTANT: This is the ONLY place where payment intent API is called
+   * PREVENTS DUPLICATE PAYMENT INTENTS by checking existing intent
    */
   createPaymentIntent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.createPaymentIntent),
       switchMap(({ order }) => {
-        // Check if payment intent already exists
+        // CRITICAL: Check if payment intent already exists to prevent duplicates
         if (order.paymentIntent) {
-          console.log('✅ Payment intent already exists');
+          console.log('✅ Payment intent already exists, reusing:',
+            order.paymentIntent.substring(0, 20) + '...');
           return of(OrderActions.createPaymentIntentSuccess({
             clientSecret: order.paymentIntent
           }));
         }
 
-        console.log('🔄 Calling payment API...');
+        // Validate order has required data
+        if (!order.id) {
+          console.error('❌ Cannot create payment intent: Order ID missing');
+          return of(OrderActions.createPaymentIntentFailure({
+            error: 'Order ID is required to create payment intent'
+          }));
+        }
+
+        console.log('🔄 Creating new payment intent for order:', order.id);
 
         // Calculate total from order items
         const totalPrice = order.orderItems.reduce(
@@ -141,7 +161,9 @@ export class OrderEffects {
           0
         );
 
-        // Create new payment intent via API
+        console.log('   - Total amount:', totalPrice);
+
+        // Create new payment intent via API (ONLY CALLED ONCE per order)
         return this.paymentService.createPaymentIntent({
           amount: totalPrice,
           email: order.shippingAddress?.email || '',
@@ -154,7 +176,8 @@ export class OrderEffects {
             : order.orderItems[0]?.item.name || "Products"
         }).pipe(
           map(response => {
-            console.log('✅ Payment intent created:', response.client_secret?.substring(0, 20) + '...');
+            console.log('✅ Payment intent created successfully:',
+              response.client_secret?.substring(0, 20) + '...');
             return OrderActions.createPaymentIntentSuccess({
               clientSecret: response.client_secret as string
             });
