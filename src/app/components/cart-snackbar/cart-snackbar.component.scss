@@ -1,0 +1,205 @@
+// Cart Snackbar with Bio Theme (Wood Color)
+.cart-snackbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  min-width: 400px;
+  background: linear-gradient(135deg, var(--bio-wood-brown) 0%, #8d6e63 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(109, 76, 65, 0.4);
+  position: relative;
+  overflow: hidden;
+  animation: slideDownFromCart 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Decorative accent line
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--bio-honey-gold);
+  }
+
+  // Item Image
+  .item-image {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+
+      mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: var(--bio-wood-brown);
+      }
+    }
+  }
+
+  // Item Info
+  .item-info {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    min-width: 0;
+
+    .success-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        color: #4caf50;
+        filter: drop-shadow(0 2px 4px rgba(76, 175, 80, 0.3));
+      }
+    }
+
+    .item-details {
+      flex: 1;
+      min-width: 0;
+
+      .item-name {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .item-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.9);
+
+        .quantity {
+          font-weight: 500;
+        }
+
+        .separator {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .price {
+          font-weight: 700;
+          color: var(--bio-honey-gold);
+        }
+      }
+
+      .success-message {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        font-style: italic;
+      }
+    }
+  }
+
+  // Close Button
+  .close-button {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+  }
+}
+
+// Slide down animation from cart
+@keyframes slideDownFromCart {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive Design
+@media (max-width: 600px) {
+  .cart-snackbar {
+    min-width: 320px;
+    padding: 10px 12px;
+    gap: 12px;
+
+    .item-image {
+      width: 56px;
+      height: 56px;
+
+      .image-placeholder mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .item-info {
+      gap: 10px;
+
+      .success-icon mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .item-details {
+        .item-name {
+          font-size: 15px;
+        }
+
+        .item-meta {
+          font-size: 12px;
+        }
+
+        .success-message {
+          font-size: 11px;
+        }
+      }
+    }
+
+    .close-button mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

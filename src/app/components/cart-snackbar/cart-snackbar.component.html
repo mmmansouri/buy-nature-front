@@ -1,0 +1,33 @@
+<div class="cart-snackbar">
+  <!-- Item Image -->
+  <div class="item-image">
+    @if (data.itemImage) {
+      <img [src]="data.itemImage" [alt]="data.itemName" />
+    } @else {
+      <div class="image-placeholder">
+        <mat-icon>shopping_bag</mat-icon>
+      </div>
+    }
+  </div>
+
+  <!-- Item Info -->
+  <div class="item-info">
+    <div class="success-icon">
+      <mat-icon>check_circle</mat-icon>
+    </div>
+    <div class="item-details">
+      <strong class="item-name">{{ data.itemName }}</strong>
+      <div class="item-meta">
+        <span class="quantity">Qty: {{ data.quantity }}</span>
+        <span class="separator">•</span>
+        <span class="price">{{ data.itemPrice | currency }}</span>
+      </div>
+      <p class="success-message">Added to cart successfully!</p>
+    </div>
+  </div>
+
+  <!-- Close Button -->
+  <button mat-icon-button class="close-button" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

@@ -71,7 +71,187 @@
       align-items: center;
       gap: 4px;
 
-      .cart-button,
+      .cart-button-container {
+        position: relative; // This is the anchor for absolute positioning
+
+        .cart-button {
+          position: relative;
+          transition: background-color 0.2s ease;
+          color: white !important;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+          }
+
+          mat-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+            color: white !important;
+          }
+
+          ::ng-deep .mat-badge-content {
+            font-weight: 600;
+            font-size: 11px;
+            top: 8px !important;
+            right: 8px !important;
+          }
+
+          ::ng-deep .mat-badge-small .mat-badge-content {
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+          }
+        }
+
+        // Cart Notification - positioned absolutely relative to cart-button-container
+        .cart-notification {
+          position: absolute;
+          top: calc(100% + 12px); // Position below the cart button
+          right: -180px; // Offset to center under cart icon
+          z-index: 2000;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 12px 16px;
+          width: 420px;
+          background: linear-gradient(135deg, var(--bio-wood-brown) 0%, #8d6e63 100%);
+          border-radius: 12px;
+          box-shadow: 0 8px 24px rgba(109, 76, 65, 0.4);
+
+          // Arrow pointing to cart icon
+          &::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 200px; // Position arrow to point at cart button center
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--bio-wood-brown);
+          }
+
+          // Item Image
+          .item-image {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .image-placeholder {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+
+              mat-icon {
+                font-size: 32px;
+                width: 32px;
+                height: 32px;
+                color: var(--bio-wood-brown);
+              }
+            }
+          }
+
+          // Item Info
+          .item-info {
+            flex: 1;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            min-width: 0;
+
+            .success-icon {
+              flex-shrink: 0;
+              margin-top: 2px;
+
+              mat-icon {
+                font-size: 24px;
+                width: 24px;
+                height: 24px;
+                color: #4caf50;
+                filter: drop-shadow(0 2px 4px rgba(76, 175, 80, 0.3));
+              }
+            }
+
+            .item-details {
+              flex: 1;
+              min-width: 0;
+
+              .item-name {
+                display: block;
+                font-size: 16px;
+                font-weight: 600;
+                color: white;
+                margin-bottom: 4px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+
+              .item-meta {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 4px;
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.9);
+
+                .quantity {
+                  font-weight: 500;
+                }
+
+                .separator {
+                  color: rgba(255, 255, 255, 0.6);
+                }
+
+                .price {
+                  font-weight: 700;
+                  color: var(--bio-honey-gold);
+                }
+              }
+
+              .success-message {
+                margin: 0;
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.8);
+                font-style: italic;
+              }
+            }
+          }
+
+          // Close Button
+          .close-button {
+            flex-shrink: 0;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+
+            mat-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.15);
+              color: white;
+            }
+          }
+        }
+      }
+
       .user-button {
         position: relative;
         transition: background-color 0.2s ease;
@@ -88,102 +268,11 @@
           color: white !important;
         }
       }
-
-      .cart-button {
-        ::ng-deep .mat-badge-content {
-          font-weight: 600;
-          font-size: 11px;
-          top: 8px !important;
-          right: 8px !important;
-        }
-
-        ::ng-deep .mat-badge-small .mat-badge-content {
-          width: 18px;
-          height: 18px;
-          line-height: 18px;
-        }
-      }
     }
   }
 }
 
-// User Menu Styling
-::ng-deep {
-  .user-menu {
-    margin-top: 8px;
-    min-width: 240px;
-
-    .mat-mdc-menu-content {
-      padding: 0;
-    }
-
-    .menu-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 16px 12px;
-      background: linear-gradient(135deg, var(--bio-forest-green) 0%, var(--bio-forest-green-light) 100%);
-      color: white;
-
-      mat-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
-
-      span {
-        font-size: 16px;
-        font-weight: 600;
-      }
-    }
-
-    .mat-mdc-menu-item {
-      min-height: 48px;
-      padding: 0 16px;
-
-      mat-icon {
-        margin-right: 12px;
-        color: #666;
-      }
-
-      span {
-        font-size: 15px;
-        color: #333;
-      }
-
-      &:hover {
-        background-color: var(--bio-bg-secondary);
-
-        mat-icon {
-          color: var(--bio-forest-green);
-        }
-      }
-    }
-
-    .logout-item {
-      mat-icon {
-        color: #f44336;
-      }
-
-      span {
-        color: #f44336;
-      }
-
-      &:hover {
-        background-color: #ffebee;
-
-        mat-icon,
-        span {
-          color: #d32f2f;
-        }
-      }
-    }
-
-    mat-divider {
-      margin: 8px 0;
-    }
-  }
-}
+// User Menu Button styling is in the .user-button class above
 
 // Responsive Design
 @media (max-width: 768px) {
@@ -214,7 +303,23 @@
       .right-section {
         gap: 2px;
 
-        .cart-button mat-icon,
+        .cart-button-container {
+          .cart-button mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+
+          .cart-notification {
+            width: 340px;
+            right: -140px;
+
+            &::after {
+              right: 160px;
+            }
+          }
+        }
+
         .user-button mat-icon {
           font-size: 24px;
           width: 24px;

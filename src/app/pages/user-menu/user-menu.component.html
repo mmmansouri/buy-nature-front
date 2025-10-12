@@ -1,0 +1,66 @@
+<div *ngIf="menuOpen" class="user-menu-backdrop" (click)="closeMenu()"></div>
+
+<div *ngIf="menuOpen" class="user-menu-container" [@slideIn] appClickOutside (clickOutside)="closeMenu()">
+  <!-- Menu Header -->
+  <div class="menu-header">
+    <div class="header-title">
+      <mat-icon>account_circle</mat-icon>
+      <h3>My Account</h3>
+    </div>
+    <button mat-icon-button (click)="closeMenu()" class="close-button" aria-label="Close menu">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Menu Content -->
+  <div class="menu-content">
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-icon">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="profile-info">
+        <h4>Welcome back!</h4>
+        <p>Manage your account</p>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="menu-items">
+      <a [routerLink]="['/customer/profile']" (click)="closeMenu()" class="menu-item">
+        <div class="menu-item-icon">
+          <mat-icon>person_outline</mat-icon>
+        </div>
+        <div class="menu-item-content">
+          <h5>My Profile</h5>
+          <p>View and edit your profile</p>
+        </div>
+        <mat-icon class="arrow-icon">chevron_right</mat-icon>
+      </a>
+
+      <a [routerLink]="['/customer/orders']" (click)="closeMenu()" class="menu-item">
+        <div class="menu-item-icon">
+          <mat-icon>receipt_long</mat-icon>
+        </div>
+        <div class="menu-item-content">
+          <h5>My Orders</h5>
+          <p>Track and manage your orders</p>
+        </div>
+        <mat-icon class="arrow-icon">chevron_right</mat-icon>
+      </a>
+
+      <div class="divider"></div>
+
+      <button (click)="logout()" class="menu-item logout-item">
+        <div class="menu-item-icon logout-icon">
+          <mat-icon>logout</mat-icon>
+        </div>
+        <div class="menu-item-content">
+          <h5>Logout</h5>
+          <p>Sign out of your account</p>
+        </div>
+        <mat-icon class="arrow-icon">chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

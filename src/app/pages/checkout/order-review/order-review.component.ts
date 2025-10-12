@@ -2,17 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../models/order.model';
 import { Observable } from 'rxjs';
-import { AsyncPipe, CurrencyPipe, NgIf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { CartService } from '../../../services/cart.service';
-import {
-  MatCell, MatCellDef,
-  MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef,
-  MatRow, MatRowDef,
-  MatTable
-} from "@angular/material/table";
 import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 import {DeliveryService} from "../../../services/delivery.service";
 import {ShippingAddress} from "../../../models/shipping-address.model";
 import {OrderItem} from "../../../models/order.item.model";
@@ -22,9 +15,11 @@ import {OrderItem} from "../../../models/order.item.model";
     templateUrl: './order-review.component.html',
     styleUrls: ['./order-review.component.scss'],
     imports: [
-        NgIf,
         AsyncPipe,
-        CurrencyPipe, MatTable, MatHeaderCell, MatCell, MatColumnDef, MatHeaderRow, MatRow, MatHeaderCellDef, MatCellDef, MatHeaderRowDef, MatRowDef, MatCardModule]
+        CurrencyPipe,
+        MatCardModule,
+        MatIcon
+    ]
 })
 export class OrderReviewComponent implements OnInit {
   order$: Observable<Order>;

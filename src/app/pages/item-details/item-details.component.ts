@@ -9,11 +9,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { Item } from '../../models/item.model';
 import { ItemsService } from '../../services/items.service';
 import { CartService } from '../../services/cart.service';
+import { NotificationService } from '../../services/notification.service';
 
 /**
  * Item Details Component - Modern Angular 19+ Implementation
@@ -37,7 +37,6 @@ import { CartService } from '../../services/cart.service';
     MatChipsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatSnackBarModule,
     FormsModule
   ],
   templateUrl: './item-details.component.html',
@@ -58,7 +57,7 @@ export class ItemDetailsComponent implements OnInit {
     private router: Router,
     private itemService: ItemsService,
     private cartService: CartService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -105,17 +104,12 @@ export class ItemDetailsComponent implements OnInit {
       quantity: this.quantity
     });
 
-    this.snackBar.open(
-      `${this.quantity} × ${currentItem.name} added to cart!`,
-      'View Cart',
-      {
-        duration: 4000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      }
-    ).onAction().subscribe(() => {
-      // Navigate to checkout when "View Cart" is clicked
-      this.router.navigate(['/checkout']);
+    // Show notification via NotificationService
+    this.notificationService.showCartNotification({
+      itemName: currentItem.name,
+      itemImage: currentItem.imageUrl,
+      itemPrice: currentItem.price,
+      quantity: this.quantity
     });
 
     // Reset quantity after adding

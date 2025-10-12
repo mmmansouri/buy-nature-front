@@ -1,23 +1,46 @@
 <div class="customer-creation-container">
+  <!-- Decorative Background Elements -->
+  <div class="background-decoration">
+    <div class="leaf leaf-1">
+      <mat-icon>spa</mat-icon>
+    </div>
+    <div class="leaf leaf-2">
+      <mat-icon>eco</mat-icon>
+    </div>
+    <div class="leaf leaf-3">
+      <mat-icon>local_florist</mat-icon>
+    </div>
+    <div class="leaf leaf-4">
+      <mat-icon>nature</mat-icon>
+    </div>
+  </div>
+
   <mat-card class="creation-card">
-    <mat-card-header>
-      <mat-card-title>Create Your Account</mat-card-title>
-      <mat-card-subtitle>Fill in your details to get started</mat-card-subtitle>
-    </mat-card-header>
+    <!-- Card Header with Bio Theme -->
+    <div class="card-header">
+      <div class="header-icon">
+        <mat-icon>person_add</mat-icon>
+      </div>
+      <h1 class="header-title">Join Our Community</h1>
+      <p class="header-subtitle">Create your account and start your natural journey with us</p>
+    </div>
 
     <mat-card-content>
       <!-- Success Message -->
       @if (successMessage()) {
         <div class="success-banner">
           <mat-icon>check_circle</mat-icon>
-          <span>{{ successMessage() }}</span>
+          <div class="success-content">
+            <strong>Success!</strong>
+            <span>{{ successMessage() }}</span>
+          </div>
         </div>
       }
 
       <!-- Error Message -->
       @if (error()) {
         <div class="error-banner">
-          <mat-icon>error</mat-icon>
+          <mat-icon>error_outline</mat-icon>
           <span>{{ error() }}</span>
         </div>
       }
@@ -31,8 +54,14 @@
           </h3>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="your.email@example.com" required>
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="your.email@example.com"
+              autocomplete="email"
+              required>
             <mat-icon matPrefix>email</mat-icon>
             <mat-error>{{ getEmailErrorMessage() }}</mat-error>
           </mat-form-field>
@@ -44,13 +73,20 @@
               [type]="hidePassword() ? 'password' : 'text'"
               formControlName="password"
               placeholder="Enter a strong password"
+              autocomplete="new-password"
               required>
             <mat-icon matPrefix>lock</mat-icon>
-            <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="'Toggle password visibility'"
+              [attr.aria-pressed]="!hidePassword()">
               <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
             <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
-            <mat-hint>Must be at least 8 characters with uppercase, lowercase, number, and special character</mat-hint>
+            <mat-hint>At least 8 chars with uppercase, lowercase, number, and special character</mat-hint>
           </mat-form-field>
         </div>
 
@@ -137,27 +173,24 @@
             mat-raised-button
             color="primary"
             type="submit"
+            class="submit-button"
             [disabled]="loading() || !!successMessage()">
             @if (loading()) {
-              <mat-spinner diameter="20"></mat-spinner>
+              <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
               <span>Creating Account...</span>
             } @else {
-              <ng-container>
-                <mat-icon>person_add</mat-icon>
-                <span>Create Account</span>
-              </ng-container>
+              <mat-icon>person_add</mat-icon>
+              <span>Create Account</span>
             }
-          </button>
-
-          <button
-            mat-stroked-button
-            type="button"
-            routerLink="/login"
-            [disabled]="loading()">
-            Already have an account? Sign in
           </button>
         </div>
       </form>
     </mat-card-content>
+
+    <!-- Card Footer -->
+    <mat-card-footer class="card-footer">
+      <mat-icon>login</mat-icon>
+      <p>Already have an account? <a routerLink="/login" class="login-link">Sign in here</a></p>
+    </mat-card-footer>
   </mat-card>
 </div>

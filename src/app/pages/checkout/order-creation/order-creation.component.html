@@ -1,12 +1,121 @@
-<div class="confirmation-content">
+<div class="confirmation-container">
+  <!-- Loading State -->
   @if (orderStatus() === 'loading') {
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Processing your order...</p>
-  } @else if (orderStatus() === 'success') {
-    <p class="success-message">Your order has been placed successfully!</p>
+    <div class="status-card loading">
+      <div class="status-icon-wrapper">
+        <mat-spinner diameter="60"></mat-spinner>
+      </div>
+      <h2>Processing Your Order</h2>
+      <p>Please wait while we finalize your order...</p>
+      <div class="loading-steps">
+        <div class="step active">
+          <mat-icon>check_circle</mat-icon>
+          <span>Payment confirmed</span>
+        </div>
+        <div class="step active">
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Creating order</span>
+        </div>
+        <div class="step">
+          <mat-icon>pending</mat-icon>
+          <span>Sending confirmation</span>
+        </div>
+      </div>
+    </div>
+  }
 
-  } @else if (orderStatus() === 'error') {
-    <p class="error-message">Your payment has accepted but we failed to place your order. Nothing is to be done from your side.
-      We will contact you ASAP when we fix the issue. Sorry for the inconvenience </p>
+  <!-- Success State -->
+  @else if (orderStatus() === 'success') {
+    <div class="status-card success">
+      <div class="status-icon-wrapper">
+        <div class="success-checkmark">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+      </div>
+      <h2>Order Placed Successfully!</h2>
+      <p class="success-message">Thank you for your purchase. Your order has been confirmed.</p>
+
+      <div class="success-details">
+        <div class="detail-item">
+          <mat-icon>email</mat-icon>
+          <div class="detail-text">
+            <strong>Confirmation Sent</strong>
+            <span>Check your email for order details</span>
+          </div>
+        </div>
+        <div class="detail-item">
+          <mat-icon>local_shipping</mat-icon>
+          <div class="detail-text">
+            <strong>We'll Deliver Soon</strong>
+            <span>Track your order in your account</span>
+          </div>
+        </div>
+        <div class="detail-item">
+          <mat-icon>support_agent</mat-icon>
+          <div class="detail-text">
+            <strong>Need Help?</strong>
+            <span>Contact our support team anytime</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <button mat-raised-button color="primary" class="primary-action" (click)="continueToProducts()">
+          <mat-icon>storefront</mat-icon>
+          Continue Shopping
+        </button>
+        <div class="secondary-actions">
+          <button mat-stroked-button color="primary" (click)="viewOrders()">
+            <mat-icon>receipt_long</mat-icon>
+            View My Orders
+          </button>
+          <button mat-stroked-button (click)="goToHome()">
+            <mat-icon>home</mat-icon>
+            Go to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (orderStatus() === 'error') {
+    <div class="status-card error">
+      <div class="status-icon-wrapper">
+        <mat-icon class="error-icon">error</mat-icon>
+      </div>
+      <h2>Order Processing Issue</h2>
+      <p class="error-message">Your payment was accepted, but we encountered an issue processing your order.</p>
+
+      <div class="error-details">
+        <div class="detail-box">
+          <mat-icon>info</mat-icon>
+          <div>
+            <strong>Don't worry!</strong>
+            <p>Your payment is secure and no action is required from your side.</p>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <mat-icon>support</mat-icon>
+          <div>
+            <strong>We're on it</strong>
+            <p>Our team has been notified and will contact you shortly to complete your order.</p>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <strong>Response Time</strong>
+            <p>We typically resolve these issues within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-apology">
+        <p>We sincerely apologize for this inconvenience. Thank you for your patience and understanding.</p>
+      </div>
+    </div>
   }
 </div>

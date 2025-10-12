@@ -3,6 +3,7 @@ import { ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/fo
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { catchError, map, take, filter } from 'rxjs/operators';
@@ -41,6 +42,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
         MatInputModule,
         MatCardModule,
         MatProgressSpinner,
+        MatIcon,
         StripeElementsDirective,
         StripePaymentElementComponent
     ]

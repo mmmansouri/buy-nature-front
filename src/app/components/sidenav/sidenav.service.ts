@@ -16,6 +16,10 @@ export class SidenavService {
     this.sidenavState.next(false); // Close the sidenav
   }
 
+  close() {
+    this.sidenavState.next(false); // Close the sidenav (alias)
+  }
+
   openSidenav() {
     this.sidenavState.next(true); // Open the sidenav
   }

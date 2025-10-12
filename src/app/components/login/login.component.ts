@@ -43,6 +43,9 @@ export class LoginComponent implements OnInit {
   // Registration success message
   showRegistrationSuccess = signal(false);
 
+  // Password visibility toggle
+  hidePassword = signal(true);
+
   ngOnInit(): void {
     // Check if user was redirected from registration
     this.route.queryParams.subscribe(params => {
@@ -52,6 +55,10 @@ export class LoginComponent implements OnInit {
         setTimeout(() => this.showRegistrationSuccess.set(false), 5000);
       }
     });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword.set(!this.hidePassword());
   }
 
   onSubmit() {

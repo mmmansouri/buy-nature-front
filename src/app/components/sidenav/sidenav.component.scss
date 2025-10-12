@@ -1,126 +1,357 @@
+// ==========================
 // Sidenav Container
+// ==========================
 mat-sidenav-container {
   height: 100%;
+  width: 100%;
+  position: relative;
 }
 
-// Sidenav
-mat-sidenav {
-  background: #ffffff;
-  border-right: 1px solid #e0e0e0;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-  width: fit-content;
-  padding-top: 64px;
+// ==========================
+// Bio-Themed Sidenav
+// ==========================
+mat-sidenav.bio-sidenav {
+  width: 260px;
+  padding-top: 64px; // Space for fixed toolbar
+  background: linear-gradient(180deg,
+    #f1f8e9 0%,
+    #e8f5e9 50%,
+    #f9fbe7 100%);
+  border-right: 1px solid rgba(139, 195, 74, 0.2);
+  box-shadow: 2px 0 8px rgba(109, 76, 65, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Navigation List
-  mat-nav-list {
-    padding: 16px 0;
+  // Decorative overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(139, 195, 74, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(139, 195, 74, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-    a.mat-mdc-list-item {
-      border-radius: 0;
-      height: 56px;
+  // ==========================
+  // Header Section
+  // ==========================
+  .sidenav-header {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg,
+      var(--bio-forest-green) 0%,
+      var(--bio-forest-green-light) 100%);
+    box-shadow: 0 2px 8px rgba(109, 76, 65, 0.12);
+
+    .header-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 26px;
+        width: 26px;
+        height: 26px;
+        color: white;
+      }
+    }
+
+    .header-content {
+      flex: 1;
+
+      h3 {
+        margin: 0 0 2px;
+        font-size: 17px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.3px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+
+  // Divider
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--bio-honey-gold) 50%,
+      transparent 100%);
+    margin: 0 12px 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  // ==========================
+  // Navigation List
+  // ==========================
+  mat-nav-list {
+    padding: 8px 12px;
+    position: relative;
+    z-index: 1;
+
+    a.mat-mdc-list-item.nav-item {
+      border-radius: 10px;
+      height: 52px;
       margin: 4px 0;
-      transition: all 0.2s ease;
-      color: #333;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      background: transparent;
+
+      // Hover background overlay
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg,
+          rgba(139, 195, 74, 0.1) 0%,
+          rgba(174, 213, 129, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 10px;
+        pointer-events: none;
+      }
 
       .entry {
         display: flex;
         align-items: center;
-        gap: 16px;
-        padding: 0 20px;
+        gap: 14px;
+        padding: 0 14px;
         width: 100%;
+        position: relative;
+        z-index: 1;
+
+        .icon-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.6);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+          mat-icon {
+            font-size: 21px;
+            width: 21px;
+            height: 21px;
+            color: var(--bio-wood-brown);
+            transition: all 0.3s ease;
+          }
+        }
+
+        .nav-label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #424242;
+          transition: all 0.3s ease;
+          letter-spacing: 0.2px;
+        }
+      }
+
+      // Hover State
+      &:hover:not(.active) {
+        transform: translateX(3px);
+
+        &::after {
+          opacity: 1;
+        }
+
+        .entry {
+          .icon-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            transform: scale(1.08);
+            box-shadow: 0 4px 8px rgba(109, 76, 65, 0.15);
+
+            mat-icon {
+              color: var(--bio-forest-green);
+            }
+          }
+
+          .nav-label {
+            color: var(--bio-forest-green);
+            font-weight: 600;
+          }
+        }
+      }
+
+      // Active State
+      &.active {
+        background: linear-gradient(135deg,
+          rgba(139, 195, 74, 0.18) 0%,
+          rgba(174, 213, 129, 0.12) 100%);
+        box-shadow: 0 2px 8px rgba(109, 76, 65, 0.12);
+
+        // Left accent indicator
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 28px;
+          background: linear-gradient(180deg,
+            var(--bio-forest-green) 0%,
+            var(--bio-honey-gold) 100%);
+          border-radius: 0 4px 4px 0;
+          box-shadow: 2px 0 6px rgba(139, 195, 74, 0.3);
+        }
+
+        .entry {
+          .icon-wrapper {
+            background: white;
+            box-shadow: 0 4px 12px rgba(109, 76, 65, 0.18);
+            transform: scale(1.05);
+
+            mat-icon {
+              color: var(--bio-forest-green);
+            }
+          }
+
+          .nav-label {
+            color: var(--bio-forest-green);
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+
+  // ==========================
+  // Footer Section
+  // ==========================
+  .sidenav-footer {
+    position: relative;
+    z-index: 1;
+    padding: 14px;
+    margin-top: auto;
+    text-align: center;
+    border-top: 2px solid rgba(139, 195, 74, 0.2);
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(139, 195, 74, 0.04) 100%);
+
+    .footer-decoration {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,
+        rgba(139, 195, 74, 0.12) 0%,
+        rgba(174, 213, 129, 0.08) 100%);
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        color: var(--bio-honey-gold);
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--bio-wood-brown);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      opacity: 0.8;
+    }
+  }
+}
+
+// ==========================
+// Sidenav Content Area
+// ==========================
+mat-sidenav-content {
+  padding-top: 64px; // Space for fixed toolbar
+  min-height: 100vh;
+  background: var(--bio-bg-primary);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+// ==========================
+// Collapsed State (Icon Only)
+// ==========================
+mat-sidenav[style*="expanded"].bio-sidenav {
+  width: 68px;
+
+  .sidenav-header,
+  .divider,
+  .sidenav-footer {
+    display: none;
+  }
+
+  mat-nav-list {
+    padding: 8px 4px;
+  }
+
+  a.mat-mdc-list-item.nav-item .entry {
+    justify-content: center;
+    padding: 0 !important;
+    gap: 0;
+
+    .icon-wrapper {
+      margin: 0;
+    }
+
+    .nav-label {
+      display: none;
+    }
+  }
+}
+
+// ==========================
+// Mobile Responsive
+// ==========================
+@media screen and (max-width: 768px) {
+  mat-sidenav.bio-sidenav {
+    padding-top: 56px;
+    width: 260px !important;
+
+    .sidenav-header {
+      padding: 14px 12px;
+
+      .header-icon {
+        width: 40px;
+        height: 40px;
 
         mat-icon {
           font-size: 24px;
           width: 24px;
           height: 24px;
-          color: #666;
-          transition: color 0.2s ease;
-        }
-
-        span {
-          font-size: 15px;
-          font-weight: 500;
-          transition: color 0.2s ease;
         }
       }
 
-      // Hover state
-      &:hover:not(.active) {
-        background-color: var(--bio-bg-secondary);
-
-        .entry {
-          mat-icon {
-            color: var(--bio-forest-green);
-            transform: scale(1.1);
-          }
-
-          span {
-            color: var(--bio-forest-green);
-          }
-        }
-      }
-
-      // Active state
-      &.active {
-        background: linear-gradient(90deg, rgba(45, 80, 22, 0.12) 0%, rgba(74, 124, 44, 0.06) 100%);
-        border-left: 4px solid var(--bio-forest-green);
-
-        .entry {
-          padding-left: 16px; // Compensate for left border
-
-          mat-icon {
-            color: var(--bio-forest-green);
-          }
-
-          span {
-            color: var(--bio-forest-green);
-            font-weight: 600;
-          }
-        }
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 4px;
-          background: linear-gradient(180deg, var(--bio-forest-green) 0%, var(--bio-forest-green-light) 100%);
-        }
+      .header-content h3 {
+        font-size: 16px;
       }
     }
-  }
-}
-
-// Sidenav Content - Offset for toolbar
-mat-sidenav-content {
-  padding-top: 64px;
-  background: var(--bio-bg-primary);
-  min-height: calc(100vh - 64px);
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-// Collapsed sidenav state
-mat-sidenav[style*="expanded"] {
-  width: 64px;
-
-  .entry span {
-    display: none;
-  }
-
-  .entry {
-    justify-content: center;
-    padding: 0;
-  }
-}
-
-// Mobile responsive adjustments
-@media screen and (max-width: 768px) {
-  mat-sidenav {
-    padding-top: 56px;
   }
 
   mat-sidenav-content {
@@ -128,10 +359,16 @@ mat-sidenav[style*="expanded"] {
   }
 }
 
-// Animation for sidenav open/close
+// ==========================
+// Material Drawer Backdrop
+// ==========================
 ::ng-deep {
   .mat-drawer-backdrop.mat-drawer-shown {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(2px);
+  }
+
+  .mat-drawer-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 }

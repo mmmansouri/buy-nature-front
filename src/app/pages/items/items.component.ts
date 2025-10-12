@@ -10,7 +10,7 @@ import { ItemsService } from '../../services/items.service';
 import { CartService } from '../../services/cart.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../services/notification.service';
 
 
 
@@ -25,8 +25,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         RouterLink,
         MatProgressSpinner,
         MatIconModule,
-        MatChipsModule,
-        MatSnackBarModule
+        MatChipsModule
     ],
     templateUrl: './items.component.html',
     styleUrl: './items.component.scss'
@@ -40,7 +39,7 @@ export class ItemsComponent implements OnInit {
   constructor(
     private itemsService: ItemsService,
     private cartService: CartService,
-    private snackBar: MatSnackBar
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -73,20 +72,18 @@ export class ItemsComponent implements OnInit {
       next: (item) => {
         if (item) {
           this.cartService.addToCart({item, quantity: 1});
-          this.snackBar.open(`${item.name} added to cart!`, 'Close', {
-            duration: 3000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+
+          // Show notification via NotificationService
+          this.notificationService.showCartNotification({
+            itemName: item.name,
+            itemImage: item.imageUrl,
+            itemPrice: item.price,
+            quantity: 1
           });
         }
       },
       error: (err) => {
         console.error('Error fetching item:', err);
-        this.snackBar.open('Failed to add item to cart', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
       }
     });
   }

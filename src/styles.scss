@@ -164,6 +164,62 @@ a {
   color: var(--bio-forest-green) !important;
 }
 
+// Custom Cart Snackbar
+.custom-cart-snackbar {
+  // Remove dark overlay background
+  &::ng-deep .cdk-overlay-backdrop {
+    display: none !important;
+  }
+
+  .mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: transparent;
+    --mat-snack-bar-button-color: white;
+    --mdc-snackbar-supporting-text-color: white;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    background: transparent !important;
+  }
+
+  .mdc-snackbar__surface {
+    background: transparent !important;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .mat-mdc-snack-bar-label {
+    padding: 0;
+  }
+}
+
+// Position snackbar near cart icon (top-right area)
+::ng-deep {
+  .custom-cart-snackbar {
+    // Remove backdrop
+    & + .cdk-overlay-backdrop {
+      display: none !important;
+      opacity: 0 !important;
+    }
+  }
+
+  // Adjust positioning to appear directly below cart icon
+  .cdk-overlay-pane {
+    &.custom-cart-snackbar {
+      position: fixed !important;
+      top: 70px !important; // Just below toolbar (64px + 6px gap)
+      right: 80px !important; // Align with cart icon position
+      left: auto !important;
+      bottom: auto !important;
+      margin: 0 !important;
+    }
+  }
+
+  // Override Material's default positioning for snackbar
+  .mat-mdc-snack-bar-container.custom-cart-snackbar {
+    position: static !important;
+  }
+}
+
 /*@use '@angular/material' as mat;
 
 @include mat.core();

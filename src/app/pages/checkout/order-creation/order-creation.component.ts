@@ -1,7 +1,9 @@
-import { Component, OnInit, signal, inject, DestroyRef, effect } from '@angular/core';
+import { Component, OnInit, signal, inject, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { take, filter, tap, delay } from "rxjs";
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { take, filter, tap } from "rxjs";
 import { OrderService } from "../../../services/order.service";
 import { Router } from '@angular/router';
 
@@ -16,7 +18,9 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-order-creation',
     imports: [
-        MatProgressSpinner
+        MatProgressSpinner,
+        MatIcon,
+        MatButton
     ],
     templateUrl: './order-creation.component.html',
     styleUrl: './order-creation.component.scss'
@@ -43,7 +47,7 @@ export class OrderCreationComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: (order) => {
-        console.log('✅ Payment successful, clearing cart and order data IMMEDIATELY');
+        console.log('✅ Payment successful, clearing cart and order data');
         this.orderStatus.set('success');
 
         // Clear cart and order data only once
@@ -51,18 +55,12 @@ export class OrderCreationComponent implements OnInit {
           this.cartCleared = true;
 
           // CRITICAL: Clear localStorage FIRST before any other actions
-          console.log('🗑️ Clearing localStorage immediately to prevent cart restoration');
+          console.log('🗑️ Clearing localStorage to prevent cart restoration');
           localStorage.removeItem('appState');
 
           // Then clear the state via actions
           this.orderService.clearAllOrderData();
           console.log('🧹 Cart and order data cleared from state');
-
-          // Redirect after a short delay
-          setTimeout(() => {
-            console.log('↗️ Redirecting to items page');
-            this.router.navigate(['/items']);
-          }, 1000);
         }
       },
       error: (error) => {
@@ -82,5 +80,21 @@ export class OrderCreationComponent implements OnInit {
         this.orderStatus.set('error');
       }
     });
+  }
+
+  // Navigation methods for user control
+  continueToProducts(): void {
+    console.log('📦 User navigating to products page');
+    this.router.navigate(['/items']);
+  }
+
+  viewOrders(): void {
+    console.log('📦 User navigating to orders page');
+    this.router.navigate(['/customer/orders']);
+  }
+
+  goToHome(): void {
+    console.log('📦 User navigating to home page');
+    this.router.navigate(['/']);
   }
 }

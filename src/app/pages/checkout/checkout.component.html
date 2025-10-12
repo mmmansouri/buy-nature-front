@@ -54,7 +54,6 @@
     @if (paymentStatus() === 'success') {
       @if (currentStepIndex() === 4) {
         <app-order-creation></app-order-creation>
-        <button mat-raised-button color="primary" (click)="resetStepper(stepper)">Continue Shopping</button>
       }
     } @else {
       <p>Please complete the payment step first.</p>

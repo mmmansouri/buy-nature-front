@@ -39,9 +39,9 @@
 
   <!-- Items Grid -->
   <div *ngIf="!isLoading && !error && items.length > 0" class="items-grid">
-    <mat-card *ngFor="let item of items" class="item-card" [routerLink]="['/item-details', item.id]">
-      <!-- Product Image -->
-      <div class="image-container">
+    <mat-card *ngFor="let item of items" class="item-card">
+      <!-- Product Image - clickable to go to details -->
+      <div class="image-container" [routerLink]="['/item-details', item.id]" style="cursor: pointer;">
         <img
           *ngIf="item.imageUrl"
           [src]="item.imageUrl"
@@ -53,7 +53,7 @@
         </div>
 
         <!-- Quick Add Button Overlay -->
-        <div class="quick-add-overlay">
+        <div class="quick-add-overlay" (click)="$event.stopPropagation()">
           <button
             mat-mini-fab
             color="primary"
@@ -68,7 +68,7 @@
       <!-- Product Info -->
       <mat-card-content class="product-content">
         <div class="product-header">
-          <h3 class="product-name">{{ item.name }}</h3>
+          <h3 class="product-name" [routerLink]="['/item-details', item.id]" style="cursor: pointer;">{{ item.name }}</h3>
           <div class="price-tag">
             <span class="price">{{ formatPrice(item.price) }}</span>
           </div>
@@ -89,6 +89,7 @@
           <button
             mat-stroked-button
             color="primary"
+            [routerLink]="['/item-details', item.id]"
             class="details-btn">
             <mat-icon>visibility</mat-icon>
             Details

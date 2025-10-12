@@ -1,69 +1,153 @@
 <div class="order-review-container">
-  <div class="delivery-review-container">
-    <div *ngIf="(delivery$ | async) as delivery">
-      <mat-card class="delivery-card">
-        <mat-card-header>
-          <mat-card-title><h2>Delivery Information</h2></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{ delivery.firstName}} {{ delivery.lastName}}</p>
-          <p>{{ delivery.phoneNumber }}</p>
-          <p>{{ delivery.email }}</p>
-          <p><strong>Address : </strong>{{ delivery.streetNumber }} {{ delivery.street }}</p>
-          <p><strong>City : </strong> {{ delivery.city }}</p>
-          <p><strong>Region : </strong> {{ delivery.region }}</p>
-          <p><strong>Postal Code : </strong> {{ delivery.postalCode }}</p>
-          <p><strong>Country : </strong> {{ delivery.country }}</p>
-        </mat-card-content>
-      </mat-card>
+  <!-- Page Header -->
+  <div class="review-header">
+    <mat-icon class="header-icon">fact_check</mat-icon>
+    <div class="header-text">
+      <h2>Review Your Order</h2>
+      <p>Please verify your order details before proceeding to payment</p>
     </div>
   </div>
-  <div class="cart-review-container">
-    <div *ngIf="(cartItems$ | async) as cartItems">
-      <mat-card class="delivery-card">
-        <mat-card-header>
-          <mat-card-title><h2>Order Review</h2></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div *ngIf="cartItems.length > 0">
-            <h3>Items</h3>
-            <table mat-table [dataSource]="cartItems" class="mat-elevation-z8">
-              <!-- Item Name Column -->
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Item Name </th>
-                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.item.name }} </td>
-              </ng-container>
 
-              <!-- Quantity Column -->
-              <ng-container matColumnDef="quantity">
-                <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.quantity }} </td>
-              </ng-container>
-
-              <!-- Quantity Column -->
-              <ng-container matColumnDef="unitPrice">
-                <th mat-header-cell *matHeaderCellDef> Unit </th>
-                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.item.price }} </td>
-              </ng-container>
-
-              <!-- Quantity Column -->
-              <ng-container matColumnDef="totalPrice">
-                <th mat-header-cell *matHeaderCellDef> Total </th>
-                <td mat-cell *matCellDef="let cartItem"> {{ cartItem.quantity * cartItem.item.price }} </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+  <!-- Delivery Information Card -->
+  @if (delivery$ | async; as delivery) {
+    <mat-card class="info-card delivery-card">
+      <mat-card-header>
+        <div class="card-title-wrapper">
+          <mat-icon>local_shipping</mat-icon>
+          <mat-card-title>Delivery Information</mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-section">
+            <h4>
+              <mat-icon>person</mat-icon>
+              Contact Details
+            </h4>
+            <div class="info-item">
+              <span class="label">Name:</span>
+              <span class="value">{{ delivery.firstName }} {{ delivery.lastName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Phone:</span>
+              <span class="value">{{ delivery.phoneNumber }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Email:</span>
+              <span class="value">{{ delivery.email }}</span>
+            </div>
           </div>
-        </mat-card-content>
-      </mat-card>
-      <div>
-        <h3>Total Price</h3>
-        <p>{{ totalPrice$ | async | currency }}</p>
-      </div>
-    </div>
-  </div>
-  <div class="total-price-review-container">
+
+          <div class="info-section">
+            <h4>
+              <mat-icon>home</mat-icon>
+              Shipping Address
+            </h4>
+            <div class="info-item">
+              <span class="label">Street:</span>
+              <span class="value">{{ delivery.streetNumber }} {{ delivery.street }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">City:</span>
+              <span class="value">{{ delivery.city }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Region:</span>
+              <span class="value">{{ delivery.region }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Postal Code:</span>
+              <span class="value">{{ delivery.postalCode }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Country:</span>
+              <span class="value">{{ delivery.country }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Order Items Card -->
+  @if (cartItems$ | async; as cartItems) {
+    <mat-card class="info-card items-card">
+      <mat-card-header>
+        <div class="card-title-wrapper">
+          <mat-icon>shopping_basket</mat-icon>
+          <mat-card-title>Order Items ({{ cartItems.length }})</mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        @if (cartItems.length > 0) {
+          <div class="items-list">
+            @for (cartItem of cartItems; track cartItem.item.id) {
+              <div class="order-item">
+                <div class="item-image">
+                  @if (cartItem.item.imageUrl) {
+                    <img [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
+                  } @else {
+                    <div class="image-placeholder">
+                      <mat-icon>inventory_2</mat-icon>
+                    </div>
+                  }
+                </div>
+
+                <div class="item-info">
+                  <h4 class="item-name">{{ cartItem.item.name }}</h4>
+                  @if (cartItem.item.description) {
+                    <p class="item-description">{{ cartItem.item.description }}</p>
+                  }
+                </div>
+
+                <div class="item-quantity">
+                  <span class="quantity-label">Qty:</span>
+                  <span class="quantity-value">{{ cartItem.quantity }}</span>
+                </div>
+
+                <div class="item-pricing">
+                  <div class="unit-price">
+                    <span class="price-label">Unit:</span>
+                    <span class="price-value">{{ cartItem.item.price | currency }}</span>
+                  </div>
+                  <div class="total-price">
+                    <span class="price-label">Total:</span>
+                    <span class="price-value total">{{ (cartItem.quantity * cartItem.item.price) | currency }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Order Total -->
+          <div class="order-total">
+            <div class="total-row subtotal">
+              <span class="total-label">Subtotal:</span>
+              <span class="total-amount">{{ totalPrice$ | async | currency }}</span>
+            </div>
+            <div class="total-row shipping">
+              <span class="total-label">Shipping:</span>
+              <span class="total-amount free">Free</span>
+            </div>
+            <div class="total-divider"></div>
+            <div class="total-row grand-total">
+              <span class="total-label">Total Amount:</span>
+              <span class="total-amount">{{ totalPrice$ | async | currency }}</span>
+            </div>
+          </div>
+        } @else {
+          <div class="empty-cart">
+            <mat-icon>shopping_cart</mat-icon>
+            <p>No items in cart</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Confirmation Note -->
+  <div class="confirmation-note">
+    <mat-icon>info</mat-icon>
+    <p>By proceeding to payment, you agree to our terms and conditions. Your order will be processed after successful payment.</p>
   </div>
 </div>
