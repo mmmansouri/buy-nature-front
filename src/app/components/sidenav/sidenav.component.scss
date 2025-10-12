@@ -48,34 +48,34 @@ mat-sidenav {
 
       // Hover state
       &:hover:not(.active) {
-        background-color: #f5f5f5;
+        background-color: var(--bio-bg-secondary);
 
         .entry {
           mat-icon {
-            color: #1976d2;
+            color: var(--bio-forest-green);
             transform: scale(1.1);
           }
 
           span {
-            color: #1976d2;
+            color: var(--bio-forest-green);
           }
         }
       }
 
       // Active state
       &.active {
-        background: linear-gradient(90deg, rgba(25, 118, 210, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%);
-        border-left: 4px solid #1976d2;
+        background: linear-gradient(90deg, rgba(45, 80, 22, 0.12) 0%, rgba(74, 124, 44, 0.06) 100%);
+        border-left: 4px solid var(--bio-forest-green);
 
         .entry {
           padding-left: 16px; // Compensate for left border
 
           mat-icon {
-            color: #1976d2;
+            color: var(--bio-forest-green);
           }
 
           span {
-            color: #1976d2;
+            color: var(--bio-forest-green);
             font-weight: 600;
           }
         }
@@ -87,7 +87,7 @@ mat-sidenav {
           top: 0;
           bottom: 0;
           width: 4px;
-          background: linear-gradient(180deg, #1976d2 0%, #2196f3 100%);
+          background: linear-gradient(180deg, var(--bio-forest-green) 0%, var(--bio-forest-green-light) 100%);
         }
       }
     }
@@ -97,7 +97,7 @@ mat-sidenav {
 // Sidenav Content - Offset for toolbar
 mat-sidenav-content {
   padding-top: 64px;
-  background: #fafafa;
+  background: var(--bio-bg-primary);
   min-height: calc(100vh - 64px);
   overflow-y: auto;
   overflow-x: hidden;

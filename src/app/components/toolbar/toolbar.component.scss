@@ -23,10 +23,17 @@
       gap: 8px;
 
       .menu-button {
+        color: white !important;
+
         mat-icon {
           font-size: 28px;
           width: 28px;
           height: 28px;
+          color: white !important;
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
         }
       }
 
@@ -68,6 +75,7 @@
       .user-button {
         position: relative;
         transition: background-color 0.2s ease;
+        color: white !important;
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.15);
@@ -77,6 +85,7 @@
           font-size: 28px;
           width: 28px;
           height: 28px;
+          color: white !important;
         }
       }
 
@@ -113,7 +122,7 @@
       align-items: center;
       gap: 12px;
       padding: 16px 16px 12px;
-      background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+      background: linear-gradient(135deg, var(--bio-forest-green) 0%, var(--bio-forest-green-light) 100%);
       color: white;
 
       mat-icon {
@@ -143,10 +152,10 @@
       }
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: var(--bio-bg-secondary);
 
         mat-icon {
-          color: #1976d2;
+          color: var(--bio-forest-green);
         }
       }
     }

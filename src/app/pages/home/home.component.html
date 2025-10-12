@@ -1,1 +1,171 @@
-<p>home works!</p>
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="organic-badge">
+          <mat-icon>verified</mat-icon>
+          100% Organic & Natural
+        </span>
+        <h1 class="hero-title">
+          Pure Nature,<br>
+          <span class="highlight">Delivered to You</span>
+        </h1>
+        <p class="hero-description">
+          Discover our selection of premium organic products sourced directly from nature.
+          From golden honey to the finest dates and cold-pressed olive oil, we bring you
+          the authentic taste of tradition and purity.
+        </p>
+        <div class="hero-actions">
+          <button mat-raised-button color="primary" routerLink="/items" class="shop-btn">
+            <mat-icon>storefront</mat-icon>
+            Shop Now
+          </button>
+          <button mat-stroked-button color="primary" class="learn-btn">
+            <mat-icon>eco</mat-icon>
+            Our Story
+          </button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-image-placeholder">
+          <mat-icon>eco</mat-icon>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Why Choose Buy Nature?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon organic">
+          <mat-icon>verified</mat-icon>
+        </div>
+        <h3>100% Organic</h3>
+        <p>All our products are certified organic, free from pesticides and chemicals</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon sustainable">
+          <mat-icon>recycling</mat-icon>
+        </div>
+        <h3>Sustainable</h3>
+        <p>Eco-friendly packaging and sustainable farming practices</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon local">
+          <mat-icon>place</mat-icon>
+        </div>
+        <h3>Locally Sourced</h3>
+        <p>Direct from local farmers and producers who care about quality</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fresh">
+          <mat-icon>spa</mat-icon>
+        </div>
+        <h3>Always Fresh</h3>
+        <p>Harvested and delivered at peak freshness for maximum flavor</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Showcase -->
+  <section class="products-showcase">
+    <h2 class="section-title">Our Featured Products</h2>
+    <p class="section-subtitle">Handpicked treasures from nature's bounty</p>
+
+    <div class="products-grid">
+      <!-- Honey Card -->
+      <mat-card class="product-showcase-card">
+        <div class="product-image-container">
+          <div class="product-image-placeholder honey">
+            <mat-icon>water_drop</mat-icon>
+          </div>
+          <span class="product-badge">Bestseller</span>
+        </div>
+        <mat-card-content>
+          <h3>Raw Organic Honey</h3>
+          <p class="product-description">
+            Pure, unfiltered honey harvested from wildflower meadows.
+            Rich in enzymes, antioxidants, and natural sweetness.
+          </p>
+          <ul class="product-features">
+            <li><mat-icon>check_circle</mat-icon> Unprocessed & Raw</li>
+            <li><mat-icon>check_circle</mat-icon> Rich in Antioxidants</li>
+            <li><mat-icon>check_circle</mat-icon> No Added Sugar</li>
+          </ul>
+          <button mat-raised-button color="primary" routerLink="/items">
+            <mat-icon>shopping_cart</mat-icon>
+            Explore Honey
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Dates Card -->
+      <mat-card class="product-showcase-card">
+        <div class="product-image-container">
+          <div class="product-image-placeholder dates">
+            <mat-icon>calendar_today</mat-icon>
+          </div>
+          <span class="product-badge new">New</span>
+        </div>
+        <mat-card-content>
+          <h3>Premium Medjool Dates</h3>
+          <p class="product-description">
+            Soft, sweet dates from ancient palm groves. Nature's candy,
+            packed with fiber, minerals, and natural energy.
+          </p>
+          <ul class="product-features">
+            <li><mat-icon>check_circle</mat-icon> High in Fiber</li>
+            <li><mat-icon>check_circle</mat-icon> Natural Energy</li>
+            <li><mat-icon>check_circle</mat-icon> Rich in Minerals</li>
+          </ul>
+          <button mat-raised-button color="primary" routerLink="/items">
+            <mat-icon>shopping_cart</mat-icon>
+            Explore Dates
+          </button>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Olive Oil Card -->
+      <mat-card class="product-showcase-card">
+        <div class="product-image-container">
+          <div class="product-image-placeholder olive">
+            <mat-icon>opacity</mat-icon>
+          </div>
+          <span class="product-badge">Premium</span>
+        </div>
+        <mat-card-content>
+          <h3>Extra Virgin Olive Oil</h3>
+          <p class="product-description">
+            Cold-pressed from hand-picked olives. The liquid gold of the
+            Mediterranean, rich in healthy fats and flavor.
+          </p>
+          <ul class="product-features">
+            <li><mat-icon>check_circle</mat-icon> Cold-Pressed</li>
+            <li><mat-icon>check_circle</mat-icon> Heart-Healthy</li>
+            <li><mat-icon>check_circle</mat-icon> Premium Quality</li>
+          </ul>
+          <button mat-raised-button color="primary" routerLink="/items">
+            <mat-icon>shopping_cart</mat-icon>
+            Explore Oils
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <mat-icon class="cta-icon">eco</mat-icon>
+      <h2>Ready to Experience Pure Nature?</h2>
+      <p>Join thousands of happy customers who trust us for their organic needs</p>
+      <button mat-raised-button color="primary" routerLink="/items" class="cta-button">
+        <mat-icon>shopping_bag</mat-icon>
+        Start Shopping
+      </button>
+    </div>
+  </section>
+</div>

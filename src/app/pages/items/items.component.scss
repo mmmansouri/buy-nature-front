@@ -25,7 +25,7 @@
         font-size: 48px;
         width: 48px;
         height: 48px;
-        color: #1976d2;
+        color: var(--bio-forest-green);
       }
 
       h1 {
@@ -44,7 +44,7 @@
 
     .header-stats {
       mat-chip {
-        background-color: #1976d2;
+        background-color: var(--bio-forest-green);
         color: white;
         font-weight: 500;
         padding: 8px 16px;
@@ -259,7 +259,7 @@
             .price {
               font-size: 20px;
               font-weight: 700;
-              color: #1976d2;
+              color: var(--bio-honey-gold-dark);
               white-space: nowrap;
             }
           }

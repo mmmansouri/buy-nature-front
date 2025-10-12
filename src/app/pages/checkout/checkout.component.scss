@@ -4,6 +4,7 @@
   min-height: 100%;
   padding: 24px;
   padding-bottom: 48px;
+  background: var(--bio-bg-primary);
 }
 
 .stepper-button-container {
@@ -17,34 +18,63 @@
   margin: 0 10px;
 }
 
+// Override stepper styles for bio theme
+::ng-deep {
+  mat-horizontal-stepper {
+    background: var(--bio-bg-card);
+    border-radius: 16px;
+    box-shadow: var(--bio-shadow-md);
+    padding: 24px;
+  }
+
+  .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+
+    .mat-step-icon {
+      background-color: var(--bio-bg-secondary);
+      color: var(--bio-text-secondary);
+    }
+
+    .mat-step-icon-selected,
+    .mat-step-icon-state-done {
+      background-color: var(--bio-forest-green);
+      color: white;
+    }
+
+    .mat-step-label {
+      color: var(--bio-text-secondary);
+    }
+
+    .mat-step-label-selected {
+      color: var(--bio-forest-green);
+      font-weight: 600;
+    }
+  }
+
+  .mat-stepper-horizontal-line {
+    border-top-color: var(--bio-bg-secondary);
+  }
+}
+
+// Button styles harmonized with bio theme
 .mat-mdc-button {
-  border: 1px solid #f7ac09;
-  background-color: #f7ac09;
-  color: rgb(35, 238, 113);
+  border: 1px solid var(--bio-forest-green);
+  background-color: var(--bio-forest-green);
+  color: white;
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--bio-shadow-sm);
 
   &:hover {
-    background-color: #76eb32;
-    border-color: #76eb32;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--bio-forest-green-light);
+    border-color: var(--bio-forest-green-light);
+    box-shadow: var(--bio-shadow-md);
   }
 
   &:disabled {
-    background-color: #c5cae9;
-    border-color: #c5cae9;
-    color: rgba(255, 255, 255, 0.3);
+    background-color: var(--bio-bg-secondary);
+    border-color: var(--bio-bg-secondary);
+    color: var(--bio-text-secondary);
     box-shadow: none;
+    opacity: 0.6;
   }
-}
-
-::ng-deep .mat-horizontal-stepper-header {
-  pointer-events: none !important;
-}
-
-::ng-deep mat-horizontal-stepper {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 24px;
 }

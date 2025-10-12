@@ -1,48 +1,185 @@
 @use '@angular/material' as mat;
 
-$themeM2-primary: mat.m2-define-palette(mat.$m2-amber-palette);
-$themeM2-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+// ========================================
+// Buy Nature - Custom Bio Theme
+// ========================================
+// Color Palette: Forest Green, Wood Brown, Honey Gold
+// Easily customizable for bio/organic products
 
-
-$themeM2-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-
-$themeM2: mat.m2-define-light-theme((
-  color: (
-    primary: $themeM2-primary,
-    accent: $themeM2-accent,
-    warn: $themeM2-warn,
+// Define custom color palettes for bio theme
+$bio-forest-green-palette: (
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #2d5016,  // Primary forest green
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
   )
+);
+
+$bio-honey-gold-palette: (
+  50: #fff8e1,
+  100: #ffecb3,
+  200: #ffe082,
+  300: #ffd54f,
+  400: #ffca28,
+  500: #d4a574,  // Primary honey gold
+  600: #ffb300,
+  700: #ffa000,
+  800: #ff8f00,
+  900: #ff6f00,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: rgba(black, 0.87),
+    700: rgba(black, 0.87),
+    800: white,
+    900: white,
+  )
+);
+
+$bio-wood-brown-palette: (
+  50: #efebe9,
+  100: #d7ccc8,
+  200: #bcaaa4,
+  300: #a1887f,
+  400: #8d6e63,
+  500: #6d4c41,  // Primary wood brown
+  600: #6d4c41,
+  700: #5d4037,
+  800: #4e342e,
+  900: #3e2723,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+// Material 2 Theme (for backwards compatibility)
+$bio-theme-m2-primary: mat.m2-define-palette($bio-forest-green-palette, 500);
+$bio-theme-m2-accent: mat.m2-define-palette($bio-honey-gold-palette, 500);
+$bio-theme-m2-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$bio-theme-m2: mat.m2-define-light-theme((
+  color: (
+    primary: $bio-theme-m2-primary,
+    accent: $bio-theme-m2-accent,
+    warn: $bio-theme-m2-warn,
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: '"Roboto", "Helvetica Neue", sans-serif',
+  ),
+  density: 0,
 ));
 
-
-$themeM3: mat.define-theme((
+// Material 3 Theme (Angular 19+ modern theme)
+$bio-theme-m3: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
+    primary: mat.$green-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: (
+    brand-family: '"Roboto", "Helvetica Neue", sans-serif',
+    plain-family: '"Roboto", "Helvetica Neue", sans-serif',
+  ),
+  density: (
+    scale: 0
   )
 ));
 
-
+// Apply themes to body
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
   margin: 0;
   height: 100%;
 
-  @include mat.all-component-themes($themeM3);
-  @include mat.all-component-themes($themeM2);
-  @include mat.color-variants-backwards-compatibility($themeM3);
+  @include mat.all-component-themes($bio-theme-m3);
+  @include mat.all-component-themes($bio-theme-m2);
+  @include mat.color-variants-backwards-compatibility($bio-theme-m3);
 }
 
 html {
   height: 100%;
 }
 
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+// Include Material core styles
 @include mat.elevation-classes();
 @include mat.app-background();
+
+// ========================================
+// Custom CSS Variables for Easy Theming
+// ========================================
+:root {
+  // Primary Colors
+  --bio-forest-green: #2d5016;
+  --bio-forest-green-light: #4a7c2c;
+  --bio-forest-green-dark: #1a3d0f;
+
+  // Secondary Colors
+  --bio-honey-gold: #d4a574;
+  --bio-honey-gold-light: #e6c199;
+  --bio-honey-gold-dark: #b8864f;
+
+  // Accent Colors
+  --bio-wood-brown: #6d4c41;
+  --bio-wood-brown-light: #8d6e63;
+  --bio-wood-brown-dark: #4e342e;
+
+  // Neutral Colors
+  --bio-cream: #faf8f3;
+  --bio-beige: #f5f1e8;
+  --bio-earth: #8b7355;
+
+  // Text Colors
+  --bio-text-primary: #2c2c2c;
+  --bio-text-secondary: #5a5a5a;
+  --bio-text-light: #ffffff;
+
+  // Background Colors
+  --bio-bg-primary: #faf8f3;
+  --bio-bg-secondary: #f5f1e8;
+  --bio-bg-card: #ffffff;
+
+  // Shadow
+  --bio-shadow-sm: 0 2px 8px rgba(45, 80, 22, 0.08);
+  --bio-shadow-md: 0 4px 16px rgba(45, 80, 22, 0.12);
+  --bio-shadow-lg: 0 8px 32px rgba(45, 80, 22, 0.16);
+}
+
+// ========================================
+// How to Customize:
+// ========================================
+// 1. Change primary color: Update --bio-forest-green
+// 2. Change accent color: Update --bio-honey-gold
+// 3. Change secondary color: Update --bio-wood-brown
+// 4. For Material components: Update the palette definitions above
+// ========================================
 
