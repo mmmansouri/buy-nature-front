@@ -1,41 +1,101 @@
-<div *ngIf="cartOpen" class="mini-cart-container" appClickOutside (clickOutside)="closeCart()">
-  <!-- Show this when the cart is empty -->
-  <div *ngIf="(cartItems$ | async)?.length === 0" class="empty-cart-message">
-    Your cart is empty
+<div *ngIf="cartOpen" class="mini-cart-backdrop" (click)="closeCart()"></div>
+
+<div *ngIf="cartOpen" class="mini-cart-container" [@slideIn] appClickOutside (clickOutside)="closeCart()">
+  <!-- Cart Header -->
+  <div class="cart-header">
+    <div class="header-title">
+      <mat-icon>shopping_cart</mat-icon>
+      <h3>Shopping Cart</h3>
+      <span class="item-count" *ngIf="(cartItems$ | async)?.length">{{ (cartItems$ | async)?.length }}</span>
+    </div>
+    <button mat-icon-button (click)="closeCart()" class="close-button" aria-label="Close cart">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
 
-  <div *ngIf="(cartItems$ | async)?.length!>0" appClickOutside (clickOutside)="closeCart()">
-    <div *ngFor="let cartItem of (cartItems$ | async); let i = index" class="cart-item">
-      <div class="item-image">
-        <img [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
-      </div>
-      <div class="item-details">
-        <span class="item-name">{{ cartItem.item.name }}</span>
-      </div>
-      <button mat-icon-button (click)="removeItem(cartItem.item.id); $event.stopPropagation()" aria-label="Remove item" class="delete-button">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <div class="item-actions">
-        <button mat-icon-button (click)="decreaseQuantity(cartItem.item); $event.stopPropagation()" aria-label="Decrease quantity" class="quantity-button-increase">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>
-        <button mat-icon-button (click)="increaseQuantity(cartItem.item); $event.stopPropagation()" aria-label="Increase quantity" class="quantity-button-increase">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <div class="item-price">
-        {{ cartItem.item.price * cartItem.quantity | currency }}
+  <!-- Empty Cart State -->
+  <div *ngIf="(cartItems$ | async)?.length === 0" class="empty-cart">
+    <mat-icon class="empty-icon">shopping_cart</mat-icon>
+    <h4>Your cart is empty</h4>
+    <p>Add some products to get started!</p>
+    <button mat-raised-button color="primary" [routerLink]="['/items']" (click)="closeCart()">
+      <mat-icon>storefront</mat-icon>
+      Shop Now
+    </button>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="(cartItems$ | async)?.length! > 0" class="cart-content">
+    <div class="cart-items-list">
+      <div *ngFor="let cartItem of (cartItems$ | async); let i = index" class="cart-item">
+        <!-- Item Image -->
+        <div class="item-image">
+          <img *ngIf="cartItem.item.imageUrl" [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
+          <div *ngIf="!cartItem.item.imageUrl" class="image-placeholder">
+            <mat-icon>image</mat-icon>
+          </div>
+        </div>
+
+        <!-- Item Details -->
+        <div class="item-details">
+          <h4 class="item-name">{{ cartItem.item.name }}</h4>
+          <p class="item-price">{{ cartItem.item.price | currency }}</p>
+
+          <!-- Quantity Controls -->
+          <div class="quantity-controls">
+            <button
+              mat-icon-button
+              (click)="decreaseQuantity(cartItem.item); $event.stopPropagation()"
+              [disabled]="cartItem.quantity <= 1"
+              class="quantity-btn"
+              aria-label="Decrease quantity">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="quantity-display">{{ cartItem.quantity }}</span>
+            <button
+              mat-icon-button
+              (click)="increaseQuantity(cartItem.item); $event.stopPropagation()"
+              class="quantity-btn"
+              aria-label="Increase quantity">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item Total & Remove -->
+        <div class="item-actions">
+          <div class="item-total">{{ cartItem.item.price * cartItem.quantity | currency }}</div>
+          <button
+            mat-icon-button
+            (click)="removeItem(cartItem.item.id); $event.stopPropagation()"
+            class="remove-btn"
+            aria-label="Remove item">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Total price and checkout button on the same line -->
-    <div class="checkout-total-container">
-      <span class="total-price">Total: {{ totalPrice$ | async| currency }}</span>
-      <button mat-raised-button color="primary" class="checkout-button" [routerLink]="['/checkout']" (click)=" closeCart()">
-        Checkout
-      </button>
+    <!-- Cart Footer -->
+    <div class="cart-footer">
+      <div class="subtotal-section">
+        <div class="subtotal-row">
+          <span>Subtotal</span>
+          <span class="subtotal-amount">{{ totalPrice$ | async | currency }}</span>
+        </div>
+        <p class="tax-note">Shipping and taxes calculated at checkout</p>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-stroked-button color="primary" [routerLink]="['/items']" (click)="closeCart()" class="continue-btn">
+          <mat-icon>arrow_back</mat-icon>
+          Continue Shopping
+        </button>
+        <button mat-raised-button color="primary" [routerLink]="['/checkout']" (click)="closeCart()" class="checkout-btn">
+          <mat-icon>payment</mat-icon>
+          Checkout
+        </button>
+      </div>
     </div>
   </div>
-
 </div>

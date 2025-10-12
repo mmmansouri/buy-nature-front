@@ -1,34 +1,50 @@
+// Checkout Container
+:host {
+  display: block;
+  min-height: 100%;
+  padding: 24px;
+  padding-bottom: 48px;
+}
+
 .stepper-button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 12px;
+}
 
 .stepper-button-container button {
-    margin: 0 10px; /* Add horizontal margin to space out the buttons */
+  margin: 0 10px;
 }
 
 .mat-mdc-button {
-  border: 1px solid #f7ac09; /* Primary color */
-  background-color: #f7ac09; /* Primary color */
+  border: 1px solid #f7ac09;
+  background-color: #f7ac09;
   color: rgb(35, 238, 113);
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #76eb32; /* Darker primary color */
-    border-color: #76eb32; /* Darker primary color */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+    background-color: #76eb32;
+    border-color: #76eb32;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
   }
 
   &:disabled {
-    background-color: #c5cae9; /* Lighter primary color */
-    border-color: #c5cae9; /* Lighter primary color */
+    background-color: #c5cae9;
+    border-color: #c5cae9;
     color: rgba(255, 255, 255, 0.3);
-    box-shadow: none; /* No shadow when disabled */
+    box-shadow: none;
   }
-  }
+}
 
-::ng-deep .mat-horizontal-stepper-header{
+::ng-deep .mat-horizontal-stepper-header {
   pointer-events: none !important;
+}
+
+::ng-deep mat-horizontal-stepper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
 }

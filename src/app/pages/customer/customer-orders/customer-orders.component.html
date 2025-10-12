@@ -1,5 +1,17 @@
 <div class="customer-orders-container">
-  <h1>My Orders</h1>
+  <!-- Modern Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <mat-icon class="header-icon">shopping_bag</mat-icon>
+      <div>
+        <h1>My Orders</h1>
+        <p class="subtitle">Track and manage your purchases</p>
+      </div>
+    </div>
+    @if (orders() && orders().length) {
+      <mat-chip class="orders-count">{{ orders().length }} {{ orders().length === 1 ? 'Order' : 'Orders' }}</mat-chip>
+    }
+  </div>
 
   @if (loading()) {
     <div class="loading-container">
@@ -8,62 +20,105 @@
     </div>
   } @else if (error()) {
     <div class="error-container">
-      <p>There was an error loading your orders. Please try again later.</p>
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>Oops! Something went wrong</h2>
+      <p>We couldn't load your orders. Please try again.</p>
       <button mat-raised-button color="primary"
-              (click)="customerService.getCustomerOrdersSignal(userAuth.customerId()!)">Retry</button>
+              (click)="customerService.getCustomerOrdersSignal(userAuth.customerId()!)">
+        <mat-icon>refresh</mat-icon>
+        Retry
+      </button>
     </div>
   } @else if (orders() && orders().length) {
-    <div class="orders-grid">
+    <div class="orders-list">
       @for (order of orders(); track order.id) {
-        <mat-card class="order-card">
-          <mat-card-header>
-            <mat-card-title>Order #{{ order.id!.slice(-6) }}</mat-card-title>
-            <mat-card-subtitle>creation date to be implemented</mat-card-subtitle>
-            <div class="spacer"></div>
-            <mat-chip [class]="getOrderStatusClass(order.status)">
-              {{ order.status }}
-            </mat-chip>
-          </mat-card-header>
-
-          <mat-card-content>
-            <div class="order-details">
-              <p><strong>Items:</strong> {{ order.orderItems.length || 0 }}</p>
-              <p><strong>Total:</strong> to be implemented</p>
-            </div>
-
-            @if (order.orderItems && order.orderItems.length) {
-              <div class="order-items">
-                <h3>Order Items</h3>
-                @for (item of order.orderItems.slice(0, 2); track item.item.id) {
-                  <div class="order-item">
-                    <p>{{ item.quantity }} × {{ item.item.name }}</p>
-                    <p>${{ item.item.price.toFixed(2) }}</p>
-                  </div>
-                }
-                @if (order.orderItems.length > 2) {
-                  <p class="more-items">+{{ order.orderItems.length - 2 }} more items</p>
-                }
+        <mat-card class="order-card" [routerLink]="['/orders', order.id]">
+          <!-- Card Header with Order Info -->
+          <div class="order-header">
+            <div class="order-number">
+              <mat-icon>receipt_long</mat-icon>
+              <div>
+                <span class="order-id">{{ formatOrderId(order.id!) }}</span>
+                <span class="order-date">{{ order.createdAt ? formatShortDate(order.createdAt) : 'Date unavailable' }}</span>
               </div>
-            }
-          </mat-card-content>
+            </div>
+            <mat-chip [class]="getOrderStatusClass(order.status)" class="status-chip">
+              {{ formatStatus(order.status) }}
+            </mat-chip>
+          </div>
 
           <mat-divider></mat-divider>
 
-          <mat-card-actions>
-            <button mat-button color="primary" [routerLink]="['/orders', order.id]">
-              View Details
+          <!-- Items Preview with Images -->
+          <div class="order-content">
+            <div class="items-preview">
+              @for (item of order.orderItems.slice(0, 3); track item.item.id) {
+                <div class="item-card">
+                  <div class="item-image">
+                    @if (item.item.imageUrl) {
+                      <img [src]="item.item.imageUrl" [alt]="item.item.name" loading="lazy">
+                    } @else {
+                      <div class="image-placeholder">
+                        <mat-icon>image</mat-icon>
+                      </div>
+                    }
+                    <span class="item-quantity">×{{ item.quantity }}</span>
+                  </div>
+                  <div class="item-details">
+                    <span class="item-name">{{ item.item.name }}</span>
+                    <span class="item-price">{{ item.item.price | currency }}</span>
+                  </div>
+                </div>
+              }
+              @if (order.orderItems.length > 3) {
+                <div class="more-items-badge">
+                  <mat-icon>add</mat-icon>
+                  <span>{{ order.orderItems.length - 3 }} more</span>
+                </div>
+              }
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+              <div class="summary-row">
+                <mat-icon>inventory_2</mat-icon>
+                <span>{{ order.orderItems.length }} {{ order.orderItems.length === 1 ? 'item' : 'items' }}</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total</span>
+                <span class="total-amount">{{ order.total ? (order.total | currency) : calculateTotal(order) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer -->
+          <mat-divider></mat-divider>
+          <div class="order-footer">
+            <button mat-button color="primary" class="view-details-btn">
+              <span>View Details</span>
+              <mat-icon>arrow_forward</mat-icon>
             </button>
-            @if (order.status === 'Processing') {
-              <button mat-button color="warn">Cancel Order</button>
+            @if (order.status === 'Processing' || order.status === 'PENDING') {
+              <button mat-button color="warn" (click)="$event.stopPropagation()">
+                <mat-icon>cancel</mat-icon>
+                Cancel
+              </button>
             }
-          </mat-card-actions>
+          </div>
         </mat-card>
       }
     </div>
   } @else {
     <div class="no-orders">
-      <p>You don't have any orders yet.</p>
-      <button mat-raised-button color="primary" routerLink="/shop">Start Shopping</button>
+      <div class="empty-state">
+        <mat-icon class="empty-icon">shopping_cart</mat-icon>
+        <h2>No Orders Yet</h2>
+        <p>Start shopping to see your orders here</p>
+        <button mat-raised-button color="primary" routerLink="/items">
+          <mat-icon>storefront</mat-icon>
+          Browse Products
+        </button>
+      </div>
     </div>
   }
 </div>

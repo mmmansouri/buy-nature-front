@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {animate, style, transition, trigger} from '@angular/animations';
 import {CartService} from "../../services/cart.service";
 import {OrderItem} from "../../models/order.item.model";
 import {ClickOutsideDirective} from "../../directives/click-outside.directive";
@@ -27,7 +28,18 @@ import { StepperService } from '../../services/stepper.service';
         MatButton
     ],
     templateUrl: './cart-mini.component.html',
-    styleUrl: './cart-mini.component.scss'
+    styleUrl: './cart-mini.component.scss',
+    animations: [
+      trigger('slideIn', [
+        transition(':enter', [
+          style({ transform: 'translateX(100%)', opacity: 0 }),
+          animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ transform: 'translateX(0)', opacity: 1 }))
+        ]),
+        transition(':leave', [
+          animate('200ms cubic-bezier(0.4, 0, 1, 1)', style({ transform: 'translateX(100%)', opacity: 0 }))
+        ])
+      ])
+    ]
 })
 export class CartMiniComponent implements OnInit {
 

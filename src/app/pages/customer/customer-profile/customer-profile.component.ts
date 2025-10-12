@@ -32,7 +32,35 @@ export class CustomerProfileComponent {
   loading = this.customerService.getCustomerLoadingSignal();
   error = this.customerService.getCustomerErrorSignal();
 
+  /**
+   * Format date to readable format
+   */
   formatDate(date: string | Date): string {
-    return date ? new Date(date).toLocaleDateString() : '';
+    if (!date) return 'N/A';
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(new Date(date));
+  }
+
+  /**
+   * Get initials from customer name for avatar
+   */
+  getInitials(): string {
+    const c = this.customer();
+    if (!c) return '';
+    const first = c.firstName?.charAt(0) || '';
+    const last = c.lastName?.charAt(0) || '';
+    return (first + last).toUpperCase();
+  }
+
+  /**
+   * Get formatted full address
+   */
+  getFullAddress(): string {
+    const c = this.customer();
+    if (!c) return '';
+    return `${c.streetNumber} ${c.street}, ${c.city}, ${c.region} ${c.postalCode}, ${c.country}`;
   }
 }

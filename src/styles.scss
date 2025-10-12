@@ -1,5 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Global Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
+  overflow-x: hidden;
+}
+
 /* Custom snackbar styles for login required notification */
 .login-required-snackbar {
   background-color: #ff6b6b !important;

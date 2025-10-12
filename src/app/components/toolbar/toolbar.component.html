@@ -1,29 +1,69 @@
-<mat-toolbar color="primary" class="flexSpaceBetween">
-  <button mat-icon-button (click)="toggleMenu()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <a routerLink="/" class="unstyled-link"><span>Buy Nature</span></a>
-  <div>
-    <button mat-icon-button (click)="toggleCartShow($event)">
-      <mat-icon [matBadge]="(totalItems$ | async)" aria-hidden="false">shopping_cart</mat-icon>
-    </button>
-    <button mat-icon-button [matMenuTriggerFor]="customerMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <mat-menu #customerMenu="matMenu">
-      <button mat-menu-item routerLink="/customer/profile">
-        <mat-icon>person</mat-icon>
-        <span>My Profile</span>
+<mat-toolbar class="modern-toolbar" color="primary">
+  <div class="toolbar-content">
+    <!-- Left Section: Menu & Logo -->
+    <div class="left-section">
+      <button mat-icon-button (click)="toggleMenu()" class="menu-button" aria-label="Toggle menu">
+        <mat-icon>menu</mat-icon>
       </button>
-      <button mat-menu-item routerLink="/customer/orders">
-        <mat-icon>receipt_long</mat-icon>
-        <span>My Orders</span>
+      <a routerLink="/" class="logo-link">
+        <mat-icon class="logo-icon">eco</mat-icon>
+        <span class="logo-text">Buy Nature</span>
+      </a>
+    </div>
+
+    <!-- Right Section: Actions -->
+    <div class="right-section">
+      <!-- Cart Button -->
+      <button
+        mat-icon-button
+        (click)="toggleCartShow($event)"
+        class="cart-button"
+        aria-label="Shopping cart">
+        <mat-icon
+          [matBadge]="(totalItems$ | async) || 0"
+          [matBadgeHidden]="!(totalItems$ | async)"
+          matBadgeColor="warn"
+          matBadgeSize="small">
+          shopping_cart
+        </mat-icon>
       </button>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Logout</span>
+
+      <!-- User Menu -->
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="customerMenu"
+        class="user-button"
+        aria-label="User menu">
+        <mat-icon>account_circle</mat-icon>
       </button>
-    </mat-menu>
+
+      <mat-menu #customerMenu="matMenu" class="user-menu" xPosition="before">
+        <div class="menu-header">
+          <mat-icon>person</mat-icon>
+          <span>My Account</span>
+        </div>
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item routerLink="/customer/profile">
+          <mat-icon>person_outline</mat-icon>
+          <span>My Profile</span>
+        </button>
+
+        <button mat-menu-item routerLink="/customer/orders">
+          <mat-icon>receipt_long</mat-icon>
+          <span>My Orders</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="logout()" class="logout-item">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
   </div>
 </mat-toolbar>
+
+<!-- Mini Cart Container -->
 <ng-container #miniCartContainer></ng-container>

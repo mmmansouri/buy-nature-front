@@ -3,6 +3,7 @@ import { SidenavService } from "../sidenav/sidenav.service";
 import { MatToolbarModule} from "@angular/material/toolbar";
 import { MatIconModule} from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from "@angular/router";
 import { MatBadgeModule } from '@angular/material/badge';
 import {CommonModule} from "@angular/common";
@@ -15,13 +16,16 @@ import { UserAuthService } from "../../services/user-auth.service";
 
 @Component({
     selector: 'app-toolbar',
-    imports: [MatMenuModule,
+    imports: [
+        MatMenuModule,
         MatBadgeModule,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
+        MatDividerModule,
         RouterLink,
-        CommonModule],
+        CommonModule
+    ],
     templateUrl: './toolbar.component.html',
     styleUrl: './toolbar.component.scss'
 })

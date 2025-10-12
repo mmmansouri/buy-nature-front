@@ -1,16 +1,191 @@
-<div class="items-details-container">
-  <div class="carroussel" >
-    <ng-container #middleContainer></ng-container>
+<div class="item-details-container">
+  <!-- Breadcrumb Navigation -->
+  <div class="breadcrumb">
+    <button mat-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Products
+    </button>
   </div>
-  <div class="buy-options" >
-    <ng-container #leftContainer></ng-container>
-  </div>
-  <div class="description">
-    <ng-container #bottomContainer></ng-container>
-  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading product details...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>Product Not Found</h2>
+      <p>{{ error() }}</p>
+      <div class="error-actions">
+        <button mat-raised-button color="primary" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Products
+        </button>
+        <button mat-stroked-button (click)="loadItem(route.snapshot.paramMap.get('id')!)">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Product Details -->
+  @else if (item()) {
+    <div class="product-details">
+      <!-- Product Image Section -->
+      <div class="product-image-section">
+        <mat-card class="image-card">
+          @if (item()!.imageUrl) {
+            <img
+              [src]="item()!.imageUrl"
+              [alt]="item()!.name"
+              class="product-image"
+              loading="eager">
+          } @else {
+            <div class="image-placeholder">
+              <mat-icon>image</mat-icon>
+            </div>
+          }
+        </mat-card>
+
+        <!-- Image Thumbnails (placeholder for future gallery) -->
+        <div class="image-thumbnails">
+          <div class="thumbnail active">
+            @if (item()!.imageUrl) {
+              <img [src]="item()!.imageUrl" [alt]="item()!.name">
+            } @else {
+              <mat-icon>image</mat-icon>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info Section -->
+      <div class="product-info-section">
+        <mat-card class="info-card">
+          <mat-card-content>
+            <!-- Product Header -->
+            <div class="product-header">
+              <div class="title-section">
+                <h1 class="product-name">{{ item()!.name }}</h1>
+
+                <!-- Stock Status -->
+                <div class="stock-status">
+                  @if (isInStock()) {
+                    <mat-chip class="in-stock">
+                      <mat-icon>check_circle</mat-icon>
+                      In Stock
+                    </mat-chip>
+                  } @else {
+                    <mat-chip class="out-of-stock">
+                      <mat-icon>cancel</mat-icon>
+                      Out of Stock
+                    </mat-chip>
+                  }
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="price-section">
+                <span class="price">{{ formatPrice(item()!.price) }}</span>
+              </div>
+            </div>
+
+            <mat-divider class="section-divider"></mat-divider>
+
+            <!-- Product Description -->
+            <div class="description-section">
+              <h3 class="section-title">
+                <mat-icon>description</mat-icon>
+                Description
+              </h3>
+              <p class="description-text">{{ item()!.description }}</p>
+            </div>
+
+            <mat-divider class="section-divider"></mat-divider>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-section">
+              <h3 class="section-title">
+                <mat-icon>shopping_cart</mat-icon>
+                Quantity
+              </h3>
+              <mat-form-field appearance="outline" class="quantity-selector">
+                <mat-label>Select Quantity</mat-label>
+                <mat-select [(ngModel)]="quantity">
+                  @for (qty of quantityOptions; track qty) {
+                    <mat-option [value]="qty">{{ qty }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+              <button
+                mat-raised-button
+                color="primary"
+                class="add-to-cart-btn"
+                [disabled]="!isInStock()"
+                (click)="addToCart()">
+                <mat-icon>add_shopping_cart</mat-icon>
+                Add to Cart
+              </button>
+              <button
+                mat-stroked-button
+                color="primary"
+                class="buy-now-btn"
+                [disabled]="!isInStock()">
+                <mat-icon>flash_on</mat-icon>
+                Buy Now
+              </button>
+            </div>
+
+            <!-- Product Features -->
+            <div class="features-section">
+              <h3 class="section-title">
+                <mat-icon>verified</mat-icon>
+                Product Features
+              </h3>
+              <div class="features-grid">
+                <div class="feature-item">
+                  <mat-icon>local_shipping</mat-icon>
+                  <div class="feature-text">
+                    <strong>Free Shipping</strong>
+                    <span>On orders over $50</span>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <mat-icon>eco</mat-icon>
+                  <div class="feature-text">
+                    <strong>100% Organic</strong>
+                    <span>Natural ingredients</span>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <mat-icon>autorenew</mat-icon>
+                  <div class="feature-text">
+                    <strong>Easy Returns</strong>
+                    <span>30-day return policy</span>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <mat-icon>verified_user</mat-icon>
+                  <div class="feature-text">
+                    <strong>Secure Payment</strong>
+                    <span>SSL encrypted</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  }
 </div>
-
-
-
-
-
