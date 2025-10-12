@@ -40,10 +40,10 @@
       .logo-link {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         text-decoration: none;
         color: white;
-        transition: opacity 0.2s ease;
+        transition: all 0.3s ease;
         padding: 8px 12px;
         border-radius: 8px;
 
@@ -51,16 +51,45 @@
           background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .logo-icon {
-          font-size: 32px;
-          width: 32px;
-          height: 32px;
+        .logo-icon-wrapper {
+          flex-shrink: 0;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .logo-icon {
+            font-size: 26px;
+            width: 26px;
+            height: 26px;
+            color: white;
+          }
         }
 
-        .logo-text {
-          font-size: 20px;
-          font-weight: 600;
-          letter-spacing: 0.5px;
+        .logo-content {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .logo-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.3px;
+            line-height: 1;
+          }
+
+          .logo-subtitle {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            line-height: 1;
+          }
         }
       }
     }
@@ -288,14 +317,25 @@
         .logo-link {
           padding: 4px 8px;
 
-          .logo-icon {
-            font-size: 28px;
-            width: 28px;
-            height: 28px;
+          .logo-icon-wrapper {
+            width: 40px;
+            height: 40px;
+
+            .logo-icon {
+              font-size: 24px;
+              width: 24px;
+              height: 24px;
+            }
           }
 
-          .logo-text {
-            font-size: 18px;
+          .logo-content {
+            .logo-text {
+              font-size: 16px;
+            }
+
+            .logo-subtitle {
+              font-size: 10px;
+            }
           }
         }
       }
@@ -331,7 +371,7 @@
 }
 
 @media (max-width: 480px) {
-  .modern-toolbar .toolbar-content .left-section .logo-text {
+  .modern-toolbar .toolbar-content .left-section .logo-content {
     display: none;
   }
 }

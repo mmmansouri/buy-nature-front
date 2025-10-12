@@ -104,8 +104,8 @@ export class UserEffects {
   updateUserPassword$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.updateUserPassword),
-      switchMap(({ userId, newPassword }) =>
-        this.http.put<void>(`${this.baseUrl}/${userId}/password`, { newPassword }).pipe(
+      switchMap(({ userId, currentPassword, newPassword }) =>
+        this.http.put<void>(`${this.baseUrl}/${userId}/password`, { currentPassword, newPassword }).pipe(
           map(() => UserActions.updateUserPasswordSuccess()),
           catchError(error => {
             console.error('Error updating password:', error);

@@ -62,4 +62,19 @@ export class CustomerEffects {
       )
     )
   );
+
+  updateCustomerProfile$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CustomerActions.updateCustomerProfile),
+      switchMap(({ customerId, updates }) =>
+        this.http.put<Customer>(`${this.baseCustomerUrl}/${customerId}`, updates).pipe(
+          map(customer => CustomerActions.updateCustomerProfileSuccess({ customer })),
+          catchError(error => {
+            console.error('Error updating customer profile:', error);
+            return of(CustomerActions.updateCustomerProfileFailure({ error }));
+          })
+        )
+      )
+    )
+  );
 }

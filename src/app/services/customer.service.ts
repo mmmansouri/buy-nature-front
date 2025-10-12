@@ -9,6 +9,7 @@ import {CustomerState} from "../store/customer/customer.state";
 import {Store} from "@ngrx/store";
 import * as CustomerActions from '../store/customer/customer.actions';
 import {CustomerCreationRequest} from "../models/customer-creation-request.model";
+import {Customer} from "../models/customer.model";
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,10 @@ export class CustomerService {
       error: this.store.selectSignal(selectCustomerError),
       customerId: this.store.selectSignal(selectCustomerId) // Add this line
     };
+  }
+
+  updateCustomerProfile(customerId: string, updates: Partial<Customer>) {
+    this.store.dispatch(CustomerActions.updateCustomerProfile({ customerId, updates }));
   }
 
 }

@@ -47,3 +47,18 @@ export const createCustomerFailure = createAction(
   '[Customer] Create Customer Failure',
   props<{ error: any }>()
 );
+
+export const updateCustomerProfile = createAction(
+  '[Customer] Update Customer Profile',
+  props<{ customerId: string; updates: Partial<Customer> }>()
+);
+
+export const updateCustomerProfileSuccess = createAction(
+  '[Customer] Update Customer Profile Success',
+  props<{ customer: Customer }>()
+);
+
+export const updateCustomerProfileFailure = createAction(
+  '[Customer] Update Customer Profile Failure',
+  props<{ error: any }>()
+);

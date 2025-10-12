@@ -41,7 +41,7 @@
   <div *ngIf="!isLoading && !error && items.length > 0" class="items-grid">
     <mat-card *ngFor="let item of items" class="item-card">
       <!-- Product Image - clickable to go to details -->
-      <div class="image-container" [routerLink]="['/item-details', item.id]" style="cursor: pointer;">
+      <div class="image-container" (click)="navigateToDetails(item.id)" style="cursor: pointer;">
         <img
           *ngIf="item.imageUrl"
           [src]="item.imageUrl"
@@ -53,7 +53,7 @@
         </div>
 
         <!-- Quick Add Button Overlay -->
-        <div class="quick-add-overlay" (click)="$event.stopPropagation()">
+        <div class="quick-add-overlay">
           <button
             mat-mini-fab
             color="primary"

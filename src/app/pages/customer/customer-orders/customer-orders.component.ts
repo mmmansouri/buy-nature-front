@@ -39,7 +39,7 @@ export class CustomerOrdersComponent {
   protected customerService = inject(CustomerService);
   protected userAuth = inject(UserAuthService);
 
-  // Use the customer ID from auth service
+  // Use the customer ID from auth service - sorted by most recent
   orders = this.customerService.getCustomerOrdersSignal(this.userAuth.customerId()!);
   loading = this.customerService.getCustomerLoadingSignal();
   error = this.customerService.getCustomerErrorSignal();
@@ -95,6 +95,47 @@ export class CustomerOrdersComponent {
   }
 
   /**
+   * Format date with time for order display
+   * Shows date and time in compact format
+   */
+  formatDateWithTime(dateString: string): string {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  }
+
+  /**
+   * Format only the date part for pretty display
+   * Example: "Jan 15, 2025"
+   */
+  formatDatePart(dateString: string): string {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(date);
+  }
+
+  /**
+   * Format only the time part for pretty display
+   * Example: "2:30 PM"
+   */
+  formatTimePart(dateString: string): string {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    }).format(date);
+  }
+
+  /**
    * Format order ID to readable format
    * Takes last 8 characters and formats them nicely
    */
@@ -140,5 +181,47 @@ export class CustomerOrdersComponent {
       style: 'currency',
       currency: 'USD'
     }).format(total);
+  }
+
+  /**
+   * Get the most expensive item from an order
+   * Used to display as the main highlighted item
+   */
+  getMostExpensiveItem(order: Order) {
+    if (!order.orderItems || order.orderItems.length === 0) {
+      return null;
+    }
+
+    return order.orderItems.reduce((max, item) =>
+      item.item.price > max.item.price ? item : max
+    );
+  }
+
+  /**
+   * Get remaining items (excluding the most expensive)
+   */
+  getRemainingItems(order: Order) {
+    if (!order.orderItems || order.orderItems.length <= 1) {
+      return [];
+    }
+
+    const mostExpensive = this.getMostExpensiveItem(order);
+    return order.orderItems.filter(item => item !== mostExpensive);
+  }
+
+  /**
+   * Get sorted orders by most recent date
+   */
+  getSortedOrders() {
+    const ordersList = this.orders();
+    if (!ordersList || ordersList.length === 0) {
+      return [];
+    }
+
+    return [...ordersList].sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0).getTime();
+      const dateB = new Date(b.createdAt || 0).getTime();
+      return dateB - dateA; // Most recent first
+    });
   }
 }

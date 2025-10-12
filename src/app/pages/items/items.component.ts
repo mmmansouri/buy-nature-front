@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list'
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {Item} from "../../models/item.model";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import { ItemsService } from '../../services/items.service';
@@ -39,7 +39,8 @@ export class ItemsComponent implements OnInit {
   constructor(
     private itemsService: ItemsService,
     private cartService: CartService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -68,6 +69,8 @@ export class ItemsComponent implements OnInit {
 
   addItem(item: Item, event: Event): void {
     event.stopPropagation(); // Prevent navigation to details
+    event.preventDefault(); // Prevent any default behavior
+
     this.itemsService.getItemById(item.id).subscribe({
       next: (item) => {
         if (item) {
@@ -86,6 +89,13 @@ export class ItemsComponent implements OnInit {
         console.error('Error fetching item:', err);
       }
     });
+  }
+
+  /**
+   * Navigate to item details page
+   */
+  navigateToDetails(itemId: string): void {
+    this.router.navigate(['/item-details', itemId]);
   }
 
   /**

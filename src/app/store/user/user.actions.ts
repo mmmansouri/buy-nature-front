@@ -72,7 +72,7 @@ export const updateUserEmailFailure = createAction(
 // Update Password
 export const updateUserPassword = createAction(
   '[User] Update User Password',
-  props<{ userId: string; newPassword: string }>()
+  props<{ userId: string; currentPassword: string; newPassword: string }>()
 );
 export const updateUserPasswordSuccess = createAction(
   '[User] Update User Password Success'

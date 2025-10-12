@@ -31,7 +31,7 @@
     </div>
   } @else if (orders() && orders().length) {
     <div class="orders-list">
-      @for (order of orders(); track order.id) {
+      @for (order of getSortedOrders(); track order.id) {
         <mat-card class="order-card" [routerLink]="['/orders', order.id]">
           <!-- Card Header with Order Info -->
           <div class="order-header">
@@ -39,7 +39,16 @@
               <mat-icon>receipt_long</mat-icon>
               <div>
                 <span class="order-id">{{ formatOrderId(order.id!) }}</span>
-                <span class="order-date">{{ order.createdAt ? formatShortDate(order.createdAt) : 'Date unavailable' }}</span>
+                @if (order.createdAt) {
+                  <div class="order-datetime">
+                    <mat-icon class="datetime-icon">schedule</mat-icon>
+                    <span class="date-part">{{ formatDatePart(order.createdAt) }}</span>
+                    <span class="time-separator">•</span>
+                    <span class="time-part">{{ formatTimePart(order.createdAt) }}</span>
+                  </div>
+                } @else {
+                  <span class="order-date">Date unavailable</span>
+                }
               </div>
             </div>
             <mat-chip [class]="getOrderStatusClass(order.status)" class="status-chip">
@@ -49,34 +58,60 @@
 
           <mat-divider></mat-divider>
 
-          <!-- Items Preview with Images -->
+          <!-- Items Preview with Consistent Layout -->
           <div class="order-content">
-            <div class="items-preview">
-              @for (item of order.orderItems.slice(0, 3); track item.item.id) {
-                <div class="item-card">
-                  <div class="item-image">
-                    @if (item.item.imageUrl) {
-                      <img [src]="item.item.imageUrl" [alt]="item.item.name" loading="lazy">
-                    } @else {
-                      <div class="image-placeholder">
-                        <mat-icon>image</mat-icon>
+            <!-- Main Item (Most Expensive) -->
+            @if (getMostExpensiveItem(order); as mainItem) {
+              <div class="main-item">
+                <div class="main-item-image">
+                  @if (mainItem.item.imageUrl) {
+                    <img [src]="mainItem.item.imageUrl" [alt]="mainItem.item.name" loading="lazy">
+                  } @else {
+                    <div class="image-placeholder">
+                      <mat-icon>image</mat-icon>
+                    </div>
+                  }
+                  <span class="item-quantity">×{{ mainItem.quantity }}</span>
+                </div>
+                <div class="main-item-details">
+                  <span class="item-name">{{ mainItem.item.name }}</span>
+                  <span class="item-price">{{ mainItem.item.price | currency }}</span>
+                </div>
+              </div>
+            }
+
+            <!-- Additional Items Grid -->
+            @if (getRemainingItems(order).length > 0) {
+              <div class="additional-items">
+                <div class="items-header">
+                  <mat-icon>inventory_2</mat-icon>
+                  <span>{{ getRemainingItems(order).length }} more {{ getRemainingItems(order).length === 1 ? 'item' : 'items' }}</span>
+                </div>
+                <div class="items-grid">
+                  @for (item of getRemainingItems(order).slice(0, 3); track item.item.id) {
+                    <div class="small-item">
+                      <div class="small-item-image">
+                        @if (item.item.imageUrl) {
+                          <img [src]="item.item.imageUrl" [alt]="item.item.name" loading="lazy">
+                        } @else {
+                          <div class="image-placeholder">
+                            <mat-icon>image</mat-icon>
+                          </div>
+                        }
+                        <span class="item-quantity">×{{ item.quantity }}</span>
                       </div>
-                    }
-                    <span class="item-quantity">×{{ item.quantity }}</span>
-                  </div>
-                  <div class="item-details">
-                    <span class="item-name">{{ item.item.name }}</span>
-                    <span class="item-price">{{ item.item.price | currency }}</span>
-                  </div>
+                      <span class="small-item-price">{{ item.item.price | currency }}</span>
+                    </div>
+                  }
+                  @if (getRemainingItems(order).length > 3) {
+                    <div class="more-items-badge">
+                      <mat-icon>add</mat-icon>
+                      <span>+{{ getRemainingItems(order).length - 3 }}</span>
+                    </div>
+                  }
                 </div>
-              }
-              @if (order.orderItems.length > 3) {
-                <div class="more-items-badge">
-                  <mat-icon>add</mat-icon>
-                  <span>{{ order.orderItems.length - 3 }} more</span>
-                </div>
-              }
-            </div>
+              </div>
+            }
 
             <!-- Order Summary -->
             <div class="order-summary">

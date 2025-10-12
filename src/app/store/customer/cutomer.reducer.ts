@@ -57,5 +57,24 @@ export const customerReducer = createReducer(
     loading: false,
     error,
     customerId: null
+  })),
+  on(CustomerActions.updateCustomerProfile, (state) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+  on(CustomerActions.updateCustomerProfileSuccess, (state, { customer }) => ({
+    ...state,
+    customer: {
+      ...customer,
+      orders: state.customer.orders || []
+    },
+    loading: false,
+    error: null
+  })),
+  on(CustomerActions.updateCustomerProfileFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
   }))
 );

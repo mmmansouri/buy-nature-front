@@ -1,0 +1,135 @@
+<div class="bio-dialog">
+  <h2 mat-dialog-title class="dialog-title">
+    <mat-icon class="title-icon">person</mat-icon>
+    <span>Edit Profile</span>
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="profileForm" class="profile-form">
+      <!-- Personal Information Section Header -->
+      <div class="section-header">
+        <mat-icon>person</mat-icon>
+        <h3>Personal Information</h3>
+      </div>
+
+      <!-- First Name -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>First Name</mat-label>
+        <mat-icon matPrefix>badge</mat-icon>
+        <input matInput formControlName="firstName" required>
+        @if (profileForm.get('firstName')?.hasError('required')) {
+          <mat-error>First name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Last Name</mat-label>
+        <mat-icon matPrefix>badge</mat-icon>
+        <input matInput formControlName="lastName" required>
+        @if (profileForm.get('lastName')?.hasError('required')) {
+          <mat-error>Last name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Phone Number -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Phone Number</mat-label>
+        <mat-icon matPrefix>call</mat-icon>
+        <input matInput formControlName="phoneNumber" type="tel" required>
+        @if (profileForm.get('phoneNumber')?.hasError('required')) {
+          <mat-error>Phone number is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Address Section Header -->
+      <div class="section-header">
+        <mat-icon>location_city</mat-icon>
+        <h3>Delivery Address</h3>
+      </div>
+
+      <!-- Street Number -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Street Number</mat-label>
+        <mat-icon matPrefix>tag</mat-icon>
+        <input matInput formControlName="streetNumber" required>
+        @if (profileForm.get('streetNumber')?.hasError('required')) {
+          <mat-error>Street number is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Street -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Street</mat-label>
+        <mat-icon matPrefix>signpost</mat-icon>
+        <input matInput formControlName="street" required>
+        @if (profileForm.get('street')?.hasError('required')) {
+          <mat-error>Street is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- City -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>City</mat-label>
+        <mat-icon matPrefix>location_city</mat-icon>
+        <input matInput formControlName="city" required>
+        @if (profileForm.get('city')?.hasError('required')) {
+          <mat-error>City is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Region -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Region / State</mat-label>
+        <mat-icon matPrefix>map</mat-icon>
+        <input matInput formControlName="region" required>
+        @if (profileForm.get('region')?.hasError('required')) {
+          <mat-error>Region is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Postal Code -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Postal Code</mat-label>
+        <mat-icon matPrefix>markunread_mailbox</mat-icon>
+        <input matInput formControlName="postalCode" required>
+        @if (profileForm.get('postalCode')?.hasError('required')) {
+          <mat-error>Postal code is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Country -->
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Country</mat-label>
+        <mat-icon matPrefix>public</mat-icon>
+        <input matInput formControlName="country" required>
+        @if (profileForm.get('country')?.hasError('required')) {
+          <mat-error>Country is required</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Error Display -->
+      @if (error()) {
+        <div class="error-message">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ error() }}</span>
+        </div>
+      }
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button (click)="onCancel()" [disabled]="loading()">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="profileForm.invalid || loading()">
+      @if (loading()) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <mat-icon>check_circle</mat-icon>
+      }
+      Save Changes
+    </button>
+  </mat-dialog-actions>
+</div>

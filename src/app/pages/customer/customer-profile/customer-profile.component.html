@@ -56,10 +56,10 @@
           <mat-card-header>
             <div class="card-header">
               <div class="header-left">
-                <mat-icon class="card-icon">spa</mat-icon>
+                <mat-icon class="card-icon">person</mat-icon>
                 <mat-card-title>Personal Information</mat-card-title>
               </div>
-              <button mat-icon-button>
+              <button mat-icon-button (click)="openPersonalInfoDialog()" aria-label="Edit personal information">
                 <mat-icon>edit</mat-icon>
               </button>
             </div>
@@ -73,14 +73,6 @@
                   <span>Full Name</span>
                 </div>
                 <div class="info-value">{{ customer().firstName }} {{ customer().lastName }}</div>
-              </div>
-
-              <div class="info-item">
-                <div class="info-label">
-                  <mat-icon>alternate_email</mat-icon>
-                  <span>Email Address</span>
-                </div>
-                <div class="info-value">{{ customer().email }}</div>
               </div>
 
               <div class="info-item">
@@ -102,6 +94,46 @@
           </mat-card-content>
         </mat-card>
 
+        <!-- Login & Security Card -->
+        <mat-card class="info-card security-card">
+          <mat-card-header>
+            <div class="card-header">
+              <div class="header-left">
+                <mat-icon class="card-icon">lock</mat-icon>
+                <mat-card-title>Login & Security</mat-card-title>
+              </div>
+              <button mat-icon-button (click)="openCredentialsDialog()" aria-label="Edit credentials">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="info-label">
+                  <mat-icon>alternate_email</mat-icon>
+                  <span>Email / Login</span>
+                </div>
+                <div class="info-value">{{ customer().email }}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <mat-icon>vpn_key</mat-icon>
+                  <span>Password</span>
+                </div>
+                <div class="info-value password-masked">••••••••</div>
+              </div>
+            </div>
+
+            <div class="security-note">
+              <mat-icon>info</mat-icon>
+              <span>Your email is used to sign in to your account</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
         <!-- Address Information Card -->
         <mat-card class="info-card">
           <mat-card-header>
@@ -110,7 +142,7 @@
                 <mat-icon class="card-icon">location_city</mat-icon>
                 <mat-card-title>Default Address</mat-card-title>
               </div>
-              <button mat-icon-button>
+              <button mat-icon-button (click)="openEditDialog()" aria-label="Edit address">
                 <mat-icon>edit</mat-icon>
               </button>
             </div>
@@ -144,60 +176,24 @@
           </mat-card-content>
         </mat-card>
 
-        <!-- Account Actions Card -->
-        <mat-card class="info-card actions-card">
-          <mat-card-header>
-            <div class="card-header">
-              <div class="header-left">
-                <mat-icon class="card-icon">tune</mat-icon>
-                <mat-card-title>Account Settings</mat-card-title>
-              </div>
-            </div>
-          </mat-card-header>
-
+        <!-- Bio Nature Card -->
+        <mat-card class="info-card bio-nature-card">
           <mat-card-content>
-            <div class="action-list">
-              <button mat-button class="action-item">
-                <mat-icon>lock_outline</mat-icon>
-                <div class="action-text">
-                  <span class="action-title">Change Password</span>
-                  <span class="action-subtitle">Update your account security</span>
-                </div>
-                <mat-icon class="action-arrow">chevron_right</mat-icon>
-              </button>
-
-              <mat-divider></mat-divider>
-
-              <button mat-button class="action-item">
-                <mat-icon>notifications_none</mat-icon>
-                <div class="action-text">
-                  <span class="action-title">Notifications</span>
-                  <span class="action-subtitle">Manage email preferences</span>
-                </div>
-                <mat-icon class="action-arrow">chevron_right</mat-icon>
-              </button>
-
-              <mat-divider></mat-divider>
-
-              <button mat-button class="action-item">
-                <mat-icon>shield</mat-icon>
-                <div class="action-text">
-                  <span class="action-title">Privacy & Security</span>
-                  <span class="action-subtitle">Control your data</span>
-                </div>
-                <mat-icon class="action-arrow">chevron_right</mat-icon>
-              </button>
-
-              <mat-divider></mat-divider>
-
-              <button mat-button class="action-item danger">
-                <mat-icon>exit_to_app</mat-icon>
-                <div class="action-text">
-                  <span class="action-title">Sign Out</span>
-                  <span class="action-subtitle">Log out of your account</span>
-                </div>
-                <mat-icon class="action-arrow">chevron_right</mat-icon>
-              </button>
+            <div class="bio-nature-content">
+              <div class="nature-icon-circle">
+                <mat-icon class="nature-icon">eco</mat-icon>
+              </div>
+              <h3 class="bio-title">Buy Nature</h3>
+              <p class="bio-tagline">Embracing Natural Living</p>
+              <div class="nature-decorations">
+                <mat-icon class="leaf-icon">local_florist</mat-icon>
+                <mat-icon class="leaf-icon">spa</mat-icon>
+                <mat-icon class="leaf-icon">yard</mat-icon>
+              </div>
+              <p class="bio-message">
+                Thank you for being part of our sustainable community.
+                Together, we're making the world a greener place.
+              </p>
             </div>
           </mat-card-content>
         </mat-card>

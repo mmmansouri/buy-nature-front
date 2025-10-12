@@ -47,40 +47,14 @@
           <span class="nav-label" *ngIf="!isSidenavOpen || isMobile">Products</span>
         </span>
       </a>
-
-      <!-- Profile -->
-      <a mat-list-item
-         routerLink="/customer/profile"
-         routerLinkActive="active"
-         class="nav-item">
-        <span class="entry">
-          <div class="icon-wrapper">
-            <mat-icon>person_outline</mat-icon>
-          </div>
-          <span class="nav-label" *ngIf="!isSidenavOpen || isMobile">Profile</span>
-        </span>
-      </a>
-
-      <!-- Orders -->
-      <a mat-list-item
-         routerLink="/customer/orders"
-         routerLinkActive="active"
-         class="nav-item">
-        <span class="entry">
-          <div class="icon-wrapper">
-            <mat-icon>receipt_long</mat-icon>
-          </div>
-          <span class="nav-label" *ngIf="!isSidenavOpen || isMobile">Orders</span>
-        </span>
-      </a>
     </mat-nav-list>
 
-    <!-- Sidenav Footer (only in expanded mode) -->
-    <div class="sidenav-footer" *ngIf="!isSidenavOpen || isMobile">
+    <!-- Sidenav Footer - Always Visible -->
+    <div class="sidenav-footer">
       <div class="footer-decoration">
-        <mat-icon>local_florist</mat-icon>
+        <mat-icon>eco</mat-icon>
       </div>
-      <p>Embrace Nature</p>
+      <p *ngIf="!isSidenavOpen || isMobile">Embrace Nature</p>
     </div>
   </mat-sidenav>
 
