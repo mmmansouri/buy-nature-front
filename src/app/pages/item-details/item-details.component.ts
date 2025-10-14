@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Item } from '../../models/item.model';
@@ -39,6 +40,7 @@ import { NotificationService } from '../../services/notification.service';
     MatChipsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatTabsModule,
     FormsModule
   ],
   templateUrl: './item-details.component.html',

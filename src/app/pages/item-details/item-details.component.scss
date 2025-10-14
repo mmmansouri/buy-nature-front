@@ -97,16 +97,15 @@
     z-index: 1;
     padding: 0 32px 32px;
 
-    // Desktop Layout: Simple 2-column flex with full height right column
+    // Desktop Layout: 70/30 split with full page width
     .desktop-layout {
       display: flex;
       gap: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
       align-items: stretch;
+      width: 100%;
 
       .left-column {
-        flex: 1;
+        flex: 0 0 70%;
         min-width: 0;
         display: flex;
         flex-direction: column;
@@ -114,7 +113,7 @@
       }
 
       .right-column {
-        flex: 1;
+        flex: 0 0 calc(30% - 24px);
         min-width: 0;
         display: flex;
         flex-direction: column;
@@ -280,8 +279,79 @@
   }
 
   mat-card-content {
-    padding: 40px;
+    padding: 0 !important;
+  }
 
+  // Tab styling for bio theme
+  ::ng-deep .product-tabs {
+    .mat-mdc-tab-labels {
+      background: linear-gradient(135deg,
+        rgba(139, 195, 74, 0.05) 0%,
+        rgba(174, 213, 129, 0.03) 100%);
+      border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+    }
+
+    .mat-mdc-tab {
+      min-width: 120px;
+      height: 60px;
+
+      &:hover {
+        background: rgba(139, 195, 74, 0.08);
+      }
+
+      .mdc-tab__text-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: #666;
+        transition: all 0.3s ease;
+
+        .tab-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      &.mdc-tab--active {
+        .mdc-tab__text-label {
+          color: var(--bio-forest-green);
+
+          .tab-icon {
+            color: var(--bio-honey-gold);
+          }
+        }
+      }
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      padding: 32px 40px 40px 40px;
+    }
+
+    .mat-mdc-tab-body-content {
+      overflow: visible !important;
+    }
+
+    .mdc-tab-indicator__content--underline {
+      border-color: var(--bio-forest-green) !important;
+      border-width: 3px !important;
+    }
+  }
+
+  .tab-content {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .section-title {
@@ -370,6 +440,110 @@
       }
     }
   }
+
+  // Characteristics tab styles
+  .characteristics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    .characteristic-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 20px;
+      background: linear-gradient(135deg,
+        rgba(139, 195, 74, 0.05) 0%,
+        rgba(174, 213, 129, 0.03) 100%);
+      border-radius: 12px;
+      border: 2px solid rgba(139, 195, 74, 0.15);
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: var(--bio-forest-green);
+        background: rgba(139, 195, 74, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 195, 74, 0.2);
+      }
+
+      .char-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--bio-honey-gold);
+      }
+
+      .char-value {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--bio-forest-green);
+      }
+    }
+  }
+
+  // Certifications tab styles
+  .certifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .certification-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      background: linear-gradient(135deg,
+        rgba(139, 195, 74, 0.05) 0%,
+        rgba(174, 213, 129, 0.03) 100%);
+      border-radius: 12px;
+      border: 2px solid rgba(139, 195, 74, 0.15);
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: var(--bio-forest-green);
+        background: rgba(139, 195, 74, 0.1);
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(139, 195, 74, 0.2);
+      }
+
+      .cert-icon {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(139, 195, 74, 0.2);
+
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+          color: var(--bio-forest-green);
+        }
+      }
+
+      .cert-details {
+        flex: 1;
+
+        h4 {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--bio-forest-green);
+        }
+
+        p {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1.6;
+          color: #666;
+        }
+      }
+    }
+  }
 }
 
 // ========================================
@@ -423,19 +597,17 @@
 
     mat-chip {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       padding: 8px 16px;
       height: auto;
 
       &.in-stock {
-        background: linear-gradient(135deg,
-          rgba(139, 195, 74, 0.15) 0%,
-          rgba(174, 213, 129, 0.1) 100%);
-        color: var(--bio-forest-green);
+        background: var(--bio-forest-green) !important;
+        color: white !important;
         border: 2px solid var(--bio-forest-green);
 
         mat-icon {
-          color: var(--bio-forest-green);
+          color: white !important;
         }
       }
 
