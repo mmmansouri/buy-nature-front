@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { UserAuthService } from '../../services/user-auth.service';
@@ -14,7 +14,6 @@ import { UserAuthService } from '../../services/user-auth.service';
     CommonModule,
     MatIcon,
     MatIconButton,
-    MatButton,
     RouterLink,
     ClickOutsideDirective
   ],

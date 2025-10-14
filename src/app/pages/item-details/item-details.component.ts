@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,19 +10,21 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Item } from '../../models/item.model';
 import { ItemsService } from '../../services/items.service';
 import { CartService } from '../../services/cart.service';
 import { NotificationService } from '../../services/notification.service';
 
 /**
- * Item Details Component - Modern Angular 19+ Implementation
+ * Item Details Component - Responsive Layout Implementation
  *
  * Features:
  * - Signal-based state management
- * - Modern product detail layout
+ * - Responsive grid layout (desktop/tablet vs mobile)
+ * - Image gallery with navigation
  * - Quantity selector and cart integration
- * - Responsive image gallery
+ * - Bio-themed design
  */
 @Component({
   selector: 'app-item-details',
@@ -48,6 +50,13 @@ export class ItemDetailsComponent implements OnInit {
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
 
+  // Responsive breakpoint detection
+  isMobile = signal<boolean>(false);
+
+  // Image gallery state
+  images = signal<string[]>([]);
+  selectedImageIndex = signal<number>(0);
+
   // Quantity selector
   quantity: number = 1;
   quantityOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -57,8 +66,17 @@ export class ItemDetailsComponent implements OnInit {
     private router: Router,
     private itemService: ItemsService,
     private cartService: CartService,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    // Observe breakpoint changes for responsive layout
+    this.breakpointObserver.observe([
+      Breakpoints.HandsetPortrait,
+      Breakpoints.HandsetLandscape
+    ]).subscribe(result => {
+      this.isMobile.set(result.matches);
+    });
+  }
 
   ngOnInit() {
     const itemId = this.route.snapshot.paramMap.get('id');
@@ -79,6 +97,9 @@ export class ItemDetailsComponent implements OnInit {
       next: (item) => {
         if (item) {
           this.item.set(item);
+          // Initialize image gallery (for now using single image, expandable for multiple)
+          this.images.set(item.imageUrl ? [item.imageUrl] : []);
+          this.selectedImageIndex.set(0);
         } else {
           this.error.set('Item not found');
         }
@@ -138,5 +159,53 @@ export class ItemDetailsComponent implements OnInit {
    */
   isInStock(): boolean {
     return true; // Add real stock logic when available
+  }
+
+  /**
+   * Get currently selected image URL
+   */
+  getSelectedImage(): string {
+    const imgs = this.images();
+    const index = this.selectedImageIndex();
+    return imgs.length > 0 ? imgs[index] : '';
+  }
+
+  /**
+   * Navigate to previous image
+   */
+  previousImage(): void {
+    const imgs = this.images();
+    if (imgs.length === 0) return;
+
+    const currentIndex = this.selectedImageIndex();
+    const newIndex = currentIndex === 0 ? imgs.length - 1 : currentIndex - 1;
+    this.selectedImageIndex.set(newIndex);
+  }
+
+  /**
+   * Navigate to next image
+   */
+  nextImage(): void {
+    const imgs = this.images();
+    if (imgs.length === 0) return;
+
+    const currentIndex = this.selectedImageIndex();
+    const newIndex = currentIndex === imgs.length - 1 ? 0 : currentIndex + 1;
+    this.selectedImageIndex.set(newIndex);
+  }
+
+  /**
+   * Select image by index
+   */
+  selectImage(index: number): void {
+    this.selectedImageIndex.set(index);
+  }
+
+  /**
+   * Add to cart and navigate to checkout
+   */
+  buyNow(): void {
+    this.addToCart();
+    this.router.navigate(['/checkout']);
   }
 }

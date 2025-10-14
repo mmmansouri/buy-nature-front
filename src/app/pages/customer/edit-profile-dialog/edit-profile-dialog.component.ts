@@ -4,8 +4,7 @@ import {
   MatDialogRef,
   MatDialogTitle,
   MatDialogContent,
-  MatDialogActions,
-  MatDialogClose
+  MatDialogActions
 } from '@angular/material/dialog';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -26,7 +25,6 @@ export interface EditProfileDialogData {
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatDialogClose,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,

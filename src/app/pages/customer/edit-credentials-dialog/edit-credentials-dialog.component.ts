@@ -3,9 +3,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose
+  MatDialogContent
 } from '@angular/material/dialog';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -28,8 +26,6 @@ export interface EditCredentialsDialogData {
   imports: [
     MatDialogTitle,
     MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
