@@ -408,35 +408,125 @@
             </mat-card-content>
           </mat-card>
 
-          <!-- Description Section -->
+          <!-- Description Card with Tabs (Mobile) -->
           <mat-card class="description-card">
             <mat-card-content>
-              <h3 class="section-title">
-                <mat-icon>description</mat-icon>
-                Product Description
-              </h3>
-              <p class="description-text">{{ item()!.description }}</p>
+              <mat-tab-group class="product-tabs" animationDuration="300ms">
 
-              <mat-divider class="section-divider"></mat-divider>
+                <!-- Description Tab -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">description</mat-icon>
+                    <span class="tab-label">Description</span>
+                  </ng-template>
+                  <div class="tab-content">
+                    <p class="description-text">{{ item()!.description }}</p>
 
-              <div class="features-section">
-                <div class="feature-item">
-                  <mat-icon>local_shipping</mat-icon>
-                  <span>Free Shipping</span>
-                </div>
-                <div class="feature-item">
-                  <mat-icon>eco</mat-icon>
-                  <span>100% Organic</span>
-                </div>
-                <div class="feature-item">
-                  <mat-icon>autorenew</mat-icon>
-                  <span>Easy Returns</span>
-                </div>
-                <div class="feature-item">
-                  <mat-icon>verified_user</mat-icon>
-                  <span>Secure Payment</span>
-                </div>
-              </div>
+                    <mat-divider class="section-divider"></mat-divider>
+
+                    <div class="additional-info">
+                      <h4 class="info-title">
+                        <mat-icon>info</mat-icon>
+                        Why Choose This Product?
+                      </h4>
+                      <ul class="info-list">
+                        <li><mat-icon>check</mat-icon>Sustainably sourced ingredients</li>
+                        <li><mat-icon>check</mat-icon>No harmful chemicals or additives</li>
+                        <li><mat-icon>check</mat-icon>Environmentally friendly packaging</li>
+                        <li><mat-icon>check</mat-icon>Supports local organic farmers</li>
+                      </ul>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <!-- Characteristics Tab -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">tune</mat-icon>
+                    <span class="tab-label">Characteristics</span>
+                  </ng-template>
+                  <div class="tab-content">
+                    <div class="characteristics-grid">
+                      <div class="characteristic-item">
+                        <span class="char-label">Weight</span>
+                        <span class="char-value">500g</span>
+                      </div>
+                      <div class="characteristic-item">
+                        <span class="char-label">Origin</span>
+                        <span class="char-value">Local Farms</span>
+                      </div>
+                      <div class="characteristic-item">
+                        <span class="char-label">Shelf Life</span>
+                        <span class="char-value">12 months</span>
+                      </div>
+                      <div class="characteristic-item">
+                        <span class="char-label">Storage</span>
+                        <span class="char-value">Cool, dry place</span>
+                      </div>
+                      <div class="characteristic-item">
+                        <span class="char-label">Category</span>
+                        <span class="char-value">Organic Food</span>
+                      </div>
+                      <div class="characteristic-item">
+                        <span class="char-label">Brand</span>
+                        <span class="char-value">Buy Nature</span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+                <!-- Certifications Tab -->
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon class="tab-icon">verified</mat-icon>
+                    <span class="tab-label">Certifications</span>
+                  </ng-template>
+                  <div class="tab-content">
+                    <div class="certifications-list">
+                      <div class="certification-item">
+                        <div class="cert-icon">
+                          <mat-icon>eco</mat-icon>
+                        </div>
+                        <div class="cert-details">
+                          <h4>USDA Organic</h4>
+                          <p>Certified organic by the United States Department of Agriculture</p>
+                        </div>
+                      </div>
+
+                      <div class="certification-item">
+                        <div class="cert-icon">
+                          <mat-icon>agriculture</mat-icon>
+                        </div>
+                        <div class="cert-details">
+                          <h4>Non-GMO Project Verified</h4>
+                          <p>Products made without genetically modified organisms</p>
+                        </div>
+                      </div>
+
+                      <div class="certification-item">
+                        <div class="cert-icon">
+                          <mat-icon>nature_people</mat-icon>
+                        </div>
+                        <div class="cert-details">
+                          <h4>Fair Trade Certified</h4>
+                          <p>Supports fair wages and sustainable farming practices</p>
+                        </div>
+                      </div>
+
+                      <div class="certification-item">
+                        <div class="cert-icon">
+                          <mat-icon>recycling</mat-icon>
+                        </div>
+                        <div class="cert-details">
+                          <h4>100% Recyclable Packaging</h4>
+                          <p>Environmentally friendly and fully recyclable materials</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-tab>
+
+              </mat-tab-group>
             </mat-card-content>
           </mat-card>
         </div>
