@@ -12,6 +12,7 @@ import {Item} from "../../models/item.model";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import { OrderService } from '../../services/order.service';
 import { StepperService } from '../../services/stepper.service';
+import { CartItemCardComponent } from '../../components/cart-item-card/cart-item-card';
 
 @Component({
     selector: 'app-cart-mini',
@@ -25,7 +26,8 @@ import { StepperService } from '../../services/stepper.service';
         RouterLink,
         AsyncPipe,
         MatIconButton,
-        MatButton
+        MatButton,
+        CartItemCardComponent
     ],
     templateUrl: './cart-mini.component.html',
     styleUrl: './cart-mini.component.scss',
@@ -63,6 +65,10 @@ export class CartMiniComponent implements OnInit {
   ngOnInit() {
   }
 
+  trackByItemId(index: number, cartItem: OrderItem): string {
+    return cartItem.item.id;
+  }
+
   closeCart() {
     this.cartOpen = false;
     this.cartOpenChange.emit(this.cartOpen);
@@ -75,16 +81,28 @@ export class CartMiniComponent implements OnInit {
     this.stepperService.setStep(2);
   }
 
-  increaseQuantity(item: Item): void {
-    this.cartService.addToCart({ item, quantity:1});
-    this.orderService.updateOrderItem({ item, quantity:1});
-    this.stepperService.setStep(2);
+  onQuantityIncrease(itemId: string): void {
+    // Get the cart item from the observable
+    this.cartItems$.subscribe(cartItems => {
+      const cartItem = cartItems.find(ci => ci.item.id === itemId);
+      if (cartItem) {
+        this.cartService.addToCart({ item: cartItem.item, quantity: 1});
+        this.orderService.updateOrderItem({ item: cartItem.item, quantity: 1});
+        this.stepperService.setStep(2);
+      }
+    }).unsubscribe();
   }
 
-  decreaseQuantity(item: Item): void {
-    this.cartService.addToCart({ item, quantity:-1});
-    this.orderService.updateOrderItem({ item, quantity:-1});
-    this.stepperService.setStep(2);
+  onQuantityDecrease(itemId: string): void {
+    // Get the cart item from the observable
+    this.cartItems$.subscribe(cartItems => {
+      const cartItem = cartItems.find(ci => ci.item.id === itemId);
+      if (cartItem) {
+        this.cartService.addToCart({ item: cartItem.item, quantity: -1});
+        this.orderService.updateOrderItem({ item: cartItem.item, quantity: -1});
+        this.stepperService.setStep(2);
+      }
+    }).unsubscribe();
   }
 
 }

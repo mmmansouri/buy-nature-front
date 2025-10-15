@@ -3,22 +3,19 @@ import {OrderItem} from "../../../models/order.item.model";
 import {CartService} from "../../../services/cart.service";
 import {AsyncPipe, CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
-import {MatIcon} from "@angular/material/icon";
 import {Observable} from "rxjs";
-import {MatIconButton} from "@angular/material/button";
-import {Item} from "../../../models/item.model";
 import { OrderService } from '../../../services/order.service';
+import { CartItemCardComponent } from '../../../components/cart-item-card/cart-item-card';
 
 @Component({
     selector: 'app-cart',
     imports: [
         CurrencyPipe,
         FormsModule,
-        MatIcon,
         NgForOf,
         NgIf,
-        MatIconButton,
-        AsyncPipe
+        AsyncPipe,
+        CartItemCardComponent
     ],
     templateUrl: './cart.component.html',
     styleUrl: './cart.component.scss'
@@ -57,19 +54,35 @@ export class CartComponent implements OnInit {
     });
   }
 
+  trackByItemId(index: number, cartItem: OrderItem): string {
+    return cartItem.item.id;
+  }
+
   // Delegate actions to the CartService
   removeItem(itemId: string): void {
     this.cartService.removeFromCart(itemId);
   }
 
-  increaseQuantity(item: Item): void {
-    this.cartService.addToCart({ item, quantity:1});
-    this.orderService.updateOrderItem({ item, quantity:1});
+  onQuantityIncrease(itemId: string): void {
+    // Get the cart item from the observable
+    this.cartItems$.subscribe(cartItems => {
+      const cartItem = cartItems.find(ci => ci.item.id === itemId);
+      if (cartItem) {
+        this.cartService.addToCart({ item: cartItem.item, quantity: 1});
+        this.orderService.updateOrderItem({ item: cartItem.item, quantity: 1});
+      }
+    }).unsubscribe();
   }
 
-  decreaseQuantity(item: Item): void {
-    this.cartService.addToCart({ item, quantity:-1});
-    this.orderService.updateOrderItem({ item, quantity:-1});
+  onQuantityDecrease(itemId: string): void {
+    // Get the cart item from the observable
+    this.cartItems$.subscribe(cartItems => {
+      const cartItem = cartItems.find(ci => ci.item.id === itemId);
+      if (cartItem) {
+        this.cartService.addToCart({ item: cartItem.item, quantity: -1});
+        this.orderService.updateOrderItem({ item: cartItem.item, quantity: -1});
+      }
+    }).unsubscribe();
   }
 
 }

@@ -6,28 +6,16 @@
 
   <!-- Show this when there are items in the cart -->
   <div *ngIf="(cartItems$ | async)?.length!  > 0">
-    <div *ngFor="let cartItem of (cartItems$ | async); let i = index" class="cart-item">
-      <div class="item-image">
-        <img [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
-      </div>
-      <div class="item-details">
-        <span class="item-name">{{ cartItem.item.name }}</span>
-      </div>
-      <button mat-icon-button (click)="removeItem(cartItem.item.id)" aria-label="Remove item" class="delete-button">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <div class="item-actions">
-        <button mat-icon-button (click)="decreaseQuantity(cartItem.item)" aria-label="Decrease quantity" class="quantity-button">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <input class="quantity-input" [(ngModel)]="cartItem.quantity" type="number" min="1" readonly>
-        <button mat-icon-button (click)="increaseQuantity(cartItem.item)" aria-label="Increase quantity" class="quantity-button-increase">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <div class="item-price">
-        {{ cartItem.item.price * cartItem.quantity | currency }}
-      </div>
+    <div class="cart-items-wrapper">
+      <app-cart-item-card
+        *ngFor="let cartItem of (cartItems$ | async); trackBy: trackByItemId"
+        [cartItem]="cartItem"
+        [compact]="false"
+        [showTotalPrice]="true"
+        (quantityIncrease)="onQuantityIncrease($event)"
+        (quantityDecrease)="onQuantityDecrease($event)"
+        (itemRemove)="removeItem($event)">
+      </app-cart-item-card>
     </div>
 
     <!-- Delivery and checkout button on the same line -->

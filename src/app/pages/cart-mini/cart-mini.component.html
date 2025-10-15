@@ -27,53 +27,15 @@
   <!-- Cart Items -->
   <div *ngIf="(cartItems$ | async)?.length! > 0" class="cart-content">
     <div class="cart-items-list">
-      <div *ngFor="let cartItem of (cartItems$ | async); let i = index" class="cart-item">
-        <!-- Item Image -->
-        <div class="item-image">
-          <img *ngIf="cartItem.item.imageUrl" [src]="cartItem.item.imageUrl" [alt]="cartItem.item.name" />
-          <div *ngIf="!cartItem.item.imageUrl" class="image-placeholder">
-            <mat-icon>image</mat-icon>
-          </div>
-        </div>
-
-        <!-- Item Details -->
-        <div class="item-details">
-          <h4 class="item-name">{{ cartItem.item.name }}</h4>
-          <p class="item-price">{{ cartItem.item.price | currency }}</p>
-
-          <!-- Quantity Controls -->
-          <div class="quantity-controls">
-            <button
-              mat-icon-button
-              (click)="decreaseQuantity(cartItem.item); $event.stopPropagation()"
-              [disabled]="cartItem.quantity <= 1"
-              class="quantity-btn"
-              aria-label="Decrease quantity">
-              <mat-icon>remove</mat-icon>
-            </button>
-            <span class="quantity-display">{{ cartItem.quantity }}</span>
-            <button
-              mat-icon-button
-              (click)="increaseQuantity(cartItem.item); $event.stopPropagation()"
-              class="quantity-btn"
-              aria-label="Increase quantity">
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <!-- Item Total & Remove -->
-        <div class="item-actions">
-          <div class="item-total">{{ cartItem.item.price * cartItem.quantity | currency }}</div>
-          <button
-            mat-icon-button
-            (click)="removeItem(cartItem.item.id); $event.stopPropagation()"
-            class="remove-btn"
-            aria-label="Remove item">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </div>
+      <app-cart-item-card
+        *ngFor="let cartItem of (cartItems$ | async); trackBy: trackByItemId"
+        [cartItem]="cartItem"
+        [compact]="true"
+        [showTotalPrice]="true"
+        (quantityIncrease)="onQuantityIncrease($event)"
+        (quantityDecrease)="onQuantityDecrease($event)"
+        (itemRemove)="removeItem($event)">
+      </app-cart-item-card>
     </div>
 
     <!-- Cart Footer -->
